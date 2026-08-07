@@ -1071,3 +1071,40 @@ footer p {
         border-bottom: 1px solid var(--color-border) !important;
     }
 }
+/* Prise en charge du bouton Mode Sombre (.dark-theme) */
+html.dark-theme {
+    --color-bg-body: #090d16;
+    --color-bg-surface: #111827;
+    --color-bg-surface-hover: #1f2937;
+    --color-bg-subtle: #1e293b;
+
+    --color-text-main: #f8fafc;
+    --color-text-muted: #cbd5e1;
+    --color-text-light: #94a3b8;
+    --color-border: #1f2937;
+    --color-border-hover: #374151;
+
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-light: rgba(59, 130, 246, 0.15);
+
+    --secondary: #10b981;
+    --secondary-hover: #34d399;
+    --secondary-light: rgba(16, 185, 129, 0.15);
+
+    --badge-phys-bg: rgba(3, 105, 161, 0.25);
+    --badge-phys-text: #38bdf8;
+    --badge-chim-bg: rgba(4, 120, 87, 0.25);
+    --badge-chim-text: #34d399;
+    --badge-cours-bg: rgba(180, 83, 9, 0.25);
+    --badge-cours-text: #fbbf24;
+    --badge-pdf-bg: rgba(190, 18, 60, 0.25);
+    --badge-pdf-text: #f43f5e;
+
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+    --glass-bg: rgba(17, 24, 39, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
