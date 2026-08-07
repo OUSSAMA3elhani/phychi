@@ -1,0 +1,1073 @@
+/* ==========================================================================
+   PhyChi - Feuil de Style Moderne, Responsive & Aligné (v4.0 - Complet)
+   Plateforme de Physique & Chimie pour l'Enseignement Supérieur
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. VARIABLES SYSTÈME & THÈMES
+   -------------------------------------------------------------------------- */
+:root {
+    /* Typographie */
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', Fira Code, Consolas, Monaco, monospace;
+
+    /* Palette Couleur - Thème Clair */
+    --color-bg-body: #f8fafc;
+    --color-bg-surface: #ffffff;
+    --color-bg-surface-hover: #f1f5f9;
+    --color-bg-subtle: #f1f5f9;
+    
+    --color-text-main: #0f172a;
+    --color-text-muted: #475569;
+    --color-text-light: #64748b;
+    --color-border: #e2e8f0;
+    --color-border-hover: #cbd5e1;
+
+    /* Couleurs Primaires & Secondaires */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #eff6ff;
+    --primary-glow: rgba(37, 99, 235, 0.2);
+
+    --secondary: #059669;
+    --secondary-hover: #047857;
+    --secondary-light: #ecfdf5;
+    --secondary-glow: rgba(5, 150, 105, 0.2);
+
+    --accent-purple: #7c3aed;
+    --accent-amber: #d97706;
+    --accent-rose: #e11d48;
+
+    /* Badges & États */
+    --badge-phys-bg: #e0f2fe;
+    --badge-phys-text: #0369a1;
+    --badge-chim-bg: #d1fae5;
+    --badge-chim-text: #047857;
+    --badge-cours-bg: #fef3c7;
+    --badge-cours-text: #b45309;
+    --badge-pdf-bg: #ffe4e6;
+    --badge-pdf-text: #be123c;
+
+    /* Ombrages & Profondeur */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1);
+    --shadow-glow: 0 0 20px var(--primary-glow);
+
+    /* Effets & Transitions */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    --glass-bg: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(226, 232, 240, 0.8);
+    --backdrop-blur: blur(12px);
+}
+
+/* Thème Sombre Automatique */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg-body: #090d16;
+        --color-bg-surface: #111827;
+        --color-bg-surface-hover: #1f2937;
+        --color-bg-subtle: #1e293b;
+
+        --color-text-main: #f8fafc;
+        --color-text-muted: #cbd5e1;
+        --color-text-light: #94a3b8;
+        --color-border: #1f2937;
+        --color-border-hover: #374151;
+
+        --primary: #3b82f6;
+        --primary-hover: #60a5fa;
+        --primary-light: rgba(59, 130, 246, 0.15);
+
+        --secondary: #10b981;
+        --secondary-hover: #34d399;
+        --secondary-light: rgba(16, 185, 129, 0.15);
+
+        --badge-phys-bg: rgba(3, 105, 161, 0.25);
+        --badge-phys-text: #38bdf8;
+        --badge-chim-bg: rgba(4, 120, 87, 0.25);
+        --badge-chim-text: #34d399;
+        --badge-cours-bg: rgba(180, 83, 9, 0.25);
+        --badge-cours-text: #fbbf24;
+        --badge-pdf-bg: rgba(190, 18, 60, 0.25);
+        --badge-pdf-text: #f43f5e;
+
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+        --glass-bg: rgba(17, 24, 39, 0.92);
+        --glass-border: rgba(255, 255, 255, 0.08);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   2. RÉINITIALISATION & BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 100%;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-text-main);
+    background-color: var(--color-bg-body);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    flex: 1;
+    max-width: 1240px;
+    width: 100%;
+    margin: 0.5rem auto 2rem;
+    padding: 1.5rem 1.5rem 2.5rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHIE & CENTRAGE UNIFORME DES TITRES DE SECTIONS
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-main);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+}
+
+h1 { font-size: clamp(1.85rem, 3.5vw, 2.5rem); }
+
+/* Centrage horizontal de tous les titres de section du site */
+h2, 
+.filter-section h2, 
+.features h2, 
+.courses-section h2, 
+.exercises-list h2, 
+.solutions-list h2, 
+.download-category h2, 
+.quick-nav h2, 
+.about-section h2, 
+.faq-category h2, 
+.legal-section h2, 
+.privacy-section h2,
+.search-results h2,
+.popular-searches h3 {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.features > h2 {
+    margin-top: 0;
+}
+
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+
+p {
+    margin-bottom: 1rem;
+    color: var(--color-text-muted);
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+ul, ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.35rem;
+    color: var(--color-text-muted);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 1.75rem 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. EN-TÊTE FIXE COMPACT & STICKY
+   -------------------------------------------------------------------------- */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+header .logo-container {
+    text-align: center;
+    padding: 0.4rem 1rem 0.2rem;
+}
+
+header .logo-container img {
+    height: 38px;
+    width: auto;
+    transition: transform 0.3s var(--transition-bounce);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+}
+
+header .logo-container img:hover {
+    transform: scale(1.03);
+}
+
+/* Navigation Principale */
+nav[aria-label="Navigation principale"] {
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-bg-surface);
+}
+
+nav[aria-label="Navigation principale"] ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.15rem;
+}
+
+nav[aria-label="Navigation principale"] a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+nav[aria-label="Navigation principale"] a:hover {
+    color: var(--primary);
+    background-color: var(--primary-light);
+    text-decoration: none;
+}
+
+nav[aria-label="Navigation principale"] a[aria-current="page"] {
+    color: var(--primary);
+    font-weight: 700;
+    background-color: var(--primary-light);
+}
+
+nav[aria-label="Navigation principale"] a[aria-current="page"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: var(--radius-full);
+}
+
+/* Menu Utilisateur */
+.user-menu {
+    background-color: var(--color-bg-subtle);
+    padding: 0.2rem 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.user-menu ul {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    list-style: none;
+    gap: 1rem;
+}
+
+.user-menu a {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.user-menu a:hover,
+.user-menu a[aria-current="page"] {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   5. BANNIÈRE HERO & EN-TÊTE DE PAGE
+   -------------------------------------------------------------------------- */
+.page-header {
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1.75rem 1.25rem;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.page-header h1 {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.page-header p {
+    font-size: 1.05rem;
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+.retour-ligne {
+  display: block; /* Force l'élément à passer à la ligne suivante */
+}
+/* Section Hero (Accueil) */
+.hero {
+    position: relative;
+    background: linear-gradient(135deg, #1e3a8a 0%, #065f46 100%);
+    color: #ffffff;
+    padding: 3.5rem 1.75rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 3rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+    animation: rotateBg 25s linear infinite;
+    pointer-events: none;
+}
+
+.hero h1 {
+    color: #ffffff;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.hero p {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.15rem;
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.hero div {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+}
+
+.hero a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: var(--transition-bounce);
+    box-shadow: var(--shadow-md);
+}
+
+.hero a:first-child {
+    background-color: #ffffff;
+    color: #0f172a;
+}
+
+.hero a:first-child:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255,255,255,0.2);
+}
+
+.hero a:last-child {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+}
+
+.hero a:last-child:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   6. CARTES & GRILLES
+   -------------------------------------------------------------------------- */
+.features, .courses-grid, .exercises-list, .solutions-list, .search-results, .favorites-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+article, .exercise-card, .course-card, .solution-card, .result-card, .favorite-card, .module-block {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+article:hover, .exercise-card:hover, .course-card:hover, .solution-card:hover, .result-card:hover, .favorite-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+article h3, .exercise-card h3, .course-card h3, .solution-card h3, .result-card h3, .favorite-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    color: var(--color-text-main);
+}
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.card-actions a {
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    transition: var(--transition-fast);
+}
+
+.card-actions a:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Navigation Rapide (Chapitres) */
+.quick-nav {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.quick-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-nav li {
+    margin-bottom: 0.5rem;
+}
+
+/* Modules & Chapitres Détaillés */
+.chapters-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.module-block {
+    border-left: 4px solid var(--primary);
+}
+
+.module-block ol {
+    margin-top: 0.85rem;
+    padding-left: 1.25rem;
+}
+
+.module-block li {
+    margin-bottom: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   7. BADGES DE CATÉGORIE
+   -------------------------------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: 0.725rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    margin-right: 0.4rem;
+    width: fit-content;
+}
+
+.badge-physique { background-color: var(--badge-phys-bg); color: var(--badge-phys-text); }
+.badge-chimie { background-color: var(--badge-chim-bg); color: var(--badge-chim-text); }
+.badge-cours { background-color: var(--badge-cours-bg); color: var(--badge-cours-text); }
+.badge-exercice, .badge-solution { background-color: var(--badge-phys-bg); color: var(--badge-phys-text); }
+.badge-pdf { background-color: var(--badge-pdf-bg); color: var(--badge-pdf-text); }
+
+/* --------------------------------------------------------------------------
+   8. FORMULAIRES DE FILTRAGE & DISPOSITION DU BOUTON FILTRER
+   -------------------------------------------------------------------------- */
+.filter-section, .auth-section, .contact-section, .profile-section, .search-form-section {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin-bottom: 2.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Dispositions des formulaires de filtres */
+.filter-section form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Alignement centré des sélecteurs */
+.filter-section form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.filter-section form select,
+.filter-section form input[type="text"],
+.filter-section form input[type="search"] {
+    flex: 1 1 210px;
+    min-width: 180px;
+    max-width: 320px;
+    margin-bottom: 0;
+}
+
+/* Bouton placé sur sa propre ligne et centré horizontalement */
+.filter-section form button,
+.filter-section form input[type="submit"] {
+    flex: 0 0 100%;
+    width: auto;
+    min-width: 180px;
+    max-width: 220px;
+    margin: 0.75rem auto 0;
+}
+
+.auth-section, .contact-section {
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form div {
+    margin-bottom: 1.15rem;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--color-text-main);
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--color-text-main);
+    background-color: var(--color-bg-body);
+    transition: var(--transition-fast);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--color-bg-surface);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.15rem;
+    margin-top: 1rem;
+}
+
+legend {
+    font-weight: 700;
+    padding: 0 0.5rem;
+    color: var(--primary);
+}
+
+/* Standardisation Harmonieuse de Tous les Boutons */
+button, input[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    height: 44px;
+    padding: 0 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+button:active, input[type="submit"]:active {
+    transform: translateY(0);
+}
+
+button[type="button"] {
+    background-color: transparent;
+    color: var(--accent-rose);
+    border: 1px solid var(--accent-rose);
+    height: 38px;
+    padding: 0 1rem;
+    font-size: 0.825rem;
+    border-radius: var(--radius-sm);
+}
+
+button[type="button"]:hover {
+    background-color: rgba(225, 29, 72, 0.08);
+    transform: none;
+}
+
+/* Centrage des actions dans formulaires de connexion / inscription / contact */
+.auth-section form div:last-of-type,
+.contact-section form div:last-of-type,
+.search-form-section form > div {
+    display: flex;
+    justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   9. TABLEAUX (TÉLÉCHARGEMENTS)
+   -------------------------------------------------------------------------- */
+.download-category {
+    margin-bottom: 2.25rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+th, td {
+    padding: 0.95rem 1.15rem;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+th {
+    background-color: var(--color-bg-subtle);
+    font-weight: 800;
+    font-size: 0.825rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: var(--color-bg-surface-hover);
+}
+
+td a {
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   10. DÉROULANTS (SOLUTIONS & FAQ)
+   -------------------------------------------------------------------------- */
+details {
+    background-color: var(--color-bg-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.15rem;
+    margin-top: 0.85rem;
+    border: 1px solid var(--color-border);
+    transition: var(--transition-fast);
+}
+
+details[open] {
+    background-color: var(--color-bg-surface);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+summary {
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    color: var(--primary);
+    user-select: none;
+}
+
+summary:hover {
+    color: var(--primary-hover);
+}
+
+.solution-content, .faq-item p {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+code {
+    background-color: var(--color-bg-subtle);
+    color: var(--accent-purple);
+    padding: 0.2rem 0.45rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    border: 1px solid var(--color-border);
+}
+
+/* --------------------------------------------------------------------------
+   11. PAGINATION
+   -------------------------------------------------------------------------- */
+nav[aria-label*="Pagination"] ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    gap: 0.4rem;
+    padding: 0;
+    margin-top: 2.5rem;
+}
+
+nav[aria-label*="Pagination"] a,
+nav[aria-label*="Pagination"] span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-main);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: var(--transition-fast);
+}
+
+nav[aria-label*="Pagination"] a[aria-current="page"] {
+    background-color: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+nav[aria-label*="Pagination"] a:hover:not([aria-current="page"]) {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   12. PIED DE PAGE (FOOTER)
+   -------------------------------------------------------------------------- */
+footer {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 3rem 1.5rem 1.75rem;
+    margin-top: auto;
+    border-top: 1px solid var(--color-border);
+}
+
+footer nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    gap: 1.75rem;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+footer nav a {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+footer nav a:hover,
+footer nav a[aria-current="page"] {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer p {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.825rem;
+    margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotateBg {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   14. RESPONSIVE DESIGN (MOBILES ET TABLETTES)
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+    main {
+        padding: 1.25rem 1rem 2rem;
+    }
+
+    .hero {
+        padding: 3rem 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    nav[aria-label="Navigation principale"] ul {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 0.25rem !important;
+    }
+
+    nav[aria-label="Navigation principale"] a {
+        padding: 0.4rem 0.65rem !important;
+        font-size: 0.825rem !important;
+        border-bottom: none !important;
+    }
+
+    nav[aria-label="Navigation principale"] a[aria-current="page"]::after {
+        display: none;
+    }
+
+    .user-menu ul {
+        justify-content: center;
+    }
+
+    .features, .courses-grid, .exercises-list, .solutions-list, .search-results, .favorites-list {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-section form select,
+    .filter-section form input[type="text"],
+    .filter-section form input[type="search"] {
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .filter-section form button,
+    .filter-section form input[type="submit"] {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Adapter les tableaux en cartes sur mobile */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        margin-bottom: 1.15rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background-color: var(--color-bg-surface);
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid var(--color-border);
+        position: relative;
+        padding-left: 45%;
+        text-align: right;
+    }
+
+    td:last-child {
+        border-bottom: none;
+    }
+
+    td::before {
+        position: absolute;
+        top: 0.95rem;
+        left: 1rem;
+        width: 40%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 800;
+        text-align: left;
+        color: var(--color-text-muted);
+    }
+
+    .download-category:nth-of-type(1) td:nth-of-type(1)::before { content: "Titre :"; }
+    .download-category:nth-of-type(1) td:nth-of-type(2)::before { content: "Matière :"; }
+    .download-category:nth-of-type(1) td:nth-of-type(3)::before { content: "Niveau :"; }
+    .download-category:nth-of-type(1) td:nth-of-type(4)::before { content: "Taille :"; }
+    .download-category:nth-of-type(1) td:nth-of-type(5)::before { content: "Action :"; }
+
+    .download-category:nth-of-type(2) td:nth-of-type(1)::before { content: "Polycopié :"; }
+    .download-category:nth-of-type(2) td:nth-of-type(2)::before { content: "Matière :"; }
+    .download-category:nth-of-type(2) td:nth-of-type(3)::before { content: "Niveau :"; }
+    .download-category:nth-of-type(2) td:nth-of-type(4)::before { content: "Taille :"; }
+    .download-category:nth-of-type(2) td:nth-of-type(5)::before { content: "Action :"; }
+
+    .download-category:nth-of-type(3) td:nth-of-type(1)::before { content: "Intitulé :"; }
+    .download-category:nth-of-type(3) td:nth-of-type(2)::before { content: "Matière :"; }
+    .download-category:nth-of-type(3) td:nth-of-type(3)::before { content: "Niveau :"; }
+    .download-category:nth-of-type(3) td:nth-of-type(4)::before { content: "Taille :"; }
+    .download-category:nth-of-type(3) td:nth-of-type(5)::before { content: "Action :"; }
+}
+/* Centrage complet des titres dans les grilles */
+.features > h2,
+.courses-grid > h2,
+.exercises-list > h2,
+.solutions-list > h2,
+.search-results > h2,
+.favorites-list > h2 {
+    grid-column: 1 / -1;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+/* Bascule en colonne uniquement sur de très petits écrans mobiles (< 480px) */
+@media (max-width: 480px) {
+    nav[aria-label="Navigation principale"] ul {
+        flex-direction: column !important;
+    }
+    
+    nav[aria-label="Navigation principale"] a {
+        padding: 0.6rem !important;
+        border-bottom: 1px solid var(--color-border) !important;
+    }
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Vos ressources favoris en physique et chimie. Retrouvez rapidement vos cours, exercices et corrigés enregistrés.">
+    <title>PhyChi - Mes Favoris</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="chapitres.html">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html" aria-current="page">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre de la page -->
+        <section class="page-header">
+            <h1>Mes Contenus Favoris</h1>
+            <p>Retrouvez rapidement l'ensemble des cours, exercices, solutions et documents que vous avez enregistrés.</p>
+        </section>
+
+        <!-- Formulaire de filtrage des favoris -->
+        <section class="filter-section">
+            <h2>Filtrer mes favoris</h2>
+            <form action="favoris.html" method="get">
+                <label for="categorie">Catégorie :</label>
+                <select name="categorie" id="categorie">
+                    <option value="toutes">Toutes les catégories</option>
+                    <option value="cours">Cours</option>
+                    <option value="exercices">Exercices</option>
+                    <option value="solutions">Solutions / Corrigés</option>
+                    <option value="telechargements">Fichiers PDF</option>
+                </select>
+
+                <label for="matiere">Matière :</label>
+                <select name="matiere" id="matiere">
+                    <option value="toutes">Toutes les matières</option>
+                    <option value="physique">Physique</option>
+                    <option value="chimie">Chimie</option>
+                </select>
+
+                <button type="submit">Filtrer</button>
+            </form>
+        </section>
+
+        <!-- Liste des éléments enregistrés en favoris -->
+        <section class="favorites-list">
+            <h2>Ressources enregistrées</h2>
+
+            <!-- Favori 1 : Cours Physique -->
+            <article class="favorite-card">
+                <header>
+                    <span class="badge badge-cours">Cours</span>
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Mécanique du Point et du Solide</h3>
+                </header>
+                <p><strong>Niveau :</strong> L1 / CPGE 1ère année</p>
+                <p>Module complet incluant la cinématique, la dynamique newtonienne, l'énergétique et les oscillateurs mécaniques.</p>
+                <div class="card-actions">
+                    <a href="cours.html#meca">Consulter le cours</a>
+                    <a href="chapitres.html#meca">Voir les chapitres</a>
+                    <button type="button">Retirer des favoris</button>
+                </div>
+            </article>
+
+            <!-- Favori 2 : Exercice Physique -->
+            <article class="favorite-card">
+                <header>
+                    <span class="badge badge-exercice">Exercice</span>
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Série 1 : Oscillateur harmonique amorti et forcé</h3>
+                </header>
+                <p><strong>Niveau :</strong> L1 / CPGE 1ère année</p>
+                <p>Étude des régimes transitoires et permanents, résonance en amplitude et facteur de qualité.</p>
+                <div class="card-actions">
+                    <a href="exercices-physique.html#meca-osc">Voir l'exercice</a>
+                    <a href="solutions.html#phys-meca-osc">Voir le corrigé</a>
+                    <button type="button">Retirer des favoris</button>
+                </div>
+            </article>
+
+            <!-- Favori 3 : Exercice Chimie -->
+            <article class="favorite-card">
+                <header>
+                    <span class="badge badge-exercice">Exercice</span>
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Série 3 : Substitution nucléophile et élimination (SN1, SN2, E1, E2)</h3>
+                </header>
+                <p><strong>Niveau :</strong> L2 / CPGE 2ème année</p>
+                <p>Problèmes d'analyse de mécanismes réactionnels et de stéréochimie en chimie organique.</p>
+                <div class="card-actions">
+                    <a href="exercices-chimie.html#orga-sn-e">Voir l'exercice</a>
+                    <a href="solutions.html#chim-orga-sn-e">Voir le corrigé</a>
+                    <button type="button">Retirer des favoris</button>
+                </div>
+            </article>
+
+            <!-- Favori 4 : Téléchargement PDF -->
+            <article class="favorite-card">
+                <header>
+                    <span class="badge badge-pdf">PDF</span>
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Aide-mémoire : Mécanismes de Chimie Organique</h3>
+                </header>
+                <p><strong>Niveau :</strong> L2 / CPGE 2ème année | <strong>Taille :</strong> 1.8 Mo</p>
+                <p>Fiche de synthèse téléchargeable regroupant les profils énergétiques et la stéréochimie des substitutions et éliminations.</p>
+                <div class="card-actions">
+                    <a href="telechargements.html#pdf-chim-orga-sn-e">Accéder au téléchargement</a>
+                    <button type="button">Retirer des favoris</button>
+                </div>
+            </article>
+        </section>
+
+        <!-- Navigation / Pagination -->
+        <nav aria-label="Pagination des favoris">
+            <ul>
+                <li><span>Précédent</span></li>
+                <li><a href="#" aria-current="page">1</a></li>
+                <li><a href="#">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

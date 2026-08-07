@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Cours complets de physique et de chimie pour l'enseignement supérieur (CPGE, Licence, Master, Agrégation).">
+    <title>PhyChi - Cours de Physique & Chimie</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html" aria-current="page">Cours</a></li>
+                <li><a href="chapitres.html">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre et présentation de la page -->
+        <section class="page-header">
+            <h1>Cours de Physique & Chimie</h1>
+            <p>Consultez des modules de cours complets et rigoureux conçus pour les étudiants du supérieur.</p>
+        </section>
+
+        <!-- Formulaire de filtrage des cours -->
+        <section class="filter-section">
+            <h2>Filtrer les modules de cours</h2>
+            <form action="cours.html" method="get">
+                <label for="discipline">Discipline :</label>
+                <select name="discipline" id="discipline">
+                    <option value="toutes">Toutes les disciplines</option>
+                    <option value="physique">Physique</option>
+                    <option value="chimie">Chimie</option>
+                </select>
+
+                <label for="niveau">Niveau d'études :</label>
+                <select name="niveau" id="niveau">
+                    <option value="tous">Tous les niveaux</option>
+                    <option value="l1">L1 / CPGE 1ère année</option>
+                    <option value="l2">L2 / CPGE 2ème année</option>
+                    <option value="l3">L3 / Master / Agrégation</option>
+                </select>
+
+                <button type="submit">Filtrer</button>
+            </form>
+        </section>
+
+        <!-- Section des cours de Physique -->
+        <section class="courses-section">
+            <h2>Modules de Physique</h2>
+            
+            <div class="courses-grid">
+                <!-- Module 1 -->
+                <article class="course-card">
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Mécanique du Point et du Solide</h3>
+                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Chapitres :</strong> 6</p>
+                    <p>Cinématique, lois de Newton, principes énergétiques, moments cinétiques, oscillateurs et mouvement à force centrale.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#meca">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-meca">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 2 -->
+                <article class="course-card">
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Thermodynamique Macroscopique</h3>
+                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Chapitres :</strong> 5</p>
+                    <p>Systèmes fermés et ouverts, 1er et 2nd principes, entalpie, entropie, changemets d'état et cycles thermiques.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#thermo">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-thermo">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 3 -->
+                <article class="course-card">
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Électromagnétisme & Équations de Maxwell</h3>
+                    <p><strong>Niveau :</strong> L2 / CPGE 2 | <strong>Chapitres :</strong> 8</p>
+                    <p>Électrostatique, magnétostatique, induction électromagnétique, équations de Maxwell, ondes électromagnétiques dans les milieux.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#electromag">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-em">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 4 -->
+                <article class="course-card">
+                    <span class="badge badge-physique">Physique</span>
+                    <h3>Mécanique des Fluides</h3>
+                    <p><strong>Niveau :</strong> L2 / L3 / CPGE 2 | <strong>Chapitres :</strong> 4</p>
+                    <p>Statique des fluides, cinématique des écoulements, équation d'Euler, théorème de Bernoulli et équation de Navier-Stokes.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#fluides">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-fluides">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Section des cours de Chimie -->
+        <section class="courses-section">
+            <h2>Modules de Chimie</h2>
+
+            <div class="courses-grid">
+                <!-- Module 1 -->
+                <article class="course-card">
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Thermochimie & Équilibres Chimiques</h3>
+                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Chapitres :</strong> 5</p>
+                    <p>Enthalpies de réaction, entropie, énergie libre de Gibbs, constantes d'équilibre et déplacement des équilibres.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#thermochimie">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-thermochimie">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 2 -->
+                <article class="course-card">
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Cinétique Chimique Homogène & Hétérogène</h3>
+                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Chapitres :</strong> 4</p>
+                    <p>Ordres de réaction, mécanismes réactionnels, approximation de l'état quasi-stationnaire, catalyse et régimes cinétiques.</p>
+
+                    <div class="card-actions">
+                        <a href="chapitres.html#cinetique">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-cinetique">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 3 -->
+                <article class="course-card">
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Chimie Organique Structurale & Réactivité</h3>
+                    <p><strong>Niveau :</strong> L2 / CPGE 2 | <strong>Chapitres :</strong> 7</p>
+                    <p>Stéréochimie, effets électroniques, substitutions nucléophiles, éliminations, additions électrophiles et organométalliques.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#organique">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-orga">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+
+                <!-- Module 4 -->
+                <article class="course-card">
+                    <span class="badge badge-chimie">Chimie</span>
+                    <h3>Électrochimie & Diagrammes E-pH</h3>
+                    <p><strong>Niveau :</strong> L2 / CPGE 2 | <strong>Chapitres :</strong> 4</p>
+                    <p>Réactions d'oxydoréduction, équation de Nernst, courbes de polarisation, diagrammes de Pourbaix et corrosion.</p>
+                    <div class="card-actions">
+                        <a href="chapitres.html#electrochimie">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-electrochimie">Télécharger le cours PDF</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Navigation / Pagination des cours -->
+        <nav aria-label="Pagination des cours">
+            <ul>
+                <li><span>Précédent</span></li>
+                <li><a href="#" aria-current="page">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

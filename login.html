@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Espace de connexion pour accéder à votre compte, vos ressources enregistrées et vos favoris.">
+    <title>PhyChi - Connexion</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="chapitres.html">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html" aria-current="page">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre de la page -->
+        <section class="page-header">
+            <h1>Connexion à votre espace</h1>
+            <p>Connectez-vous pour accéder à vos cours sauvegardés, vos exercices favoris et votre espace personnel.</p>
+        </section>
+
+        <!-- Formulaire de connexion -->
+        <section class="auth-section">
+            <h2>Identifiez-vous</h2>
+            
+            <form action="profil.html" method="post">
+                <div>
+                    <label for="email">Adresse e-mail ou Nom d'utilisateur :</label>
+                    <input type="text" id="email" name="email" required placeholder="exemple@domaine.com">
+                </div>
+
+                <div>
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" required placeholder="Votre mot de passe">
+                </div>
+
+                <div>
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Se souvenir de moi</label>
+                </div>
+
+                <div>
+                    <button type="submit">Se connecter</button>
+                </div>
+
+                <div>
+                    <a href="#">Mot de passe oublié ?</a>
+                </div>
+            </form>
+
+            <hr>
+
+            <!-- Option d'orientation pour les utilisateurs non inscrits -->
+            <div class="auth-redirect">
+                <p>Vous n'avez pas encore de compte ?</p>
+                <a href="inscription.html">Créer un compte PhyChi gratuitement</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

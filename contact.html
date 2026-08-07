@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Contactez-nous. Posez vos questions sur les cours, signalez une erreur ou envoyez vos suggestions à notre équipe.">
+    <title>PhyChi - Contact</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="chapitres.html">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre de la page -->
+        <section class="page-header">
+            <h1>Contactez-nous</h1>
+            <p>Une question, une remarque ou une suggestion ? N'hésitez pas à nous écrire via le formulaire ci-dessous.</p>
+        </section>
+
+        <!-- Section du formulaire de contact -->
+        <section class="contact-section">
+            <h2>Formulaire de message</h2>
+
+            <form action="contact.html" method="post">
+                <div>
+                    <label for="nom">Nom complet :</label>
+                    <input type="text" id="nom" name="nom" required placeholder="Votre nom et prénom">
+                </div>
+
+                <div>
+                    <label for="email">Adresse e-mail :</label>
+                    <input type="email" id="email" name="email" required placeholder="exemple@domaine.com">
+                </div>
+
+                <div>
+                    <label for="sujet">Sujet du message :</label>
+                    <select name="sujet" id="sujet" required>
+                        <option value="" disabled selected>Choisissez un sujet</option>
+                        <option value="question">Question sur un cours ou exercice</option>
+                        <option value="erreur">Signalement d'une erreur</option>
+                        <option value="suggestion">Proposition d'amélioration</option>
+                        <option value="technique">Problème technique / Compte</option>
+                        <option value="autre">Autre demande</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="message">Votre message :</label>
+                    <textarea id="message" name="message" rows="6" required placeholder="Rédigez votre message ici..."></textarea>
+                </div>
+
+                <div>
+                    <button type="submit">Envoyer le message</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Informations complémentaires -->
+        <section class="contact-info">
+            <h2>Informations de contact</h2>
+            <p><strong>Adresse e-mail :</strong> oussamaelhani3@gmail.com</p>
+            <p><strong>Support pédagogique :</strong> support@psychi.org</p>
+            <p><strong>Horaires de réponse :</strong> Du lundi au vendredi, de 9h00 à 18h00</p>
+        </section>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html" aria-current="page">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

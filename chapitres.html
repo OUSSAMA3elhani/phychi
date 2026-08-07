@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Structure détaillée des chapitres de cours en physique et chimie pour l'enseignement supérieur.">
+    <title>PhyChi - Chapitres de Cours</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="chapitres.html" aria-current="page">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre et présentation de la page -->
+        <section class="page-header">
+            <h1>Sommaire des Chapitres</h1>
+            <p>Accédez directement aux chapitres détaillés de nos programmes de physique et de chimie.</p>
+        </section>
+
+        <!-- Navigation rapide / Ancre vers les modules -->
+        <section class="quick-nav">
+            <h2>Accès rapide par discipline</h2>
+            <ul>
+                <li><strong>Physique :</strong> 
+                    <a href="#meca">Mécanique</a> | 
+                    <a href="#thermo">Thermodynamique</a> | 
+                    <a href="#electromag">Électromagnétisme</a> | 
+                    <a href="#fluides">Mécanique des fluides</a>
+                </li>
+                <li><strong>Chimie :</strong> 
+                    <a href="#thermochimie">Thermochimie</a> | 
+                    <a href="#cinetique">Cinétique</a> | 
+                    <a href="#organique">Chimie Organique</a> | 
+                    <a href="#electrochimie">Électrochimie</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section CHAPITRES DE PHYSIQUE -->
+        <section class="chapters-section">
+            <h2>Chapitres de Physique</h2>
+
+            <!-- Module Mécanique -->
+            <article class="module-block" id="meca">
+                <h3>Module : Mécanique du Point et du Solide</h3>
+                <p><em>Niveau : L1 / CPGE 1ère année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Cinématique du point matériel</h4>
+                        <p>Vecteurs position, vitesse, accélération. Repères cartésien, cylindrique et sphérique.</p>
+                        <div>
+                            <a href="cours.html#meca-ch1">Lire le cours</a> | 
+                            <a href="exercices-physique.html#meca-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Dynamique newtonienne et PFD</h4>
+                        <p>Principes fondamentaux de la dynamique, forces de frottement fluide et solide.</p>
+                        <div>
+                            <a href="cours.html#meca-ch2">Lire le cours</a> | 
+                            <a href="exercices-physique.html#meca-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 3 : Energetique du point matériel</h4>
+                        <p>Travail d'une force, énergie cinétique, forces conservatives et potentiel.</p>
+                        <div>
+                            <a href="cours.html#meca-ch3">Lire le cours</a> | 
+                            <a href="exercices-physique.html#meca-ch3">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 4 : Oscillateurs mécaniques</h4>
+                        <p>Oscillateur libre, amorti et forcé en régime sinusoïdal. Résonance.</p>
+                        <div>
+                            <a href="cours.html#meca-ch4">Lire le cours</a> | 
+                            <a href="exercices-physique.html#meca-ch4">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Thermodynamique -->
+            <article class="module-block" id="thermo">
+                <h3>Module : Thermodynamique Macroscopique</h3>
+                <p><em>Niveau : L1 / CPGE 1ère année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Description d'un système à l'équilibre</h4>
+                        <p>Variables d'état, équation d'état des gaz parfaits et réels.</p>
+                        <div>
+                            <a href="cours.html#thermo-ch1">Lire le cours</a> | 
+                            <a href="exercices-physique.html#thermo-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Premier principe de la thermodynamique</h4>
+                        <p>Travail, transfert thermique, énergie interne et enthalpie.</p>
+                        <div>
+                            <a href="cours.html#thermo-ch2">Lire le cours</a> | 
+                            <a href="exercices-physique.html#thermo-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 3 : Second principe et entropie</h4>
+                        <p>Transformations réversibles et irréversibles, bilan d'entropie.</p>
+                        <div>
+                            <a href="cours.html#thermo-ch3">Lire le cours</a> | 
+                            <a href="exercices-physique.html#thermo-ch3">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Électromagnétisme -->
+            <article class="module-block" id="electromag">
+                <h3>Module : Électromagnétisme & Équations de Maxwell</h3>
+                <p><em>Niveau : L2 / CPGE 2ème année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Électrostatique et Théorème de Gauss</h4>
+                        <p>Champ et potentiel électrostatiques, propriétés de symétrie.</p>
+                        <div>
+                            <a href="cours.html#em-ch1">Lire le cours</a> | 
+                            <a href="exercices-physique.html#em-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Magnétostatique et Loi de Biot-Savart</h4>
+                        <p>Champ magnétostatique, théorème d'Ampère, dipôle magnétique.</p>
+                        <div>
+                            <a href="cours.html#em-ch2">Lire le cours</a> | 
+                            <a href="exercices-physique.html#em-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 3 : Équations de Maxwell dans le vide</h4>
+                        <p>Formes locales et intégrales, potentiel vecteur et vecteur de Poynting.</p>
+                        <div>
+                            <a href="cours.html#em-ch3">Lire le cours</a> | 
+                            <a href="exercices-physique.html#em-ch3">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Fluides -->
+            <article class="module-block" id="fluides">
+                <h3>Module : Mécanique des Fluides</h3>
+                <p><em>Niveau : L2 / L3 / CPGE 2ème année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Statique des fluides</h4>
+                        <p>Pression, équation fondamentale de l'hydrostatique, poussée d'Archimède.</p>
+                        <div>
+                            <a href="cours.html#fluides-ch1">Lire le cours</a> | 
+                            <a href="exercices-physique.html#fluides-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Dynamique des fluides parfaits et équation de Bernoulli</h4>
+                        <p>Conservation du débit, ligne de courant, applications du théorème de Bernoulli.</p>
+                        <div>
+                            <a href="cours.html#fluides-ch2">Lire le cours</a> | 
+                            <a href="exercices-physique.html#fluides-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+        </section>
+
+        <!-- Section CHAPITRES DE CHIMIE -->
+        <section class="chapters-section">
+            <h2>Chapitres de Chimie</h2>
+
+            <!-- Module Thermochimie -->
+            <article class="module-block" id="thermochimie">
+                <h3>Module : Thermochimie & Équilibres Chimiques</h3>
+                <p><em>Niveau : L1 / CPGE 1ère année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Premier principe appliqué à la réaction chimique</h4>
+                        <p>Enthalpie de réaction, état standard, lois de Hess et de Kirchhoff.</p>
+                        <div>
+                            <a href="cours.html#thermochim-ch1">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#thermochim-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Second principe et énergie libre de Gibbs</h4>
+                        <p>Enthalpie libre de réaction, constante d'équilibre K° et loi de Van 't Hoff.</p>
+                        <div>
+                            <a href="cours.html#thermochim-ch2">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#thermochim-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Cinétique -->
+            <article class="module-block" id="cinetique">
+                <h3>Module : Cinétique Chimique</h3>
+                <p><em>Niveau : L1 / CPGE 1ère année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Vitesse de réaction et ordre de réaction</h4>
+                        <p>Lois de vitesse intégrées, temps de demi-réaction, méthode d'isolement de Ostwald.</p>
+                        <div>
+                            <a href="cours.html#cinet-ch1">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#cinet-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Mécanismes réactionnels en phase homogène</h4>
+                        <p>Actes élémentaires, approximation de l'état quasi-stationnaire (AEQS) et étape limitante.</p>
+                        <div>
+                            <a href="cours.html#cinet-ch2">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#cinet-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Chimie Organique -->
+            <article class="module-block" id="organique">
+                <h3>Module : Chimie Organique Structurale</h3>
+                <p><em>Niveau : L2 / CPGE 2ème année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Stéréochimie et conformation</h4>
+                        <p>Chiralité, énantiomérie, diastéréoisomérie, représentations de Cram, Newman et Fischer.</p>
+                        <div>
+                            <a href="cours.html#orga-ch1">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#orga-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Substitution nucléophile et Élimination</h4>
+                        <p>Étude comparative des mécanismes SN1, SN2, E1 et E2. Régiosélectivité et stéréosélectivité.</p>
+                        <div>
+                            <a href="cours.html#orga-ch2">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#orga-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <!-- Module Électrochimie -->
+            <article class="module-block" id="electrochimie">
+                <h3>Module : Électrochimie & Oxydoréduction</h3>
+                <p><em>Niveau : L2 / CPGE 2ème année</em></p>
+                <ol>
+                    <li>
+                        <h4>Chapitre 1 : Piles et équation de Nernst</h4>
+                        <p>Potentiel d'électrode, constante d'équilibre d'une réaction d'oxydoréduction.</p>
+                        <div>
+                            <a href="cours.html#electro-ch1">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#electro-ch1">Exercices associés</a>
+                        </div>
+                    </li>
+                    <li>
+                        <h4>Chapitre 2 : Diagrammes Potentiel-pH (Pourbaix)</h4>
+                        <p>Construction, domaines de prédominance, stabilité de l'eau et corrosion.</p>
+                        <div>
+                            <a href="cours.html#electro-ch2">Lire le cours</a> | 
+                            <a href="exercices-chimie.html#electro-ch2">Exercices associés</a>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+        </section>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Espace de téléchargement gratuit de cours, fiches de révision, travaux pratiques (TP) et annales au format PDF en physique et chimie.">
+    <title>PhyChi - Espace Téléchargements PDF</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- En-tête du site (Header) -->
+    <header>
+        <!-- Logo et identité du site -->
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+            </a>
+        </div>
+
+        <!-- Menu de navigation principal -->
+        <nav aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="chapitres.html">Chapitres</a></li>
+                <li><a href="exercices-physique.html">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="telechargements.html" aria-current="page">Téléchargements</a></li>
+                <li><a href="recherche.html">Recherche</a></li>
+                <li><a href="favoris.html">Favoris</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menu de compte utilisateur -->
+        <div class="user-menu">
+            <ul>
+                <li><a href="login.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page (Main) -->
+    <main>
+        <!-- Section de titre et présentation de la page -->
+        <section class="page-header">
+            <h1>Centre de Téléchargement PDF</h1>
+            <p>Retrouvez l'ensemble de nos supports pédagogiques en libre accès au format PDF : cours, fiches de révision, sujets de TP et annales.</p>
+        </section>
+
+        <!-- Formulaire de filtrage des documents -->
+        <section class="filter-section">
+            <h2>Filtrer les fichiers</h2>
+            <form action="telechargements.html" method="get">
+                <label for="type">Type de document :</label>
+                <select name="type" id="type">
+                    <option value="tous">Tous les documents</option>
+                    <option value="fiches">Fiches de synthèse & Formulaires</option>
+                    <option value="polys">Polycopiés de cours</option>
+                    <option value="tp">Sujets & Protocoles de TP</option>
+                    <option value="examens">Annales & Sujets d'examens</option>
+                </select>
+
+                <label for="matiere">Matière :</label>
+                <select name="matiere" id="matiere">
+                    <option value="toutes">Toutes les matières</option>
+                    <option value="physique">Physique</option>
+                    <option value="chimie">Chimie</option>
+                </select>
+
+                <label for="niveau">Niveau :</label>
+                <select name="niveau" id="niveau">
+                    <option value="tous">Tous les niveaux</option>
+                    <option value="l1">L1 / CPGE 1ère année</option>
+                    <option value="l2">L2 / CPGE 2ème année</option>
+                    <option value="l3">L3 / Master / Agrégation</option>
+                </select>
+
+                <button type="submit">Filtrer</button>
+            </form>
+        </section>
+
+        <!-- Section 1 : Fiches de synthèse & Formulaires -->
+        <section class="download-category">
+            <h2>Fiches Récapitulatives & Formulaires</h2>
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Titre du document</th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th>Taille</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="pdf-thermo">
+                        <td>Formulaire complet de Thermodynamique Macroscopique</td>
+                        <td>Physique</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>1.2 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="pdf-em-maxwell">
+                        <td>Fiche de synthèse : Équations de Maxwell & Ondes</td>
+                        <td>Physique</td>
+                        <td>L2 / CPGE 2</td>
+                        <td>850 Ko</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="pdf-chim-orga-sn-e">
+                        <td>Aide-mémoire : Mécanismes de Chimie Organique (SN1, SN2, E1, E2)</td>
+                        <td>Chimie</td>
+                        <td>L2 / CPGE 2</td>
+                        <td>1.8 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="pdf-chim-electro-nernst">
+                        <td>Fiche de cours : Diagrammes E-pH et Électrochimie</td>
+                        <td>Chimie</td>
+                        <td>L2 / CPGE 2</td>
+                        <td>940 Ko</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 2 : Polycopiés de Cours -->
+        <section class="download-category">
+            <h2>Polycopiés de Cours Complets</h2>
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Titre du polycopié</th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th>Taille</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="cours-meca">
+                        <td>Polycopié : Mécanique du Point et du Solide (6 Chapitres)</td>
+                        <td>Physique</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>4.5 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="cours-thermo">
+                        <td>Polycopié : Thermodynamique & Changements d'état</td>
+                        <td>Physique</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>3.1 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="cours-thermochimie">
+                        <td>Polycopié : Thermochimie & Équilibres en Solution</td>
+                        <td>Chimie</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>2.9 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr id="cours-orga">
+                        <td>Polycopié : Chimie Organique Structurale et Réactivité</td>
+                        <td>Chimie</td>
+                        <td>L2 / CPGE 2</td>
+                        <td>5.2 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 3 : Sujets et Protocoles de TP (Travaux Pratiques) -->
+        <section class="download-category">
+            <h2>Protocoles de Travaux Pratiques (TP)</h2>
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Intitulé du TP</th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th>Taille</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TP Physique : Étude de l'interféromètre de Michelson</td>
+                        <td>Physique</td>
+                        <td>L2 / CPGE 2</td>
+                        <td>1.1 Mo</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr>
+                        <td>TP Chimie : Suivi cinétique d'une réaction par spectrophotométrie</td>
+                        <td>Chimie</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>780 Ko</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                    <tr>
+                        <td>TP Chimie : Dosage potentiométrique d'une solution acide/base</td>
+                        <td>Chimie</td>
+                        <td>L1 / CPGE 1</td>
+                        <td>620 Ko</td>
+                        <td><a href="#">Télécharger (.pdf)</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Navigation dans la liste des téléchargements -->
+        <nav aria-label="Pagination des téléchargements">
+            <ul>
+                <li><span>Précédent</span></li>
+                <li><a href="#" aria-current="page">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <footer>
+        <!-- Liens d'information et d'assistance -->
+        <nav aria-label="Navigation du pied de page">
+            <ul>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+            </ul>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>
