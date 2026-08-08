@@ -1,0 +1,279 @@
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl dark:bg-brand-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Exercices de Physique</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Banque d'exercices</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Exercices de Physique
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Problèmes, travaux dirigés et sujets d'entraînement classés par domaine, par niveau et par difficulté.
+                </p>
+
+                <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-4 dark:border-slate-800">
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">5</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Séries publiées</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">22</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Exercices</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">6</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Domaines</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">100%</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Corrigés</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- Filtres -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Filtrer les exercices
+                </h2>
+
+                <form action="exercices-physique.html" method="get" class="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+                    <div>
+                        <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Domaine</label>
+                        <select name="domaine" id="domaine"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="tous">Tous les domaines</option>
+                            <option value="mecanique">Mécanique du point et du solide</option>
+                            <option value="thermodynamique">Thermodynamique</option>
+                            <option value="electromagnetisme">Électromagnétisme &amp; Électrocinétique</option>
+                            <option value="optique">Optique ondulatoire &amp; géométrique</option>
+                            <option value="fluides">Mécanique des fluides</option>
+                            <option value="quantique">Physique quantique</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau</label>
+                        <select name="niveau" id="niveau"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="tous">Tous les niveaux</option>
+                            <option value="l1">L1 / CPGE 1ère année</option>
+                            <option value="l2">L2 / CPGE 2ème année</option>
+                            <option value="l3">L3 / Master / Agrégation</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="difficulte" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Difficulté</label>
+                        <select name="difficulte" id="difficulte"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes</option>
+                            <option value="facile">Débutant (*)</option>
+                            <option value="moyen">Intermédiaire (**)</option>
+                            <option value="avance">Avancé (***)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+                        Filtrer
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Liste des séries -->
+        <section class="exercises-list mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-series">
+            <h2 id="titre-series" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                Séries d'exercices disponibles
+            </h2>
+
+            <div class="mt-8 grid gap-6">
+
+                <article class="exercise-card flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:border-brand-200 hover:shadow-lift lg:flex-row lg:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Mécanique</span>
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Intermédiaire&nbsp;(**)</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            Série 1 : Oscillateur harmonique amorti et forcé
+                        </h3>
+                        <p class="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Étude des équations différentielles du second ordre, régime sinusoïdal forcé, facteur de qualité et résonance en amplitude.
+                        </p>
+                        <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                5 exercices
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                ~90 min
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-actions flex shrink-0 flex-wrap gap-2 lg:flex-col lg:items-stretch">
+                        <a href="solutions.html#phys-meca-osc" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les solutions</a>
+                        <a href="telechargements.html#pdf-meca-osc" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="exercise-card flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:border-brand-200 hover:shadow-lift lg:flex-row lg:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Thermodynamique</span>
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Intermédiaire&nbsp;(**)</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            Série 2 : Cycles thermodynamiques et machines thermiques
+                        </h3>
+                        <p class="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Calcul des bilans d'énergie et d'entropie pour des cycles fermés et ouverts (Carnot, Otto, Diesel, réfrigérateurs).
+                        </p>
+                        <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                4 exercices
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                ~75 min
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-actions flex shrink-0 flex-wrap gap-2 lg:flex-col lg:items-stretch">
+                        <a href="solutions.html#phys-thermo-cycles" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les solutions</a>
+                        <a href="telechargements.html#pdf-thermo-cycles" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="exercise-card flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:border-brand-200 hover:shadow-lift lg:flex-row lg:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Électromagnétisme</span>
+                            <span class="inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:text-rose-400">Avancé&nbsp;(***)</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            Série 3 : Équations de Maxwell et ondes électromagnétiques dans le vide
+                        </h3>
+                        <p class="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Propagation d'ondes planes progressives harmoniques (OPPH), polarisation, vecteur de Poynting et bilan d'énergie.
+                        </p>
+                        <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                6 exercices
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                ~120 min
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-actions flex shrink-0 flex-wrap gap-2 lg:flex-col lg:items-stretch">
+                        <a href="solutions.html#phys-em-maxwell" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les solutions</a>
+                        <a href="telechargements.html#pdf-em-maxwell" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="exercise-card flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:border-brand-200 hover:shadow-lift lg:flex-row lg:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Optique ondulatoire</span>
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Intermédiaire&nbsp;(**)</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            Série 4 : Interférences à deux ondes et interféromètre de Michelson
+                        </h3>
+                        <p class="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Dispositifs par division de front d'onde et d'amplitude. Configuration en lame d'air et en coin d'air.
+                        </p>
+                        <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                4 exercices
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                ~80 min
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-actions flex shrink-0 flex-wrap gap-2 lg:flex-col lg:items-stretch">
+                        <a href="solutions.html#phys-opt-michelson" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les solutions</a>
+                        <a href="telechargements.html#pdf-opt-michelson" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="exercise-card flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:border-brand-200 hover:shadow-lift lg:flex-row lg:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Mécanique des fluides</span>
+                            <span class="inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:text-rose-400">Avancé&nbsp;(***)</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L3 / Master</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            Série 5 : Écoulements réels et équation de Navier-Stokes
+                        </h3>
+                        <p class="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Écoulements de Poiseuille et de Couette, pertes de charge linéiques et singulières, nombre de Reynolds.
+                        </p>
+                        <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                3 exercices
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                ~100 min
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-actions flex shrink-0 flex-wrap gap-2 lg:flex-col lg:items-stretch">
+                        <a href="solutions.html#phys-fluides-navier" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les solutions</a>
+                        <a href="telechargements.html#pdf-fluides-navier" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination des exercices" class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <ul class="flex items-center justify-center gap-2">
+                <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
+                <li><a href="#" aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</a></li>
+                <li><a href="#" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">2</a></li>
+                <li><a href="#" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">3</a></li>
+                <li><a href="#" class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>

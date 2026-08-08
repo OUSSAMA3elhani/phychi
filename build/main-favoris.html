@@ -1,0 +1,162 @@
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl dark:bg-brand-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Favoris</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Ma sélection</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Mes Contenus Favoris
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Retrouvez rapidement l'ensemble des cours, exercices, solutions et documents que vous avez enregistrés.
+                </p>
+            </div>
+        </section>
+
+        <!-- Filtres -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Filtrer mes favoris
+                </h2>
+
+                <form action="favoris.html" method="get" class="mt-6 grid gap-5 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                    <div>
+                        <label for="categorie" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Catégorie</label>
+                        <select name="categorie" id="categorie"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes les catégories</option>
+                            <option value="cours">Cours</option>
+                            <option value="exercices">Exercices</option>
+                            <option value="solutions">Solutions / Corrigés</option>
+                            <option value="telechargements">Fichiers PDF</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="matiere" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Matière</label>
+                        <select name="matiere" id="matiere"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes les matières</option>
+                            <option value="physique">Physique</option>
+                            <option value="chimie">Chimie</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+                        Filtrer
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Liste des favoris -->
+        <section class="favorites-list mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-favoris">
+            <div class="flex flex-wrap items-baseline justify-between gap-3">
+                <h2 id="titre-favoris" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Ressources enregistrées
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">4 éléments</p>
+            </div>
+
+            <div class="mt-8 grid gap-6 lg:grid-cols-2">
+
+                <article class="favorite-card flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-cours inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Cours</span>
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Mécanique du Point et du Solide</h3>
+                    </header>
+                    <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500">Niveau : L1 / CPGE 1ère année</p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Module complet incluant la cinématique, la dynamique newtonienne, l'énergétique et les oscillateurs mécaniques.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="cours.html#meca" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Consulter le cours</a>
+                        <a href="chapitres.html#meca" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Voir les chapitres</a>
+                        <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-500/30 dark:text-rose-400 dark:hover:bg-rose-500/10">Retirer des favoris</button>
+                    </div>
+                </article>
+
+                <article class="favorite-card flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-exercice inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700 dark:bg-violet-500/10 dark:text-violet-400">Exercice</span>
+                            <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Série 1 : Oscillateur harmonique amorti et forcé</h3>
+                    </header>
+                    <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500">Niveau : L1 / CPGE 1ère année</p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Étude des régimes transitoires et permanents, résonance en amplitude et facteur de qualité.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="exercices-physique.html#meca-osc" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir l'exercice</a>
+                        <a href="solutions.html#phys-meca-osc" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Voir le corrigé</a>
+                        <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-500/30 dark:text-rose-400 dark:hover:bg-rose-500/10">Retirer des favoris</button>
+                    </div>
+                </article>
+
+                <article class="favorite-card flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-exercice inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700 dark:bg-violet-500/10 dark:text-violet-400">Exercice</span>
+                            <span class="badge badge-chimie inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Série 3 : Substitution nucléophile et élimination</h3>
+                    </header>
+                    <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500">Niveau : L2 / CPGE 2ème année</p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Problèmes d'analyse de mécanismes réactionnels et de stéréochimie en chimie organique.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="exercices-chimie.html#orga-sn-e" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Voir l'exercice</a>
+                        <a href="solutions.html#chim-orga-sn-e" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Voir le corrigé</a>
+                        <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-500/30 dark:text-rose-400 dark:hover:bg-rose-500/10">Retirer des favoris</button>
+                    </div>
+                </article>
+
+                <article class="favorite-card flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge badge-pdf inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:text-rose-400">PDF</span>
+                            <span class="badge badge-chimie inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Aide-mémoire : Mécanismes de Chimie Organique</h3>
+                    </header>
+                    <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500">Niveau : L2 / CPGE 2ème année &nbsp;•&nbsp; 1.8 Mo</p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Fiche de synthèse téléchargeable regroupant les profils énergétiques et la stéréochimie des substitutions et éliminations.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="telechargements.html#pdf-chim-orga-sn-e" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Accéder au téléchargement</a>
+                        <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-500/30 dark:text-rose-400 dark:hover:bg-rose-500/10">Retirer des favoris</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination des favoris" class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <ul class="flex items-center justify-center gap-2">
+                <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
+                <li><a href="#" aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</a></li>
+                <li><a href="#" class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>

@@ -1,0 +1,138 @@
+    <main id="contenu">
+        <div class="relative isolate overflow-hidden">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -right-32 -top-40 h-96 w-96 rounded-full bg-flask-500/10 blur-3xl dark:bg-flask-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto grid max-w-7xl items-start gap-14 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-28">
+
+                <!-- Panneau de valorisation -->
+                <section class="lg:sticky lg:top-28" aria-labelledby="titre-avantages">
+                    <nav aria-label="Fil d'Ariane" class="mb-8">
+                        <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                            <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                            <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                            <li class="font-medium text-slate-900 dark:text-white">Inscription</li>
+                        </ol>
+                    </nav>
+
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Gratuit et sans engagement</p>
+                    <h2 id="titre-avantages" class="mt-4 max-w-lg font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                        Créez votre compte PhyChi.
+                    </h2>
+                    <p class="mt-5 max-w-lg text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                        Rejoignez la plateforme pour sauvegarder vos documents, suivre votre progression et personnaliser votre apprentissage.
+                    </p>
+
+                    <ul class="mt-10 grid max-w-lg gap-4">
+                        <li class="flex items-center gap-3 text-[15px] text-slate-600 dark:text-slate-400">
+                            <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-flask-100 text-flask-700 dark:bg-flask-500/15 dark:text-flask-400" aria-hidden="true">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
+                            Accès illimité à l'ensemble des cours et corrigés
+                        </li>
+                        <li class="flex items-center gap-3 text-[15px] text-slate-600 dark:text-slate-400">
+                            <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-flask-100 text-flask-700 dark:bg-flask-500/15 dark:text-flask-400" aria-hidden="true">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
+                            Enregistrement de vos favoris et de votre progression
+                        </li>
+                        <li class="flex items-center gap-3 text-[15px] text-slate-600 dark:text-slate-400">
+                            <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-flask-100 text-flask-700 dark:bg-flask-500/15 dark:text-flask-400" aria-hidden="true">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
+                            Téléchargement des fiches PDF et sujets de TP
+                        </li>
+                        <li class="flex items-center gap-3 text-[15px] text-slate-600 dark:text-slate-400">
+                            <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-flask-100 text-flask-700 dark:bg-flask-500/15 dark:text-flask-400" aria-hidden="true">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
+                            Aucune publicité, aucun frais caché
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Formulaire -->
+                <section class="auth-section" aria-labelledby="titre-inscription">
+                    <div class="w-full rounded-3xl border border-slate-200 bg-white p-8 shadow-lift sm:p-10 dark:border-slate-800 dark:bg-slate-900">
+                        <h1 id="titre-inscription" class="font-display text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                            Inscription
+                        </h1>
+                        <p class="mt-3 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Quelques informations suffisent pour démarrer.
+                        </p>
+
+                        <form action="login.html" method="post" class="mt-8 grid gap-5">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <div>
+                                    <label for="nom" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nom</label>
+                                    <input type="text" id="nom" name="nom" required autocomplete="family-name" placeholder="Votre nom"
+                                           class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                </div>
+                                <div>
+                                    <label for="prenom" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Prénom</label>
+                                    <input type="text" id="prenom" name="prenom" required autocomplete="given-name" placeholder="Votre prénom"
+                                           class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Adresse e-mail</label>
+                                <input type="email" id="email" name="email" required autocomplete="email" placeholder="exemple@domaine.com"
+                                       class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            </div>
+
+                            <div>
+                                <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau d'études</label>
+                                <select name="niveau" id="niveau" required
+                                        class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                    <option value="" disabled selected>Sélectionnez votre niveau</option>
+                                    <option value="l1">L1 / CPGE 1ère année</option>
+                                    <option value="l2">L2 / CPGE 2ème année</option>
+                                    <option value="l3">L3 / Licence 3</option>
+                                    <option value="master">Master / Agrégation / CAPES</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mot de passe</label>
+                                    <input type="password" id="password" name="password" required autocomplete="new-password" minlength="8" placeholder="Au moins 8 caractères"
+                                           class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                </div>
+                                <div>
+                                    <label for="password_confirm" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirmation</label>
+                                    <input type="password" id="password_confirm" name="password_confirm" required autocomplete="new-password" minlength="8" placeholder="Répétez le mot de passe"
+                                           class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                                <input type="checkbox" id="terms" name="terms" required
+                                       class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-slate-300 text-brand-600 transition-colors focus:ring-brand-500/30 dark:border-slate-600 dark:bg-slate-950">
+                                <label for="terms" class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    J'accepte les
+                                    <a href="mentions-legales.html" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">conditions d'utilisation</a>
+                                    et la
+                                    <a href="politique-confidentialite.html" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">politique de confidentialité</a>.
+                                </label>
+                            </div>
+
+                            <button type="submit"
+                                    class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                                Créer mon compte
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </button>
+                        </form>
+
+                        <div class="auth-redirect mt-8 border-t border-slate-200 pt-6 text-center dark:border-slate-800">
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Vous avez déjà un compte ?</p>
+                            <a href="login.html" class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">
+                                Se connecter
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>

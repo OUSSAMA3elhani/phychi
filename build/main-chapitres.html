@@ -1,0 +1,484 @@
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl dark:bg-brand-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Chapitres</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Programme détaillé</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Sommaire des Chapitres
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Accédez directement aux chapitres détaillés de nos programmes de physique et de chimie.
+                </p>
+            </div>
+        </section>
+
+        <!-- Accès rapide -->
+        <section class="quick-nav mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-acces-rapide">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-acces-rapide" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Accès rapide par discipline
+                </h2>
+
+                <div class="mt-6 grid gap-6 md:grid-cols-2">
+                    <div>
+                        <h3 class="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">Physique</h3>
+                        <ul class="mt-4 flex flex-wrap gap-2">
+                    <li><a href="#meca" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Mécanique du Point et du Solide</a></li>
+                    <li><a href="#thermo" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Thermodynamique Macroscopique</a></li>
+                    <li><a href="#electromag" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Électromagnétisme</a></li>
+                    <li><a href="#fluides" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Mécanique des Fluides</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-semibold uppercase tracking-[0.16em] text-flask-600 dark:text-flask-400">Chimie</h3>
+                        <ul class="mt-4 flex flex-wrap gap-2">
+                    <li><a href="#thermochimie" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Thermochimie</a></li>
+                    <li><a href="#cinetique" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Cinétique Chimique</a></li>
+                    <li><a href="#organique" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Chimie Organique Structurale</a></li>
+                    <li><a href="#electrochimie" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Électrochimie</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapitres de Physique -->
+        <section class="chapters-section mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-chap-physique">
+            <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
+                </span>
+                <h2 id="titre-chap-physique" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Chapitres de Physique
+                </h2>
+            </div>
+
+            <div class="mt-8 grid gap-6">
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="meca">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1ère année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">4 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Mécanique du Point et du Solide</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Cinématique du point matériel</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Vecteurs position, vitesse, accélération. Repères cartésien, cylindrique et sphérique.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#meca-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#meca-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Dynamique newtonienne et PFD</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Principes fondamentaux de la dynamique, forces de frottement fluide et solide.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#meca-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#meca-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">3</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Énergétique du point matériel</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Travail d'une force, énergie cinétique, forces conservatives et potentiel.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#meca-ch3" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#meca-ch3" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">4</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Oscillateurs mécaniques</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Oscillateur libre, amorti et forcé en régime sinusoïdal. Résonance.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#meca-ch4" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#meca-ch4" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="thermo">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1ère année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">3 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Thermodynamique Macroscopique</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Description d'un système à l'équilibre</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Variables d'état, équation d'état des gaz parfaits et réels.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#thermo-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#thermo-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Premier principe de la thermodynamique</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Travail, transfert thermique, énergie interne et enthalpie.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#thermo-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#thermo-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">3</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Second principe et entropie</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Transformations réversibles et irréversibles, bilan d'entropie.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#thermo-ch3" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#thermo-ch3" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="electromag">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2ème année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">3 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Électromagnétisme &amp; Équations de Maxwell</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Électrostatique et théorème de Gauss</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Champ et potentiel électrostatiques, propriétés de symétrie.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#em-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#em-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Magnétostatique et loi de Biot-Savart</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Champ magnétostatique, théorème d'Ampère, dipôle magnétique.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#em-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#em-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">3</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Équations de Maxwell dans le vide</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Formes locales et intégrales, potentiel vecteur et vecteur de Poynting.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#em-ch3" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#em-ch3" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="fluides">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / L3 / CPGE 2ème année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">2 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Mécanique des Fluides</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Statique des fluides</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Pression, équation fondamentale de l'hydrostatique, poussée d'Archimède.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#fluides-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#fluides-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Dynamique des fluides parfaits et équation de Bernoulli</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Conservation du débit, ligne de courant, applications du théorème de Bernoulli.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#fluides-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-physique.html#fluides-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+            </div>
+        </section>
+
+        <!-- Chapitres de Chimie -->
+        <section class="chapters-section mx-auto max-w-7xl px-6 py-16 lg:px-8" aria-labelledby="titre-chap-chimie">
+            <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-flask-50 text-flask-600 dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                </span>
+                <h2 id="titre-chap-chimie" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Chapitres de Chimie
+                </h2>
+            </div>
+
+            <div class="mt-8 grid gap-6">
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="thermochimie">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1ère année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">2 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Thermochimie &amp; Équilibres Chimiques</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Premier principe appliqué à la réaction chimique</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Enthalpie de réaction, état standard, lois de Hess et de Kirchhoff.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#thermochim-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#thermochim-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Second principe et énergie libre de Gibbs</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Enthalpie libre de réaction, constante d'équilibre K° et loi de Van 't Hoff.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#thermochim-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#thermochim-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="cinetique">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1ère année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">2 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Cinétique Chimique</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Vitesse de réaction et ordre de réaction</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Lois de vitesse intégrées, temps de demi-réaction, méthode d'isolement d'Ostwald.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#cinet-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#cinet-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Mécanismes réactionnels en phase homogène</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Actes élémentaires, approximation de l'état quasi-stationnaire (AEQS) et étape limitante.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#cinet-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#cinet-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="organique">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2ème année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">2 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Chimie Organique Structurale</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Stéréochimie et conformation</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Chiralité, énantiomérie, diastéréoisomérie, représentations de Cram, Newman et Fischer.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#orga-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#orga-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Substitution nucléophile et élimination</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Étude comparative des mécanismes SN1, SN2, E1 et E2. Régiosélectivité et stéréosélectivité.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#orga-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#orga-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+
+            <article class="module-block scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="electrochimie">
+                <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2ème année</span>
+                        <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">2 chapitres</span>
+                    </div>
+                    <h3 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Électrochimie &amp; Oxydoréduction</h3>
+                </header>
+
+                <ol class="mt-4 grid gap-1">
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">1</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Piles et équation de Nernst</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Potentiel d'électrode, constante d'équilibre d'une réaction d'oxydoréduction.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#electro-ch1" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#electro-ch1" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="group relative flex gap-5 rounded-2xl border border-transparent p-5 transition-colors hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-700 dark:hover:bg-slate-950/50">
+                        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-flask-600 font-display text-sm font-bold text-white" aria-hidden="true">2</span>
+                        <div class="min-w-0">
+                            <h4 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">Diagrammes Potentiel-pH (Pourbaix)</h4>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">Construction, domaines de prédominance, stabilité de l'eau et corrosion.</p>
+                            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+                                <a href="cours.html#electro-ch2" class="inline-flex items-center gap-1.5 text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                                    Lire le cours
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="exercices-chimie.html#electro-ch2" class="text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">Exercices associés</a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </article>
+            </div>
+        </section>
+    </main>

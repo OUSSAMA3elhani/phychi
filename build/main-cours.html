@@ -1,0 +1,243 @@
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl dark:bg-brand-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Cours</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Modules de cours</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Cours de Physique &amp; Chimie
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Consultez des modules de cours complets et rigoureux conçus pour les étudiants du supérieur.
+                </p>
+
+                <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-4 dark:border-slate-800">
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">8</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Modules</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">43</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Chapitres</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">L1 → M2</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Niveaux couverts</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">PDF</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Téléchargeables</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- Filtres -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Filtrer les modules de cours
+                </h2>
+
+                <form action="cours.html" method="get" class="mt-6 grid gap-5 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                    <div>
+                        <label for="discipline" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Discipline</label>
+                        <select name="discipline" id="discipline"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes les disciplines</option>
+                            <option value="physique">Physique</option>
+                            <option value="chimie">Chimie</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau d'études</label>
+                        <select name="niveau" id="niveau"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="tous">Tous les niveaux</option>
+                            <option value="l1">L1 / CPGE 1ère année</option>
+                            <option value="l2">L2 / CPGE 2ème année</option>
+                            <option value="l3">L3 / Master / Agrégation</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+                        Filtrer
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Modules de Physique -->
+        <section class="courses-section mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-physique">
+            <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
+                </span>
+                <h2 id="titre-physique" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Modules de Physique
+                </h2>
+            </div>
+
+            <div class="courses-grid mt-8 grid gap-6 md:grid-cols-2">
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <span class="badge badge-physique inline-flex w-fit items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Mécanique du Point et du Solide</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L1 / CPGE 1</span><span aria-hidden="true">•</span><span>6 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Cinématique, lois de Newton, principes énergétiques, moments cinétiques, oscillateurs et mouvement à force centrale.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#meca" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-meca" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <span class="badge badge-physique inline-flex w-fit items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Thermodynamique Macroscopique</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L1 / CPGE 1</span><span aria-hidden="true">•</span><span>5 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Systèmes fermés et ouverts, 1er et 2nd principes, enthalpie, entropie, changements d'état et cycles thermiques.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#thermo" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-thermo" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <span class="badge badge-physique inline-flex w-fit items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Électromagnétisme &amp; Équations de Maxwell</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L2 / CPGE 2</span><span aria-hidden="true">•</span><span>8 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Électrostatique, magnétostatique, induction électromagnétique, équations de Maxwell, ondes électromagnétiques dans les milieux.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#electromag" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-em" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                    <span class="badge badge-physique inline-flex w-fit items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Physique</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Mécanique des Fluides</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L2 / L3 / CPGE 2</span><span aria-hidden="true">•</span><span>4 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Statique des fluides, cinématique des écoulements, équation d'Euler, théorème de Bernoulli et équation de Navier-Stokes.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#fluides" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-fluides" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Modules de Chimie -->
+        <section class="courses-section mx-auto max-w-7xl px-6 py-16 lg:px-8" aria-labelledby="titre-chimie">
+            <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-flask-50 text-flask-600 dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                </span>
+                <h2 id="titre-chimie" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Modules de Chimie
+                </h2>
+            </div>
+
+            <div class="courses-grid mt-8 grid gap-6 md:grid-cols-2">
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                    <span class="badge badge-chimie inline-flex w-fit items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Thermochimie &amp; Équilibres Chimiques</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L1 / CPGE 1</span><span aria-hidden="true">•</span><span>5 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Enthalpies de réaction, entropie, énergie libre de Gibbs, constantes d'équilibre et déplacement des équilibres.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#thermochimie" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-thermochimie" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                    <span class="badge badge-chimie inline-flex w-fit items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Cinétique Chimique Homogène &amp; Hétérogène</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L1 / CPGE 1</span><span aria-hidden="true">•</span><span>4 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Ordres de réaction, mécanismes réactionnels, approximation de l'état quasi-stationnaire, catalyse et régimes cinétiques.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#cinetique" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-cinetique" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                    <span class="badge badge-chimie inline-flex w-fit items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Chimie Organique Structurale &amp; Réactivité</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L2 / CPGE 2</span><span aria-hidden="true">•</span><span>7 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Stéréochimie, effets électroniques, substitutions nucléophiles, éliminations, additions électrophiles et organométalliques.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#organique" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-orga" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+
+                <article class="course-card group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                    <span class="badge badge-chimie inline-flex w-fit items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">Chimie</span>
+                    <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Électrochimie &amp; Diagrammes E-pH</h3>
+                    <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400 dark:text-slate-500">
+                        <span>Niveau : L2 / CPGE 2</span><span aria-hidden="true">•</span><span>4 chapitres</span>
+                    </p>
+                    <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Réactions d'oxydoréduction, équation de Nernst, courbes de polarisation, diagrammes de Pourbaix et corrosion.
+                    </p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="chapitres.html#electrochimie" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">Voir les chapitres</a>
+                        <a href="telechargements.html#cours-electrochimie" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Télécharger le PDF</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination des cours" class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+            <ul class="flex items-center justify-center gap-2">
+                <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
+                <li><a href="#" aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</a></li>
+                <li><a href="#" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">2</a></li>
+                <li><a href="#" class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">Suivant</a></li>
+            </ul>
+        </nav>
+    </main>

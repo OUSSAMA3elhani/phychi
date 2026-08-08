@@ -1,215 +1,542 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="PhyChi - Corrigés détaillés et solutions des exercices de physique et de chimie pour l'enseignement supérieur.">
+    <meta name="theme-color" content="#0f172a">
     <title>PhyChi - Solutions & Corrigés Détaillés</title>
-    <!-- Lien vers le fichier CSS -->
-    <link rel="stylesheet" href="style.css">
-    <!-- À ajouter dans le <head> de chaque page HTML -->
+
+    <!-- Application du thème avant le rendu (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="assets/theme.js"></script>
+    <link rel="stylesheet" href="assets/ui.css">
+
+    <script src="assets/ui.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
 
-    <!-- En-tête du site (Header) -->
-    <header>
-        <!-- Logo et identité du site -->
-        <div class="logo-container">
-            <a href="index.html">
-                <img src="logo.png" alt="PhyChi - Physique & Chimie pour l'Enseignement Supérieur" width="280">
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu"
+       class="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift">
+        Aller au contenu principal
+    </a>
+
+    <!-- ==================================================================
+         EN-TÊTE
+         ================================================================== -->
+    <header id="site-header"
+            class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl transition-shadow duration-300 dark:border-slate-800/80 dark:bg-slate-950/80">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5 lg:px-8">
+
+            <a href="index.html" class="group flex shrink-0 items-center gap-3" aria-label="PhyChi, retour à l'accueil">
+                <span class="relative grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 via-brand-600 to-flask-600 shadow-glow transition-transform duration-300 group-hover:scale-105">
+                    <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>
+                        <path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/>
+                        <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/>
+                    </svg>
+                </span>
+                <span class="flex flex-col leading-none">
+                    <span class="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        Phy<span class="text-brand-600 dark:text-brand-400">Chi</span>
+                    </span>
+                    <span class="mt-1 hidden text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400 sm:block dark:text-slate-500">
+                        Physique &amp; Chimie
+                    </span>
+                </span>
             </a>
+
+            <nav aria-label="Navigation principale" class="hidden xl:block">
+                <ul class="flex items-center gap-1 text-sm font-medium">
+                    <li>
+                        <a href="index.html" data-nav="index" class="rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Accueil</a>
+                    </li>
+
+                    <li class="group relative">
+                        <button type="button" data-navgroup="apprendre" class="flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">
+                            Apprendre
+                            <svg class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="invisible absolute left-0 top-full z-10 w-64 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                            <ul class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                                <li>
+                                    <a href="cours.html" data-nav="cours" class="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Cours</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Leçons complètes et structurées</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="chapitres.html" data-nav="chapitres" class="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Chapitres</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Parcourir par programme</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="group relative">
+                        <button type="button" data-navgroup="entrainer" class="flex items-center gap-1.5 rounded-lg px-3.5 py-2 font-semibold text-brand-700 transition-colors hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10">
+                            S'entraîner
+                            <svg class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="invisible absolute left-0 top-full z-10 w-72 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                            <ul class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                                <li>
+                                    <a href="exercices-physique.html" data-nav="exercices-physique" class="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Exercices de Physique</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Mécanique, thermo, électromagnétisme</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="exercices-chimie.html" data-nav="exercices-chimie" class="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        <span class="mt-0.5 text-flask-600 dark:text-flask-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Exercices de Chimie</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Organique, cinétique, solutions</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="solutions.html" data-nav="solutions" aria-current="page" class="flex items-start gap-3 rounded-xl bg-slate-50 px-3 py-2.5 transition-colors dark:bg-slate-800">
+                                        <span class="mt-0.5 text-flask-600 dark:text-flask-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Solutions détaillées</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Corrigés pas à pas</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li><a href="telechargements.html" data-nav="telechargements" class="rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Téléchargements</a></li>
+                    <li><a href="recherche.html" data-nav="recherche" class="rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Recherche</a></li>
+                    <li><a href="favoris.html" data-nav="favoris" class="rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Favoris</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <button type="button" id="theme-toggle-btn"
+                        class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
+                        aria-label="Basculer entre le mode clair et le mode sombre">
+                    <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    <svg class="hidden h-5 w-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                </button>
+
+                <a href="login.html" data-nav="login" class="hidden rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 sm:inline-flex dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Connexion</a>
+                <a href="inscription.html" data-nav="inscription" class="hidden rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-glow sm:inline-flex dark:bg-white dark:text-slate-900 dark:hover:bg-brand-500 dark:hover:text-white">Créer un compte</a>
+
+                <button type="button" id="mobile-menu-btn" aria-expanded="false" aria-controls="mobile-menu"
+                        class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50 xl:hidden dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                    <span class="sr-only">Ouvrir le menu de navigation</span>
+                    <svg id="icon-menu" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <svg id="icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Menu de navigation principal -->
-        <nav aria-label="Navigation principale">
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="cours.html">Cours</a></li>
-                <li><a href="chapitres.html">Chapitres</a></li>
-                <li><a href="exercices-physique.html">Exercices Physique</a></li>
-                <li><a href="exercices-chimie.html">Exercices Chimie</a></li>
-                <li><a href="solutions.html" aria-current="page">Solutions</a></li>
-                <li><a href="telechargements.html">Téléchargements</a></li>
-                <li><a href="recherche.html">Recherche</a></li>
-                <li><a href="favoris.html">Favoris</a></li>
+        <nav id="mobile-menu" aria-label="Navigation mobile"
+             class="hidden border-t border-slate-200 bg-white px-6 pb-8 pt-5 xl:hidden dark:border-slate-800 dark:bg-slate-950">
+            <p class="px-1 pb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Navigation</p>
+            <ul class="grid gap-1 text-[15px] font-medium sm:grid-cols-2">
+                <li><a href="index.html" data-mnav="index" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Accueil</a></li>
+                <li><a href="cours.html" data-mnav="cours" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Cours</a></li>
+                <li><a href="chapitres.html" data-mnav="chapitres" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Chapitres</a></li>
+                <li><a href="exercices-physique.html" data-mnav="exercices-physique" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Exercices Physique</a></li>
+                <li><a href="exercices-chimie.html" data-mnav="exercices-chimie" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Exercices Chimie</a></li>
+                <li><a href="solutions.html" data-mnav="solutions" aria-current="page" class="block rounded-xl bg-brand-50 px-4 py-3 font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Solutions</a></li>
+                <li><a href="telechargements.html" data-mnav="telechargements" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Téléchargements</a></li>
+                <li><a href="recherche.html" data-mnav="recherche" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Recherche</a></li>
+                <li><a href="favoris.html" data-mnav="favoris" class="block rounded-xl px-4 py-3 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Favoris</a></li>
             </ul>
+
+            <p class="px-1 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Mon compte</p>
+            <div class="grid gap-3 sm:grid-cols-3">
+                <a href="login.html" data-mnav="login" class="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-900">Connexion</a>
+                <a href="inscription.html" data-mnav="inscription" class="rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-700">Inscription</a>
+                <a href="profil.html" data-mnav="profil" class="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-900">Mon profil</a>
+            </div>
         </nav>
-
-        <!-- Menu de compte utilisateur -->
-        <div class="user-menu">
-            <ul>
-                <li><a href="login.html">Connexion</a></li>
-                <li><a href="inscription.html">Inscription</a></li>
-                <li><a href="profil.html">Mon Profil</a></li>
-            </ul>
-        </div>
     </header>
 
-    <!-- Contenu principal de la page (Main) -->
-    <main>
-        <!-- Section de titre et présentation de la page -->
-        <section class="page-header">
-            <h1>Solutions & Corrigés Détaillés</h1>
-            <p>Consultez les étapes de résolution, les démarches méthodologiques et la rédaction complète des exercices.</p>
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-flask-500/10 blur-3xl dark:bg-flask-600/20" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Solutions</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Corrigés</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Solutions &amp; Corrigés Détaillés
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Consultez les étapes de résolution, les démarches méthodologiques et la rédaction complète des exercices.
+                </p>
+            </div>
         </section>
 
-        <!-- Formulaire de recherche / filtrage des solutions -->
-        <section class="filter-section">
-            <h2>Rechercher un corrigé</h2>
-            <form action="solutions.html" method="get">
-                <label for="matiere">Matière :</label>
-                <select name="matiere" id="matiere">
-                    <option value="toutes">Toutes les matières</option>
-                    <option value="physique">Physique</option>
-                    <option value="chimie">Chimie</option>
-                </select>
+        <!-- Recherche d'un corrigé -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Rechercher un corrigé
+                </h2>
 
-                <label for="motcle">Mot-clé ou Référence :</label>
-                <input type="text" id="motcle" name="motcle" placeholder="Ex: Oscillateur, Nernst, SN1...">
+                <form action="solutions.html" method="get" class="mt-6 grid gap-5 md:grid-cols-[1fr_2fr_auto] md:items-end">
+                    <div>
+                        <label for="matiere" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Matière</label>
+                        <select name="matiere" id="matiere"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes les matières</option>
+                            <option value="physique">Physique</option>
+                            <option value="chimie">Chimie</option>
+                        </select>
+                    </div>
 
-                <button type="submit">Rechercher</button>
-            </form>
+                    <div>
+                        <label for="motcle" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mot-clé ou référence</label>
+                        <input type="text" id="motcle" name="motcle" placeholder="Ex : Oscillateur, Nernst, SN1…"
+                               class="mt-2 w-full rounded-xl border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                    </div>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        Rechercher
+                    </button>
+                </form>
+            </div>
         </section>
 
-        <!-- Liste des corrigés disponibles -->
-        <section class="solutions-list">
-            <h2>Derniers corrigés consultables</h2>
+        <!-- Liste des corrigés -->
+        <section class="solutions-list mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-corriges">
+            <h2 id="titre-corriges" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                Derniers corrigés consultables
+            </h2>
 
-            <!-- Corrigé 1 : Mécanique -->
-            <article class="solution-card" id="phys-meca-osc">
-                <header>
-                    <span class="badge badge-physique">Physique</span>
-                    <h3>Corrigé - Série 1 : Oscillateur harmonique amorti et forcé</h3>
-                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Réf :</strong> PHYS-MECA-01</p>
-                </header>
-                <div class="solution-summary">
-                    <h4>Aperçu de la méthode :</h4>
-                    <p>Résolution de l'équation différentielle linéaire du second ordre à coefficients constants avec second membre sinusoïdal. Passage en représentation complexe pour la recherche du régime permanent.</p>
-                </div>
-                <details>
-                    <summary>Afficher la réponse complète</summary>
-                    <div class="solution-content">
-                        <h5>Étape 1 : Équation du mouvement</h5>
-                        <p>Appliquer le Principe Fondamental de la Dynamique (PFD) dans le référentiel terrestre supposé galiléen.</p>
-                        <p><code>m d²x/dt² + h dx/dt + k x = F_0 cos(ω t)</code></p>
-                        <h5>Étape 2 : Régime sinusoïdal forcé</h5>
-                        <p>En notation complexe : <code>(-m ω² + j h ω + k) X_m = F_0</code>. On en deduit l'amplitude complexe et le déphasage de la réponse du système par rapport à l'excitation.</p>
-                    </div>
-                </details>
-                <div class="card-actions">
-                    <a href="telechargements.html#pdf-meca-osc">Télécharger le Corrigé PDF</a>
-                    <a href="favoris.html">Ajouter aux favoris</a>
-                </div>
-            </article>
+            <div class="mt-8 grid gap-6">
+                <article class="solution-card flex flex-col scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="phys-meca-osc">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge inline-flex items-center rounded-full bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 px-3 py-1 text-xs font-semibold">Physique</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1</span>
+                            <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                            <span class="font-mono text-xs text-slate-400 dark:text-slate-500">PHYS-MECA-01</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Corrigé — Série 1 : Oscillateur harmonique amorti et forcé</h3>
+                    </header>
 
-            <!-- Corrigé 2 : Thermodynamique -->
-            <article class="solution-card" id="phys-thermo-cycles">
-                <header>
-                    <span class="badge badge-physique">Physique</span>
-                    <h3>Corrigé - Série 2 : Cycles thermodynamiques et machines thermiques</h3>
-                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Réf :</strong> PHYS-THERMO-02</p>
-                </header>
-                <div class="solution-summary">
-                    <h4>Aperçu de la méthode :</h4>
-                    <p>Calcul des travaux et des transferts thermiques pour chaque transformation (isotherme, isochore, isobare, adiabatique) puis vérification du premier et du second principe.</p>
-                </div>
-                <details>
-                    <summary>Afficher la réponse complète</summary>
-                    <div class="solution-content">
-                        <h5>Étape 1 : Bilans d'énergie</h5>
-                        <p>Utilisation de la première loi de Joule pour un gaz parfait : <code>dU = C_v dT</code>. Pour chaque transformation, intégrer <code>δW = -P_ext dV</code>.</p>
-                        <h5>Étape 2 : Rendement / Efficacité</h5>
-                        <p>Définir le rendement <code>η = -W / Q_chaud</code> et le comparer au rendement maximal de Carnot <code>η_Carnot = 1 - T_f / T_c</code>.</p>
+                    <div class="solution-summary mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/50">
+                        <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Aperçu de la méthode</h4>
+                        <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Résolution de l'équation différentielle linéaire du second ordre à coefficients constants avec second membre sinusoïdal. Passage en représentation complexe pour la recherche du régime permanent.</p>
                     </div>
-                </details>
-                <div class="card-actions">
-                    <a href="telechargements.html#pdf-thermo-cycles">Télécharger le Corrigé PDF</a>
-                    <a href="favoris.html">Ajouter aux favoris</a>
-                </div>
-            </article>
 
-            <!-- Corrigé 3 : Cinétique chimie -->
-            <article class="solution-card" id="chim-cinetique">
-                <header>
-                    <span class="badge badge-chimie">Chimie</span>
-                    <h3>Corrigé - Série 1 : Cinétique chimique et régimes réactionnels</h3>
-                    <p><strong>Niveau :</strong> L1 / CPGE 1 | <strong>Réf :</strong> CHIM-CINE-01</p>
-                </header>
-                <div class="solution-summary">
-                    <h4>Aperçu de la méthode :</h4>
-                    <p>Intégration de la loi de vitesse d'ordre 1 et 2. Graphiques de linéarisation pour vérifier l'ordre d'une réaction et calculer la constante de vitesse k.</p>
-                </div>
-                <details>
-                    <summary>Afficher la réponse complète</summary>
-                    <div class="solution-content">
-                        <h5>Étape 1 : Intégration de la vitesse</h5>
-                        <p>Pour un ordre 1 : <code>-d[A]/dt = k [A] => ln([A]_0 / [A]) = k t</code>. Le temps de demi-réaction est <code>t_1/2 = ln(2) / k</code>.</p>
-                        <h5>Étape 2 : Énergie d'activation</h5>
-                        <p>Analyse de la variation de la constante de vitesse en fonction de la température grâce à la loi d'Arrhenius : <code>ln(k) = ln(A) - E_a / (R T)</code>.</p>
-                    </div>
-                </details>
-                <div class="card-actions">
-                    <a href="telechargements.html#pdf-chim-cinetique">Télécharger le Corrigé PDF</a>
-                    <a href="favoris.html">Ajouter aux favoris</a>
-                </div>
-            </article>
+                    <details class="mt-5 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <summary class="flex items-center justify-between gap-4 bg-slate-50 px-5 py-4 dark:bg-slate-950/50">
+                            <span class="font-display text-sm font-bold tracking-tight text-slate-900 dark:text-white">Afficher la résolution complète</span>
+                            <span class="details-chevron grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white text-slate-500 transition-transform duration-300 dark:bg-slate-800 dark:text-slate-400" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </span>
+                        </summary>
+                        <div class="solution-content border-t border-slate-200 p-6 dark:border-slate-800">
+                            <ol class="grid gap-7">
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 1 — Équation du mouvement</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Appliquer le principe fondamental de la dynamique (PFD) dans le référentiel terrestre supposé galiléen.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">m d²x/dt² + h dx/dt + k x = F₀ cos(ω t)</p>
+                            </li>
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 2 — Régime sinusoïdal forcé</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">En notation complexe, on isole l'amplitude complexe puis on en déduit le déphasage de la réponse du système par rapport à l'excitation.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">(−m ω² + j h ω + k) X_m = F₀</p>
+                            </li>
+                            </ol>
+                        </div>
+                    </details>
 
-            <!-- Corrigé 4 : Chimie Organique -->
-            <article class="solution-card" id="chim-orga-sn-e">
-                <header>
-                    <span class="badge badge-chimie">Chimie</span>
-                    <h3>Corrigé - Série 3 : Substitution nucléophile et élimination (SN1, SN2, E1, E2)</h3>
-                    <p><strong>Niveau :</strong> L2 / CPGE 2 | <strong>Réf :</strong> CHIM-ORGA-03</p>
-                </header>
-                <div class="solution-summary">
-                    <h4>Aperçu de la méthode :</h4>
-                    <p>Analyse de la classe du dérivé halogéné, de la force du nucléophile/base et de la polarité du solvant pour trancher entre les voies monomoléculaire et bimoléculaire.</p>
-                </div>
-                <details>
-                    <summary>Afficher la réponse complète</summary>
-                    <div class="solution-content">
-                        <h5>Étape 1 : Analyse des réactifs</h5>
-                        <p>Le substrat tertiaire favorise la formation du carbocation intermédiaire via une étape cinétiquement déterminante (mécanismes SN1 et E1).</p>
-                        <h5>Étape 2 : Stéréochimie</h5>
-                        <p>Pour la SN1, le carbocation plan autorise l'attaque du nucléophile par les deux faces, menant à un mélange racémique.</p>
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="telechargements.html#pdf-meca-osc" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:hover:bg-brand-500 dark:bg-white dark:text-slate-900 dark:hover:text-white">Télécharger le corrigé PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
                     </div>
-                </details>
-                <div class="card-actions">
-                    <a href="telechargements.html#pdf-chim-orga-sn-e">Télécharger le Corrigé PDF</a>
-                    <a href="favoris.html">Ajouter aux favoris</a>
-                </div>
-            </article>
+                </article>
+
+                <article class="solution-card flex flex-col scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-brand-200 dark:hover:border-brand-900 dark:border-slate-800 dark:bg-slate-900" id="phys-thermo-cycles">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge inline-flex items-center rounded-full bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 px-3 py-1 text-xs font-semibold">Physique</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1</span>
+                            <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                            <span class="font-mono text-xs text-slate-400 dark:text-slate-500">PHYS-THERMO-02</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Corrigé — Série 2 : Cycles thermodynamiques et machines thermiques</h3>
+                    </header>
+
+                    <div class="solution-summary mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/50">
+                        <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Aperçu de la méthode</h4>
+                        <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Calcul des travaux et des transferts thermiques pour chaque transformation (isotherme, isochore, isobare, adiabatique) puis vérification du premier et du second principe.</p>
+                    </div>
+
+                    <details class="mt-5 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <summary class="flex items-center justify-between gap-4 bg-slate-50 px-5 py-4 dark:bg-slate-950/50">
+                            <span class="font-display text-sm font-bold tracking-tight text-slate-900 dark:text-white">Afficher la résolution complète</span>
+                            <span class="details-chevron grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white text-slate-500 transition-transform duration-300 dark:bg-slate-800 dark:text-slate-400" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </span>
+                        </summary>
+                        <div class="solution-content border-t border-slate-200 p-6 dark:border-slate-800">
+                            <ol class="grid gap-7">
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 1 — Bilans d'énergie</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Utilisation de la première loi de Joule pour un gaz parfait, puis intégration du travail élémentaire sur chaque transformation.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">dU = C_v dT     et     δW = −P_ext dV</p>
+                            </li>
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 2 — Rendement et efficacité</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Définir le rendement du cycle et le comparer au rendement maximal de Carnot pour vérifier la cohérence du résultat.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">η = −W / Q_chaud     ≤     η_Carnot = 1 − T_f / T_c</p>
+                            </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="telechargements.html#pdf-thermo-cycles" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 dark:hover:bg-brand-500 dark:bg-white dark:text-slate-900 dark:hover:text-white">Télécharger le corrigé PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="solution-card flex flex-col scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="chim-cinetique">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge inline-flex items-center rounded-full bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400 px-3 py-1 text-xs font-semibold">Chimie</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L1 / CPGE 1</span>
+                            <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                            <span class="font-mono text-xs text-slate-400 dark:text-slate-500">CHIM-CINE-01</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Corrigé — Série 1 : Cinétique chimique et régimes réactionnels</h3>
+                    </header>
+
+                    <div class="solution-summary mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/50">
+                        <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Aperçu de la méthode</h4>
+                        <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Intégration de la loi de vitesse d'ordre 1 et 2. Graphiques de linéarisation pour vérifier l'ordre d'une réaction et calculer la constante de vitesse k.</p>
+                    </div>
+
+                    <details class="mt-5 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <summary class="flex items-center justify-between gap-4 bg-slate-50 px-5 py-4 dark:bg-slate-950/50">
+                            <span class="font-display text-sm font-bold tracking-tight text-slate-900 dark:text-white">Afficher la résolution complète</span>
+                            <span class="details-chevron grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white text-slate-500 transition-transform duration-300 dark:bg-slate-800 dark:text-slate-400" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </span>
+                        </summary>
+                        <div class="solution-content border-t border-slate-200 p-6 dark:border-slate-800">
+                            <ol class="grid gap-7">
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 1 — Intégration de la vitesse</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Pour un ordre 1, la linéarisation du logarithme de la concentration donne directement la constante de vitesse. Le temps de demi-réaction en découle.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">ln([A]₀ / [A]) = k t     →     t₁/₂ = ln(2) / k</p>
+                            </li>
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 2 — Énergie d'activation</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Analyse de la variation de la constante de vitesse en fonction de la température grâce à la loi d'Arrhenius.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">ln(k) = ln(A) − E_a / (R T)</p>
+                            </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="telechargements.html#pdf-chim-cinetique" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:hover:bg-flask-500 dark:bg-white dark:text-slate-900 dark:hover:text-white">Télécharger le corrigé PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+
+                <article class="solution-card flex flex-col scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-colors duration-300 hover:border-flask-200 dark:hover:border-flask-900 dark:border-slate-800 dark:bg-slate-900" id="chim-orga-sn-e">
+                    <header>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge inline-flex items-center rounded-full bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400 px-3 py-1 text-xs font-semibold">Chimie</span>
+                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">L2 / CPGE 2</span>
+                            <span aria-hidden="true" class="text-xs text-slate-300 dark:text-slate-600">•</span>
+                            <span class="font-mono text-xs text-slate-400 dark:text-slate-500">CHIM-ORGA-03</span>
+                        </div>
+                        <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Corrigé — Série 3 : Substitution nucléophile et élimination (SN1, SN2, E1, E2)</h3>
+                    </header>
+
+                    <div class="solution-summary mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/50">
+                        <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Aperçu de la méthode</h4>
+                        <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Analyse de la classe du dérivé halogéné, de la force du nucléophile ou de la base et de la polarité du solvant pour trancher entre les voies monomoléculaire et bimoléculaire.</p>
+                    </div>
+
+                    <details class="mt-5 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <summary class="flex items-center justify-between gap-4 bg-slate-50 px-5 py-4 dark:bg-slate-950/50">
+                            <span class="font-display text-sm font-bold tracking-tight text-slate-900 dark:text-white">Afficher la résolution complète</span>
+                            <span class="details-chevron grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white text-slate-500 transition-transform duration-300 dark:bg-slate-800 dark:text-slate-400" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </span>
+                        </summary>
+                        <div class="solution-content border-t border-slate-200 p-6 dark:border-slate-800">
+                            <ol class="grid gap-7">
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 1 — Analyse des réactifs</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Le substrat tertiaire favorise la formation du carbocation intermédiaire via une étape cinétiquement déterminante (mécanismes SN1 et E1).</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">R₃C—X  →  R₃C⁺ + X⁻   (étape lente)</p>
+                            </li>
+                            <li class="relative pl-8">
+                                <span class="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-brand-500 bg-white dark:bg-slate-900" aria-hidden="true"></span>
+                                <h5 class="font-display text-sm font-bold uppercase tracking-[0.12em] text-slate-900 dark:text-white">Étape 2 — Stéréochimie</h5>
+                                <p class="mt-2 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">Pour la SN1, le carbocation plan autorise l'attaque du nucléophile par les deux faces, menant à un mélange racémique.</p>
+                                <p class="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-mono text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">attaque faces Re / Si  →  mélange racémique (50/50)</p>
+                            </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <div class="card-actions mt-6 flex flex-wrap gap-2">
+                        <a href="telechargements.html#pdf-chim-orga-sn-e" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-flask-600 dark:hover:bg-flask-500 dark:bg-white dark:text-slate-900 dark:hover:text-white">Télécharger le corrigé PDF</a>
+                        <a href="favoris.html" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100">Ajouter aux favoris</a>
+                    </div>
+                </article>
+            </div>
         </section>
 
-        <!-- Navigation dans la liste des solutions -->
-        <nav aria-label="Pagination des solutions">
-            <ul>
-                <li><span>Précédent</span></li>
-                <li><a href="#" aria-current="page">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">Suivant</a></li>
+        <!-- Pagination -->
+        <nav aria-label="Pagination des solutions" class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <ul class="flex items-center justify-center gap-2">
+                <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
+                <li><a href="#" aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</a></li>
+                <li><a href="#" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">2</a></li>
+                <li><a href="#" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">3</a></li>
+                <li><a href="#" class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">Suivant</a></li>
             </ul>
         </nav>
     </main>
+    <!-- ==================================================================
+         PIED DE PAGE
+         ================================================================== -->
+    <footer class="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+        <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+            <div class="grid gap-12 lg:grid-cols-12">
 
-    <!-- Pied de page (Footer) -->
-    <footer>
-        <!-- Liens d'information et d'assistance -->
-        <nav aria-label="Navigation du pied de page">
-            <ul>
-                <li><a href="apropos.html">À propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="mentions-legales.html">Mentions légales</a></li>
-                <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
-            </ul>
-        </nav>
+                <div class="lg:col-span-4">
+                    <a href="index.html" class="flex items-center gap-3" aria-label="PhyChi, retour à l'accueil">
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-flask-600" aria-hidden="true">
+                            <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>
+                                <path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/>
+                                <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/>
+                            </svg>
+                        </span>
+                        <span class="font-display text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
+                            Phy<span class="text-brand-600 dark:text-brand-400">Chi</span>
+                        </span>
+                    </a>
+                    <p class="mt-6 max-w-sm text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        La plateforme d'apprentissage dédiée à la physique et à la chimie pour l'enseignement supérieur&nbsp;:
+                        cours complets, exercices corrigés et ressources téléchargeables.
+                    </p>
+                </div>
 
-        <!-- Copyright -->
-        <p>&copy; 2026 PhyChi - Physique & Chimie pour l'Enseignement Supérieur. Tous droits réservés.</p>
+                <div class="grid gap-10 sm:grid-cols-3 lg:col-span-8">
+                    <nav aria-label="Ressources">
+                        <h2 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-900 dark:text-white">Ressources</h2>
+                        <ul class="mt-5 space-y-3 text-[15px]">
+                            <li><a href="cours.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Cours</a></li>
+                            <li><a href="chapitres.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Chapitres</a></li>
+                            <li><a href="exercices-physique.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Exercices Physique</a></li>
+                            <li><a href="exercices-chimie.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Exercices Chimie</a></li>
+                            <li><a href="solutions.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Solutions</a></li>
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Mon espace">
+                        <h2 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-900 dark:text-white">Mon espace</h2>
+                        <ul class="mt-5 space-y-3 text-[15px]">
+                            <li><a href="login.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Connexion</a></li>
+                            <li><a href="inscription.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Inscription</a></li>
+                            <li><a href="profil.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Mon profil</a></li>
+                            <li><a href="favoris.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Favoris</a></li>
+                            <li><a href="telechargements.html" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Téléchargements</a></li>
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Navigation du pied de page">
+                        <h2 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-900 dark:text-white">Informations</h2>
+                        <ul class="mt-5 space-y-3 text-[15px]">
+                            <li><a href="apropos.html" data-fnav="apropos" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">À propos</a></li>
+                            <li><a href="contact.html" data-fnav="contact" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Contact</a></li>
+                            <li><a href="faq.html" data-fnav="faq" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">FAQ</a></li>
+                            <li><a href="mentions-legales.html" data-fnav="mentions-legales" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Mentions légales</a></li>
+                            <li><a href="politique-confidentialite.html" data-fnav="politique-confidentialite" class="text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Politique de confidentialité</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    &copy; 2026 PhyChi — Physique &amp; Chimie pour l'Enseignement Supérieur. Tous droits réservés.
+                </p>
+                <p class="text-sm text-slate-400 dark:text-slate-500">
+                    Conçu pour l'enseignement supérieur.
+                </p>
+            </div>
+        </div>
     </footer>
-
 </body>
 </html>
