@@ -1,14 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Contactez-nous. Posez vos questions sur les cours, signalez une erreur ou envoyez vos suggestions à notre équipe.">
+    <meta name="theme-color" content="#0f172a">
+    <title>PhyChi - Contact</title>
+
+    <!-- Application du thème avant le rendu (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="assets/theme.js"></script>
+    <link rel="stylesheet" href="assets/ui.css">
+
+    <script src="assets/ui.js" defer></script>
+    <script src="script.js" defer></script>
+    <!-- Liaison des formulaires avec l'API Express (servi par public/js/app.js) -->
+    <script src="/js/app.js" defer></script>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu"
+       class="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift">
+        Aller au contenu principal
+    </a>
+
+    <!-- ==================================================================
+         EN-TÊTE
+         ================================================================== -->
+    <%- include('partials/header') %>
+
     <main id="contenu">
 
         <!-- En-tête de page -->
         <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
-            <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl dark:bg-brand-600/20" aria-hidden="true"></div>
+            <%- include('partials/hero-decor') %>
 
             <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
                 <nav aria-label="Fil d'Ariane" class="mb-8">
                     <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                        <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                         <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                         <li class="font-medium text-slate-900 dark:text-white">Contact</li>
                     </ol>
@@ -126,7 +175,7 @@
                     <p class="mt-2 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                         La réponse à votre question se trouve peut-être déjà dans notre foire aux questions.
                     </p>
-                    <a href="faq.html" class="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800">
+                    <a href="/faq" class="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800">
                         Consulter la FAQ
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
@@ -134,3 +183,10 @@
             </section>
         </div>
     </main>
+
+    <!-- ==================================================================
+         PIED DE PAGE
+         ================================================================== -->
+    <%- include('partials/footer') %>
+</body>
+</html>

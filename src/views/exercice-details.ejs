@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= exercise.titre %> — énoncé et correction en <%= exercise.discipline_nom %> sur PhyChi.">
+    <meta name="theme-color" content="#0f172a">
+    <title><%= title %></title>
+
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('psychi_theme');
+                var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (dark) document.documentElement.classList.add('dark-theme');
+            } catch (e) { /* stockage indisponible : on garde le thème clair */ }
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <%#
+      Chemins ABSOLUS et non relatifs : cette page vit sous /exercices/:id.
+      Un chemin relatif « assets/theme.js » y serait resolu en
+      /exercices/assets/theme.js et renverrait 404.
+    -%>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+    <script src="/assets/ui.js" defer></script>
+    <script src="/js/script.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white">
+        Aller au contenu principal
+    </a>
+
+    <%- include('partials/header') %>
+
+    <main id="contenu">
+
+        <!-- En-tête de l'exercice -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <%- include('partials/hero-decor', { heroAccent: isChimie ? 'flask' : 'brand' }) %>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li><a href="<%= backUrl %>" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Exercices de <%= exercise.discipline_nom %></a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white"><%= exercise.chapter_titre %></li>
+                    </ol>
+                </nav>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold <%= isChimie ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                        <%= exercise.discipline_nom %>
+                    </span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <%= exercise.niveau %>
+                    </span>
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold capitalize text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                        <%= exercise.difficulte %>
+                    </span>
+                </div>
+
+                <h1 class="mt-5 max-w-4xl font-display text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+                    <%= exercise.titre %>
+                </h1>
+                <p class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    <%= exercise.description %>
+                </p>
+            </div>
+        </section>
+
+        <!-- Grille 3 colonnes : contenu (2) + colonne latérale (1) -->
+        <div class="mx-auto grid max-w-7xl gap-8 px-6 py-14 lg:grid-cols-3 lg:px-8">
+
+            <!-- ================= COLONNE PRINCIPALE ================= -->
+            <div class="min-w-0 lg:col-span-2">
+                <section class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft sm:p-8 dark:border-slate-800 dark:bg-slate-900"
+                         aria-labelledby="titre-documents">
+                    <h2 id="titre-documents" class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        Documents de l'exercice
+                    </h2>
+                    <p class="mt-2 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        Les documents ne se chargent qu'à la demande : utilisez les boutons ci-dessous.
+                    </p>
+
+                    <!-- Métadonnées -->
+                    <dl class="mt-7 grid grid-cols-2 gap-5 border-y border-slate-200 py-6 sm:grid-cols-4 dark:border-slate-800">
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Chapitre</dt>
+                            <dd class="mt-1 text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre %></dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Niveau</dt>
+                            <dd class="mt-1 text-sm font-semibold uppercase text-slate-900 dark:text-white"><%= exercise.niveau %></dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Difficulté</dt>
+                            <dd class="mt-1 text-sm font-semibold capitalize text-slate-900 dark:text-white"><%= exercise.difficulte %></dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Correction</dt>
+                            <dd class="mt-1 text-sm font-semibold <%= exercise.correction_file ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' %>">
+                                <%= exercise.correction_file ? 'Disponible' : 'À venir' %>
+                            </dd>
+                        </div>
+                    </dl>
+
+                    <!-- Actions principales -->
+                    <div class="mt-7 flex flex-wrap gap-3">
+                        <% if (exercise.enonce_file) { %>
+                            <button type="button"
+                                    data-doc-toggle
+                                    aria-expanded="false"
+                                    aria-controls="doc-enonce"
+                                    data-doc-url="<%= exercise.enonce_file %>"
+                                    data-doc-title="Énoncé — <%= exercise.titre %>"
+                                    data-label-show="Voir l'énoncé"
+                                    data-label-hide="Masquer l'énoncé"
+                                    class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span data-doc-label>Voir l'énoncé</span>
+                            </button>
+                        <% } %>
+
+                        <% if (exercise.correction_file) { %>
+                            <button type="button"
+                                    data-doc-toggle
+                                    aria-expanded="false"
+                                    aria-controls="doc-correction"
+                                    data-doc-url="<%= exercise.correction_file %>"
+                                    data-doc-title="Correction — <%= exercise.titre %>"
+                                    data-label-show="Voir la correction"
+                                    data-label-hide="Masquer la correction"
+                                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                                <span data-doc-label>Voir la correction</span>
+                            </button>
+                        <% } %>
+
+                        <% var isFav = (typeof favoriteIds !== 'undefined' && favoriteIds ? favoriteIds : []).indexOf(exercise.id) !== -1; %>
+                        <button type="button"
+                                data-fav-toggle
+                                data-item-type="exercise"
+                                data-item-id="<%= exercise.id %>"
+                                data-favorited="<%= isFav ? 'true' : 'false' %>"
+                                aria-pressed="<%= isFav ? 'true' : 'false' %>"
+                                class="inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
+                        </button>
+                    </div>
+
+                    <!-- Visionneuses : masquées au chargement -->
+                    <div id="doc-enonce" class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950" hidden></div>
+                    <div id="doc-correction" class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4 dark:border-emerald-900/50 dark:bg-emerald-950/20" hidden></div>
+
+                    <!-- Accès aux documents : soumis à approbation -->
+                    <% if (exercise.enonce_file || exercise.correction_file) { %>
+                        <div class="mt-8 border-t border-slate-200 pt-6 dark:border-slate-800">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Téléchargements</h3>
+                            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                                Le téléchargement des documents est soumis à l'approbation d'un administrateur.
+                            </p>
+                            <div class="mt-4 flex flex-wrap gap-3">
+                                <%- include('partials/download-button', {
+                                    dlType: 'exercise',
+                                    dlId: exercise.id,
+                                    dlFile: exercise.enonce_file || exercise.correction_file,
+                                    dlStatus: downloadStatus.get(exercise.id),
+                                    dlLabel: 'les documents'
+                                }) %>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <p class="mt-7 rounded-2xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                            Aucun document n'a encore été téléversé pour cet exercice.
+                        </p>
+                    <% } %>
+                </section>
+
+                <a href="<%= backUrl %>" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Retour aux exercices de <%= exercise.discipline_nom %>
+                </a>
+            </div>
+
+            <!-- ================= COLONNE LATÉRALE ================= -->
+            <aside class="min-w-0 lg:col-span-1" aria-label="Contenus associés">
+                <div class="grid gap-6 lg:sticky lg:top-24">
+
+                    <!-- Exercices similaires -->
+                    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900"
+                             aria-labelledby="titre-similaires">
+                        <h2 id="titre-similaires" class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">
+                            Exercices similaires
+                        </h2>
+
+                        <% if (related.length === 0) { %>
+                            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Aucun autre exercice dans cette discipline pour l'instant.</p>
+                        <% } else { %>
+                            <ul class="mt-4 grid gap-3">
+                                <% related.forEach(function (exo) { %>
+                                    <li>
+                                        <a href="/exercices/<%= exo.id %>"
+                                           class="group block rounded-2xl border border-slate-200 p-4 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-soft dark:border-slate-800 dark:hover:border-brand-700">
+                                            <div class="flex flex-wrap items-center gap-1.5">
+                                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase text-slate-600 dark:bg-slate-800 dark:text-slate-300"><%= exo.niveau %></span>
+                                                <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold capitalize text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"><%= exo.difficulte %></span>
+                                                <% if (exo.same_chapter) { %>
+                                                    <span class="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">Même chapitre</span>
+                                                <% } %>
+                                            </div>
+                                            <p class="mt-2 text-sm font-semibold leading-snug text-slate-900 transition-colors group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
+                                                <%= exo.titre %>
+                                            </p>
+                                            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500"><%= exo.chapter_titre %></p>
+                                        </a>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        <% } %>
+                    </section>
+
+                    <!-- Cours recommandés -->
+                    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900"
+                             aria-labelledby="titre-recommandes">
+                        <h2 id="titre-recommandes" class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">
+                            Cours recommandés
+                        </h2>
+
+                        <% if (recommended.length === 0) { %>
+                            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Aucune fiche de cours associée pour l'instant.</p>
+                        <% } else { %>
+                            <ul class="mt-4 grid gap-3">
+                                <% recommended.forEach(function (course) { %>
+                                    <li class="rounded-2xl border border-slate-200 p-4 transition-colors hover:border-flask-300 dark:border-slate-800 dark:hover:border-flask-700">
+                                        <div class="flex items-start gap-3">
+                                            <span class="mt-0.5 shrink-0 text-flask-500 dark:text-flask-400" aria-hidden="true">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+                                            </span>
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-semibold leading-snug text-slate-900 dark:text-white"><%= course.titre %></p>
+                                                <p class="mt-1 text-xs text-slate-400 dark:text-slate-500"><%= course.chapter_titre %></p>
+
+                                                <% if (course.course_file) { %>
+                                                    <button type="button"
+                                                            data-file-modal
+                                                            data-file-url="<%= course.course_file %>"
+                                                            data-file-title="<%= course.titre %>"
+                                                            data-file-label="Fiche de cours"
+                                                            class="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-flask-600 dark:bg-white dark:text-slate-900 dark:hover:bg-flask-500 dark:hover:text-white">
+                                                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        Consulter
+                                                    </button>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        <% } %>
+
+                        <a href="/cours" class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                            Voir tous les cours
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </section>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <%- include('partials/file-modal') %>
+
+    <% if (!user) { %>
+        <%- include('partials/login-wall') %>
+    <% } %>
+</body>
+</html>

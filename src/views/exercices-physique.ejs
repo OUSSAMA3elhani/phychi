@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Exercices et problèmes corrigés de physique pour le niveau supérieur (Mécanique, Thermodynamique, Électromagnétisme, Optique, Fluides).">
+    <meta name="theme-color" content="#0f172a">
+    <title>PhyChi - Exercices de Physique</title>
+
+    <!-- Application du thème avant le rendu (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="assets/theme.js"></script>
+    <link rel="stylesheet" href="assets/ui.css">
+
+    <script src="assets/ui.js" defer></script>
+    <script src="script.js" defer></script>
+    <!-- Liaison des formulaires avec l'API Express (servi par public/js/app.js) -->
+    <script src="/js/app.js" defer></script>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu"
+       class="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift">
+        Aller au contenu principal
+    </a>
+
+    <!-- ==================================================================
+         EN-TÊTE
+         ================================================================== -->
+    <%- include('partials/header') %>
+
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <%- include('partials/hero-decor') %>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Exercices de Physique</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Banque d'exercices</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Exercices de Physique
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Problèmes, travaux dirigés et sujets d'entraînement classés par domaine, par niveau et par difficulté.
+                </p>
+
+                <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-4 dark:border-slate-800">
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.series %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Séries publiées</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.enonces %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Énoncés disponibles</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.chapitres %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Chapitres couverts</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.corrigesPercent %>%</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Corrigés</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- Filtres -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Filtrer les exercices
+                </h2>
+
+                <form action="/exercices-physique" method="get" class="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+                    <div>
+                        <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Chapitre</label>
+                        <%# Les chapitres proviennent de la base : l'ancienne liste de domaines
+                            etait figee dans le gabarit et ne correspondait a aucune donnee. -%>
+                        <select name="chapitre" id="domaine"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="tous"<%= filters.chapitre === 'tous' ? ' selected' : '' %>>Tous les chapitres</option>
+                            <% chapters.forEach(function (ch) { %>
+                                <option value="<%= ch.id %>"<%= String(filters.chapitre) === String(ch.id) ? ' selected' : '' %>><%= ch.titre %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau</label>
+                        <select name="niveau" id="niveau"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <% var NIVEAUX = [['tous','Tous les niveaux'],['l1','L1 / CPGE 1ère année'],['l2','L2 / CPGE 2ème année'],['l3','L3'],['master','Master']]; %>
+                            <% NIVEAUX.forEach(function (n) { %>
+                                <option value="<%= n[0] %>"<%= filters.niveau === n[0] ? ' selected' : '' %>><%= n[1] %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="difficulte" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Difficulté</label>
+                        <select name="difficulte" id="difficulte"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <% var DIFFS = [['toutes','Toutes'],['facile','Débutant (*)'],['moyen','Intermédiaire (**)'],['difficile','Difficile (***)'],['avance','Avancé (***)']]; %>
+                            <% DIFFS.forEach(function (d) { %>
+                                <option value="<%= d[0] %>"<%= filters.difficulte === d[0] ? ' selected' : '' %>><%= d[1] %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+                            Filtrer
+                        </button>
+                        <% if (filters.chapitre !== 'tous' || filters.niveau !== 'tous' || filters.difficulte !== 'toutes') { %>
+                            <a href="/exercices-physique" class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                                Réinitialiser
+                            </a>
+                        <% } %>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Liste des séries -->
+        <section class="exercises-list mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-series">
+            <h2 id="titre-series" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                Séries d'exercices disponibles
+            </h2>
+
+            <div class="mt-8 grid gap-6">
+                <% var favIds = (typeof favoriteIds !== 'undefined' && favoriteIds) ? favoriteIds : []; %>
+                <% if (typeof exercises !== 'undefined' && exercises && exercises.length > 0) { %>
+                    <% exercises.forEach(function (exo) { %>
+                        <% var isFav = favIds.indexOf(exo.id) !== -1; %>
+                        <article class="exercise-card group relative flex flex-col rounded-3xl border border-brand-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                            <header>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                                        Physique — <%= exo.niveau.toUpperCase() %>
+                                    </span>
+                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold capitalize text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                        Difficulté : <%= exo.difficulte %>
+                                    </span>
+                                </div>
+<h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                                    <a href="/exercices/<%= exo.id %>" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">
+                                        <!-- Rend toute la carte cliquable ; le bouton favori repasse au-dessus via z-10 -->
+                                        <span class="absolute inset-0" aria-hidden="true"></span>
+                                        <%= exo.titre %>
+                                    </a>
+                                </h3>
+                            </header>
+
+                            <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500">Chapitre : <%= exo.chapter_titre %></p>
+                            <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400"><%= exo.description %></p>
+
+                            <div class="exercise-file-actions relative z-10 mt-6 flex flex-wrap items-center gap-3">
+                                <a href="/exercices/<%= exo.id %>"
+                                   class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                                    Voir l'exercice
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+
+                                <button type="button"
+                                        data-fav-toggle
+                                        data-item-type="exercise"
+                                        data-item-id="<%= exo.id %>"
+                                        data-favorited="<%= isFav ? 'true' : 'false' %>"
+                                        aria-pressed="<%= isFav ? 'true' : 'false' %>"
+                                        class="inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                    <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
+                                </button>
+
+                                <!-- Disponibilite des documents, sans les charger -->
+                                <span class="ml-auto flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
+                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
+                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                </span>
+                            </div>
+                        </article>
+                    <% }); %>
+                <% } else { %>
+                    <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+                        <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Aucun exercice ne correspond à ces critères</h3>
+                        <p class="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Élargissez les filtres ou réinitialisez-les pour retrouver l'ensemble des séries de physique.
+                        </p>
+                        <a href="/exercices-physique" class="mt-6 inline-flex items-center rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                            Réinitialiser les filtres
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+
+        <%- include('partials/pagination', { paginationLabel: 'Pagination des exercices' }) %>
+    </main>
+
+    <!-- ==================================================================
+         PIED DE PAGE
+         ================================================================== -->
+    <%- include('partials/footer') %>
+
+    <%- include('partials/file-modal') %>
+</body>
+</html>

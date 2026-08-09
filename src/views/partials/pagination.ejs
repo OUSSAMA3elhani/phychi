@@ -1,0 +1,69 @@
+<%#
+  Pagination partagee.
+
+  Attend un objet `pagination` construit par paginate() dans pageController :
+  { current, pages, hasPrev, hasNext, from, to, total, queryFor(n) }.
+  `queryFor(n)` reconstruit la chaine de requete en conservant les filtres
+  actifs, sans quoi changer de page les reinitialiserait.
+
+  Parametre facultatif : paginationLabel (libelle accessible du <nav>).
+-%>
+<% if (pagination && pagination.pages > 1) { %>
+    <%
+        var label = (typeof paginationLabel !== 'undefined' && paginationLabel) ? paginationLabel : 'Pagination';
+        // Fenetre glissante de 5 numeros autour de la page courante.
+        var span = 2;
+        var start = Math.max(1, pagination.current - span);
+        var end = Math.min(pagination.pages, pagination.current + span);
+        if (end - start < 4) {
+            if (start === 1) end = Math.min(pagination.pages, start + 4);
+            else if (end === pagination.pages) start = Math.max(1, end - 4);
+        }
+
+        var IDLE = 'inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300';
+        var ACTIVE = 'inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow';
+        var STEP = 'inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300';
+        var STEP_OFF = 'inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600';
+    %>
+    <nav aria-label="<%= label %>" class="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+        <ul class="flex flex-wrap items-center justify-center gap-2">
+            <li>
+                <% if (pagination.hasPrev) { %>
+                    <a href="<%= pagination.queryFor(pagination.current - 1) %>" rel="prev" class="<%= STEP %>">Précédent</a>
+                <% } else { %>
+                    <span class="<%= STEP_OFF %>" aria-disabled="true">Précédent</span>
+                <% } %>
+            </li>
+
+            <% if (start > 1) { %>
+                <li><a href="<%= pagination.queryFor(1) %>" class="<%= IDLE %>">1</a></li>
+                <% if (start > 2) { %><li><span class="px-1 text-slate-400" aria-hidden="true">…</span></li><% } %>
+            <% } %>
+
+            <% for (var p = start; p <= end; p++) { %>
+                <li>
+                    <a href="<%= pagination.queryFor(p) %>"
+                       class="<%= p === pagination.current ? ACTIVE : IDLE %>"
+                       <%- p === pagination.current ? 'aria-current="page"' : '' %>><%= p %></a>
+                </li>
+            <% } %>
+
+            <% if (end < pagination.pages) { %>
+                <% if (end < pagination.pages - 1) { %><li><span class="px-1 text-slate-400" aria-hidden="true">…</span></li><% } %>
+                <li><a href="<%= pagination.queryFor(pagination.pages) %>" class="<%= IDLE %>"><%= pagination.pages %></a></li>
+            <% } %>
+
+            <li>
+                <% if (pagination.hasNext) { %>
+                    <a href="<%= pagination.queryFor(pagination.current + 1) %>" rel="next" class="<%= STEP %>">Suivant</a>
+                <% } else { %>
+                    <span class="<%= STEP_OFF %>" aria-disabled="true">Suivant</span>
+                <% } %>
+            </li>
+        </ul>
+
+        <p class="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
+            Résultats <%= pagination.from %>–<%= pagination.to %> sur <%= pagination.total %>
+        </p>
+    </nav>
+<% } %>

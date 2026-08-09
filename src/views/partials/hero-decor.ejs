@@ -1,0 +1,71 @@
+<%#
+  Decor de fond partage des sections « hero ».
+
+  Remplace l'ancienne decoration qui ne comportait qu'une seule orbe a GAUCHE :
+  le cote droit paraissait vide sur toutes les pages a colonne unique.
+
+  Trois couches, toutes en `pointer-events-none` et `aria-hidden` pour rester
+  purement decoratives :
+    1. la trame `bg-grid` existante ;
+    2. des orbes floutees (blur-3xl) en melange de calques ;
+    3. un motif geometrique physique/chimie a droite (orbitales + hexagone),
+       masque sous `lg` pour ne pas encombrer les petits ecrans.
+
+  Parametres facultatifs passes via include(..., { }) :
+    heroAccent   'brand' (defaut) | 'flask' -> teinte du motif de droite
+    heroCompact  true -> orbes plus discretes et motif retire, pour les heros a
+                 deux colonnes dont la droite porte deja du contenu
+                 (accueil, connexion, inscription).
+
+  Les parametres portent un prefixe `hero` : un `var accent` homonyme serait
+  hisse en tete du gabarit compile et masquerait la valeur transmise.
+-%>
+<%
+    var _accent = (typeof heroAccent !== 'undefined' && heroAccent) ? heroAccent : 'brand';
+    var _compact = (typeof heroCompact !== 'undefined') ? !!heroCompact : false;
+    var isFlask = _accent === 'flask';
+
+    // `mix-blend-multiply` fonce joliment sur fond clair ; en sombre, `screen`
+    // eclaircit au lieu de noircir la zone.
+    var blend = 'mix-blend-multiply dark:mix-blend-screen';
+    var mainOpacity = _compact ? 'opacity-20' : 'opacity-30';
+    var motifColor = isFlask ? 'text-flask-500/20 dark:text-flask-400/20' : 'text-brand-500/20 dark:text-brand-400/20';
+%>
+    <!-- Trame de fond -->
+    <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+
+    <!-- Orbe gauche : conserve l'equilibre d'origine derriere le texte -->
+    <div class="pointer-events-none absolute -left-32 -top-40 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl <%= blend %> dark:bg-brand-600/20"
+         aria-hidden="true"></div>
+
+    <!-- Orbes droite : comblent le vide signale sur toutes les pages -->
+    <div class="pointer-events-none absolute -right-24 -top-32 h-[30rem] w-[30rem] rounded-full bg-flask-400 blur-3xl <%= blend %> <%= mainOpacity %> dark:bg-flask-500"
+         aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -bottom-40 right-20 h-80 w-80 rounded-full bg-brand-400 blur-3xl <%= blend %> <%= _compact ? 'opacity-15' : 'opacity-25' %> dark:bg-brand-500"
+         aria-hidden="true"></div>
+
+    <% if (!_compact) { %>
+    <!-- Motif geometrique : orbitales atomiques + hexagone (chimie) -->
+    <div class="pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-1/4 lg:block" aria-hidden="true">
+        <svg class="h-[32rem] w-[32rem] <%= motifColor %>" viewBox="0 0 400 400" fill="none" stroke="currentColor">
+            <!-- Orbitales -->
+            <ellipse cx="200" cy="200" rx="150" ry="58" stroke-width="1.5"/>
+            <ellipse cx="200" cy="200" rx="150" ry="58" stroke-width="1.5" transform="rotate(60 200 200)"/>
+            <ellipse cx="200" cy="200" rx="150" ry="58" stroke-width="1.5" transform="rotate(120 200 200)"/>
+            <circle cx="200" cy="200" r="9" fill="currentColor" stroke="none"/>
+
+            <!-- Electrons -->
+            <circle cx="350" cy="200" r="5" fill="currentColor" stroke="none"/>
+            <circle cx="125" cy="70" r="5" fill="currentColor" stroke="none"/>
+            <circle cx="125" cy="330" r="5" fill="currentColor" stroke="none"/>
+
+            <!-- Cycle hexagonal facon chimie organique -->
+            <path d="M300 60 L336 81 L336 123 L300 144 L264 123 L264 81 Z" stroke-width="1.5"/>
+            <path d="M300 76 L322 89 L322 115 L300 128 L278 115 L278 89 Z" stroke-width="1"/>
+
+            <!-- Cercles concentriques -->
+            <circle cx="90" cy="320" r="46" stroke-width="1.5"/>
+            <circle cx="90" cy="320" r="28" stroke-width="1"/>
+        </svg>
+    </div>
+    <% } %>

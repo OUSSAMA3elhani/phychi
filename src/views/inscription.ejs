@@ -1,7 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Inscription. Créez un compte gratuitement pour suivre vos cours, accéder aux corrigés et enregistrer vos exercices favoris en physique et chimie.">
+    <meta name="theme-color" content="#0f172a">
+    <title>PhyChi - Inscription</title>
+
+    <!-- Application du thème avant le rendu (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="assets/theme.js"></script>
+    <link rel="stylesheet" href="assets/ui.css">
+
+    <script src="assets/ui.js" defer></script>
+    <script src="script.js" defer></script>
+    <!-- Liaison des formulaires avec l'API Express (servi par public/js/app.js) -->
+    <script src="/js/app.js" defer></script>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu"
+       class="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift">
+        Aller au contenu principal
+    </a>
+
+    <!-- ==================================================================
+         EN-TÊTE
+         ================================================================== -->
+    <%- include('partials/header') %>
+
     <main id="contenu">
         <div class="relative isolate overflow-hidden">
-            <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
-            <div class="pointer-events-none absolute -right-32 -top-40 h-96 w-96 rounded-full bg-flask-500/10 blur-3xl dark:bg-flask-600/20" aria-hidden="true"></div>
+            <%- include('partials/hero-decor', { heroAccent: 'flask', heroCompact: true }) %>
 
             <div class="relative mx-auto grid max-w-7xl items-start gap-14 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-28">
 
@@ -9,7 +58,7 @@
                 <section class="lg:sticky lg:top-28" aria-labelledby="titre-avantages">
                     <nav aria-label="Fil d'Ariane" class="mb-8">
                         <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                            <li><a href="index.html" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                            <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                             <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                             <li class="font-medium text-slate-900 dark:text-white">Inscription</li>
                         </ol>
@@ -114,9 +163,9 @@
                                        class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-slate-300 text-brand-600 transition-colors focus:ring-brand-500/30 dark:border-slate-600 dark:bg-slate-950">
                                 <label for="terms" class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                                     J'accepte les
-                                    <a href="mentions-legales.html" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">conditions d'utilisation</a>
+                                    <a href="/mentions-legales" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">conditions d'utilisation</a>
                                     et la
-                                    <a href="politique-confidentialite.html" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">politique de confidentialité</a>.
+                                    <a href="/politique-confidentialite" class="font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">politique de confidentialité</a>.
                                 </label>
                             </div>
 
@@ -129,7 +178,7 @@
 
                         <div class="auth-redirect mt-8 border-t border-slate-200 pt-6 text-center dark:border-slate-800">
                             <p class="text-sm text-slate-500 dark:text-slate-400">Vous avez déjà un compte ?</p>
-                            <a href="login.html" class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">
+                            <a href="/login" class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 underline-offset-4 hover:underline dark:text-brand-400">
                                 Se connecter
                             </a>
                         </div>
@@ -138,3 +187,10 @@
             </div>
         </div>
     </main>
+
+    <!-- ==================================================================
+         PIED DE PAGE
+         ================================================================== -->
+    <%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %> - PhyChi Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+    <script src="/assets/ui.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
+    <%- include('partials/sidebar') %>
+    <div class="pl-72">
+        <%- include('partials/header') %>
+        <main class="p-8">
+            <div class="grid gap-8 lg:grid-cols-12">
+                <!-- Table list -->
+                <div class="lg:col-span-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                    <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Disciplines Matières (<%= disciplines.length %>)</h2>
+                    </div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-200 dark:bg-slate-950/50 dark:border-slate-800">
+                            <tr>
+                                <th class="px-6 py-4">Nom</th>
+                                <th class="px-6 py-4">Slug</th>
+                                <th class="px-6 py-4">Description</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <% disciplines.forEach(function(d) { %>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-slate-900 dark:text-white"><%= d.nom %></td>
+                                    <td class="px-6 py-4 text-xs font-mono text-slate-500"><%= d.slug %></td>
+                                    <td class="px-6 py-4 text-xs text-slate-600 dark:text-slate-400"><%= d.description %></td>
+                                    <td class="px-6 py-4 text-right">
+                                        <form action="/admin/disciplines/<%= d.id %>/delete" method="post" onsubmit="return confirm('Supprimer cette discipline ?')" class="inline">
+                                            <button type="submit" class="text-rose-600 hover:text-rose-700 font-semibold text-xs dark:text-rose-400">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add Form -->
+                <div class="lg:col-span-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900 self-start">
+                    <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white mb-4">Ajouter / Modifier une Discipline</h3>
+                    <form action="/admin/disciplines/save" method="post" class="grid gap-4">
+                        <input type="hidden" name="id" value="">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Nom de la Discipline</label>
+                            <input type="text" name="nom" required placeholder="ex: Physique, Chimie" class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Slug (optionnel)</label>
+                            <input type="text" name="slug" placeholder="ex: physique, chimie" class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Description</label>
+                            <textarea name="description" rows="3" class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="rounded-xl bg-brand-600 text-white font-semibold py-3 hover:bg-brand-700 text-sm transition-all shadow-glow">Enregistrer la discipline</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

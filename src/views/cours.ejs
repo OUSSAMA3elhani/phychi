@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhyChi - Cours complets de physique et de chimie pour l'enseignement supérieur (CPGE, Licence, Master, Agrégation).">
+    <meta name="theme-color" content="#0f172a">
+    <title>PhyChi - Cours de Physique & Chimie</title>
+
+    <!-- Application du thème avant le rendu (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="assets/theme.js"></script>
+    <link rel="stylesheet" href="assets/ui.css">
+
+    <script src="assets/ui.js" defer></script>
+    <script src="script.js" defer></script>
+    <!-- Liaison des formulaires avec l'API Express (servi par public/js/app.js) -->
+    <script src="/js/app.js" defer></script>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+
+    <a href="#contenu"
+       class="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-xl focus:bg-brand-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift">
+        Aller au contenu principal
+    </a>
+
+    <!-- ==================================================================
+         EN-TÊTE
+         ================================================================== -->
+    <%- include('partials/header') %>
+
+    <main id="contenu">
+
+        <!-- En-tête de page -->
+        <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <%- include('partials/hero-decor') %>
+
+            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-8">
+                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                        <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+                        <li class="font-medium text-slate-900 dark:text-white">Cours</li>
+                    </ol>
+                </nav>
+
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Modules de cours</p>
+                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    Cours de Physique &amp; Chimie
+                </h1>
+                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Consultez des modules de cours complets et rigoureux conçus pour les étudiants du supérieur.
+                </p>
+
+                <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-4 dark:border-slate-800">
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.disciplines %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Disciplines</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.chapters %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Chapitres</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.courses %></dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Fiches de cours</dd>
+                    </div>
+                    <div>
+                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.filePercent %>%</dt>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Avec document</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- Filtres -->
+        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Filtrer les chapitres
+                </h2>
+
+                <form action="/cours" method="get" class="mt-6 grid gap-5 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                    <div>
+                        <label for="discipline" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Discipline</label>
+                        <select name="discipline" id="discipline"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes"<%= filters.discipline === 'toutes' ? ' selected' : '' %>>Toutes les disciplines</option>
+                            <% disciplines.forEach(function (d) { %>
+                                <option value="<%= d.slug %>"<%= filters.discipline === d.slug ? ' selected' : '' %>><%= d.nom %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau</label>
+                        <select name="niveau" id="niveau"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <% var NIVEAUX = [['tous','Tous les niveaux'],['l1','L1 / CPGE 1ère année'],['l2','L2 / CPGE 2ème année'],['l3','L3'],['master','Master']]; %>
+                            <% NIVEAUX.forEach(function (n) { %>
+                                <option value="<%= n[0] %>"<%= filters.niveau === n[0] ? ' selected' : '' %>><%= n[1] %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+                            Filtrer
+                        </button>
+                        <% if (filters.discipline !== 'toutes' || filters.niveau !== 'tous') { %>
+                            <a href="/cours" class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                                Réinitialiser
+                            </a>
+                        <% } %>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Modules de Physique -->
+        <!-- ==================================================================
+        <!-- ==================================================================
+             CHAPITRES : cartes a plat (l'arborescence en accordeon a ete retiree)
+             ================================================================== -->
+        <section class="courses-section mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-chapitres">
+            <div class="flex flex-wrap items-baseline justify-between gap-3">
+                <h2 id="titre-chapitres" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                    Chapitres disponibles
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400"><%= pagination.total %> chapitre<%= pagination.total > 1 ? 's' : '' %></p>
+            </div>
+
+            <div class="courses-grid mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                <% chapters.forEach(function (ch) { %>
+                    <% var isChimie = ch.discipline_slug === 'chimie'; %>
+                    <article class="course-card group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift <%= isChimie ? 'hover:border-flask-300 dark:hover:border-flask-700' : 'hover:border-brand-300 dark:hover:border-brand-700' %> dark:border-slate-800 dark:bg-slate-900">
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="badge inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold <%= isChimie ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                                <%= ch.discipline_nom %>
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                <%= ch.niveau %>
+                            </span>
+                        </div>
+
+                        <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            <a href="/chapitres/<%= ch.id %>" class="transition-colors <%= isChimie ? 'hover:text-flask-600 dark:hover:text-flask-400' : 'hover:text-brand-600 dark:hover:text-brand-400' %>">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <%= ch.titre %>
+                            </a>
+                        </h3>
+
+                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            <%= ch.description %>
+                        </p>
+
+                        <dl class="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-100 pt-5 text-sm dark:border-slate-800">
+                            <div class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+                                <dt class="sr-only">Fiches de cours</dt>
+                                <dd class="text-slate-600 dark:text-slate-400"><%= ch.courses_count %> fiche<%= ch.courses_count > 1 ? 's' : '' %></dd>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                <dt class="sr-only">Exercices</dt>
+                                <dd class="text-slate-600 dark:text-slate-400"><%= ch.exercises_count %> exercice<%= ch.exercises_count > 1 ? 's' : '' %></dd>
+                            </div>
+                        </dl>
+
+                        <a href="/chapitres/<%= ch.id %>" class="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors <%= isChimie ? 'text-flask-600 hover:text-flask-700 dark:text-flask-400 dark:hover:text-flask-300' : 'text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300' %>">
+                            Consulter le chapitre
+                            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </article>
+                <% }); %>
+
+                <% if (chapters.length === 0) { %>
+                    <div class="md:col-span-2 xl:col-span-3 rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+                        <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Aucun chapitre ne correspond à ces critères</h3>
+                        <p class="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                            Élargissez les filtres ou réinitialisez-les pour voir l'ensemble des chapitres.
+                        </p>
+                        <a href="/cours" class="mt-6 inline-flex items-center rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                            Réinitialiser les filtres
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+
+        <%- include('partials/pagination', { paginationLabel: 'Pagination des chapitres' }) %>
+    </main>
+
+    <!-- ==================================================================
+         PIED DE PAGE
+         ================================================================== -->
+    <%- include('partials/footer') %>
+
+    <%- include('partials/file-modal') %>
+</body>
+</html>

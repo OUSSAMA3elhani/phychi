@@ -1,0 +1,113 @@
+/* ==========================================================================
+   PhyChi - Styles de base partagés
+   Complète Tailwind : uniquement ce que les classes utilitaires ne couvrent pas.
+   ========================================================================== */
+
+:root {
+    color-scheme: light;
+
+    /* Variables héritées, utilisées par script.js (toast + favoris) */
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --accent-rose: #e11d48;
+    --radius-md: 0.75rem;
+    --shadow-lg: 0 12px 32px -8px rgb(15 23 42 / 0.24);
+    --color-text-light: #64748b;
+}
+
+.dark-theme {
+    color-scheme: dark;
+    --primary: #3b82f6;
+    --primary-light: #1e293b;
+    --color-text-light: #94a3b8;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.dark-theme :focus-visible {
+    outline-color: #60a5fa;
+}
+
+/* Trame technique discrète en arrière-plan des en-têtes de page */
+.bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.dark-theme .bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(148 163 184 / 0.10) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(148 163 184 / 0.10) 1px, transparent 1px);
+}
+
+/* Créneaux d'authentification de l'en-tête.
+   Ils utilisent `display: contents` pour ne pas ajouter de niveau de flex au
+   header. Or une classe l'emporte sur la règle `[hidden] { display: none }` de
+   la feuille de style du navigateur : sans ce rappel, les deux états (visiteur
+   et connecté) s'afficheraient en même temps. */
+[data-auth-slot][hidden] {
+    display: none !important;
+}
+
+/* Accordéons (<details>) : on masque le marqueur natif au profit d'un chevron dessiné */
+details > summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] .details-chevron {
+    transform: rotate(180deg);
+}
+
+/* Panneaux d'accordéon (arborescence des cours).
+
+   L'animation passe par `grid-template-rows: 0fr -> 1fr` : contrairement à
+   `max-height`, aucune hauteur maximale à deviner et la transition reste
+   fluide quel que soit le contenu.
+
+   Ces règles sont écrites ici, en CSS réel, et NON via des classes Tailwind
+   arbitraires (`grid-rows-[0fr]`). Le CDN Tailwind « Play » génère ce type de
+   classe à la volée en observant le DOM : la règle n'existe pas encore au
+   moment du premier basculement, si bien que le style appliqué accusait un
+   clic de retard. */
+[data-accordion-panel] {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms ease-out;
+}
+
+[data-accordion-panel][data-open="true"] {
+    grid-template-rows: 1fr;
+}
+
+/* L'enfant direct doit masquer le débordement pour que la ligne de 0fr
+   rogne réellement le contenu. */
+[data-accordion-panel] > * {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

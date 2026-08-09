@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %> - PhyChi Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+    <script src="/assets/ui.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
+    <%- include('partials/sidebar') %>
+    <div class="pl-72">
+        <%- include('partials/header') %>
+        <main class="p-8">
+
+            <!-- Compteurs par statut, cliquables comme filtres -->
+            <div class="grid gap-5 sm:grid-cols-3">
+                <%
+                    var CARDS = [
+                        { key: 'pending',  label: 'En attente', value: counts.pending,  cls: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-400' },
+                        { key: 'approved', label: 'Approuvées', value: counts.approved, cls: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400' },
+                        { key: 'rejected', label: 'Refusées',   value: counts.rejected, cls: 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-400' }
+                    ];
+                %>
+                <% CARDS.forEach(function (c) { %>
+                    <a href="/admin/downloads?statut=<%= c.key %>"
+                       class="rounded-3xl border p-6 transition-all hover:-translate-y-0.5 <%= c.cls %> <%= statut === c.key ? 'ring-2 ring-offset-2 ring-slate-900/10 dark:ring-offset-slate-950' : '' %>">
+                        <p class="text-3xl font-bold tracking-tight"><%= c.value %></p>
+                        <p class="mt-1 text-sm font-semibold"><%= c.label %></p>
+                    </a>
+                <% }); %>
+            </div>
+
+            <div class="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6 dark:border-slate-800">
+                    <div>
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                            Demandes de téléchargement<% if (statut) { %> — <span class="capitalize"><%= statut %></span><% } %>
+                        </h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400"><%= requests.length %> demande<%= requests.length > 1 ? 's' : '' %> affichée<%= requests.length > 1 ? 's' : '' %>.</p>
+                    </div>
+                    <% if (statut) { %>
+                        <a href="/admin/downloads" class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                            Voir toutes
+                        </a>
+                    <% } %>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[52rem] text-left text-sm">
+                        <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/50">
+                            <tr>
+                                <th class="px-6 py-4">Demandeur</th>
+                                <th class="px-6 py-4">Ressource</th>
+                                <th class="px-6 py-4">Statut</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <% requests.forEach(function (r) { %>
+                                <%
+                                    var BADGES = {
+                                        pending:  'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
+                                        approved: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
+                                        rejected: 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400'
+                                    };
+                                    var LABELS = { pending: 'En attente', approved: 'Approuvée', rejected: 'Refusée' };
+                                %>
+                                <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <td class="px-6 py-4">
+                                        <span class="font-semibold text-slate-900 dark:text-white"><%= r.user_prenom %> <%= r.user_nom %></span><br>
+                                        <span class="text-xs text-slate-500"><%= r.user_email %></span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                            <%= r.item_type === 'course' ? 'Cours' : 'Exercice' %>
+                                        </span>
+                                        <p class="mt-1.5 font-semibold text-slate-900 dark:text-white">
+                                            <%= r.item_titre || '(ressource supprimée)' %>
+                                        </p>
+                                        <% if (r.item_file) { %>
+                                            <button type="button"
+                                                    data-file-modal
+                                                    data-file-url="<%= r.item_file %>"
+                                                    data-file-title="<%= r.item_titre %>"
+                                                    data-file-label="Document demandé"
+                                                    class="mt-1 text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400">
+                                                Aperçu du document
+                                            </button>
+                                        <% } %>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold <%= BADGES[r.status] %>">
+                                            <%= LABELS[r.status] %>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex flex-wrap items-center justify-end gap-2">
+                                            <% if (r.status !== 'approved') { %>
+                                                <form action="/admin/downloads/<%= r.id %>/status<%= statut ? '?statut=' + statut : '' %>" method="post" class="inline">
+                                                    <input type="hidden" name="status" value="approved">
+                                                    <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-emerald-700">Approuver</button>
+                                                </form>
+                                            <% } %>
+                                            <% if (r.status !== 'rejected') { %>
+                                                <form action="/admin/downloads/<%= r.id %>/status<%= statut ? '?statut=' + statut : '' %>" method="post" class="inline">
+                                                    <input type="hidden" name="status" value="rejected">
+                                                    <button type="submit" class="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-500/30 dark:text-rose-400 dark:hover:bg-rose-500/10">Refuser</button>
+                                                </form>
+                                            <% } %>
+                                            <form action="/admin/downloads/<%= r.id %>/delete" method="post" onsubmit="return confirm('Supprimer cette demande ?')" class="inline">
+                                                <button type="submit" class="text-xs font-semibold text-slate-400 transition-colors hover:text-rose-600">Supprimer</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (requests.length === 0) { %>
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center text-sm text-slate-500 dark:text-slate-400">
+                                        Aucune demande<%= statut ? ' avec ce statut' : '' %> pour le moment.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <%- include('../partials/file-modal') %>
+</body>
+</html>
