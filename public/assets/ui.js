@@ -16,15 +16,23 @@
 
     ready(function () {
         // --- Bascule du thème (clé partagée avec script.js) ---
+        function syncThemeMeta(isDark) {
+            var metaTags = document.querySelectorAll('meta[name="theme-color"], meta[name="msapplication-navbutton-color"]');
+            var color = isDark ? '#0f172a' : '#ffffff';
+            metaTags.forEach(function (m) { m.setAttribute('content', color); });
+        }
+
         var themeBtn = document.getElementById('theme-toggle-btn');
         if (themeBtn) {
             themeBtn.addEventListener('click', function () {
                 var isDark = document.documentElement.classList.toggle('dark-theme');
+                syncThemeMeta(isDark);
                 try {
                     localStorage.setItem('psychi_theme', isDark ? 'dark' : 'light');
                 } catch (e) { /* stockage indisponible */ }
             });
         }
+        syncThemeMeta(document.documentElement.classList.contains('dark-theme'));
 
         // --- Menu mobile ---
         var menuBtn = document.getElementById('mobile-menu-btn');
