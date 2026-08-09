@@ -172,4 +172,4 @@ INSERT IGNORE INTO `exercises` (`id`, `chapter_id`, `titre`, `slug`, `descriptio
 (5, 5, 'Serie 3 : Substitution nucleophile et elimination', 'exo-sn-e-organique', 'Competition entre SN1, SN2, E1 et E2 selon le substrat et le solvant.', '/assets/downloads/fiches-orga-mecanismes.pdf', '/assets/downloads/fiches-orga-mecanismes.pdf', 'l2', 'moyen');
 
 INSERT IGNORE INTO `users` (`id`, `nom`, `prenom`, `email`, `password_hash`, `niveau`, `role`) VALUES
-(1, 'Admin', 'PhyChi', 'admin@phychi.com', '$2b$12$89vqE4FPsIPSTFM8Tfm8z.H5VKFbIbDxRmH7llcg1UUaKMNHvQBWW', 'master', 'admin');
+(1, 'EL HANI', 'Oussama', 'admin@phychemia.com', '$2b$12$GLzM1NKpjMZ/g.bsCQZXluRzbIGzGgiCI5badV4EB0Ohqz3f8wYI.', 'master', 'admin');
