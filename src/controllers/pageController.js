@@ -240,7 +240,7 @@ const pageController = {
             const initialEquation = HERO_EQUATIONS[Math.floor(Math.random() * HERO_EQUATIONS.length)];
 
             res.render('index', {
-                title: 'PhyChi - Physique & Chimie pour l\'Enseignement Supérieur | Accueil',
+                title: 'PhyChemia - Physique & Chimie pour l\'Enseignement Supérieur | Accueil',
                 page: 'index',
                 stats: {
                     chapters: chaptersCount,
@@ -261,7 +261,7 @@ const pageController = {
     async profil(req, res, next) {
         try {
             const user = res.locals.user || await User.findById(req.session.userId);
-            res.render('profil', { title: 'Mon Profil', user, page: 'profil' });
+            res.render('profil', { title: 'Mon Profil - PhyChemia', user, page: 'profil' });
         } catch (err) {
             next(err);
         }
@@ -275,7 +275,7 @@ const pageController = {
                 Favorite.listExercises(req.session.userId),
             ]);
             res.render('favoris', {
-                title: 'Mes Favoris',
+                title: 'Mes Favoris - PhyChemia',
                 page: 'favoris',
                 favoriteCourses: courses,
                 favoriteExercises: exercises,
@@ -292,7 +292,7 @@ const pageController = {
             const disciplines = await Discipline.findAll();
             const chapters = await Chapter.findAll();
             res.render('chapitres', {
-                title: 'Chapitres - PhyChi',
+                title: 'Chapitres - PhyChemia',
                 page: 'chapitres',
                 disciplines,
                 chapters,
@@ -325,7 +325,7 @@ const pageController = {
             ]);
 
             res.render('cours', {
-                title: 'Fiches de Cours - PhyChi',
+                title: 'Fiches de Cours - PhyChemia',
                 page: 'cours',
                 chapters: rows,
                 disciplines,
@@ -355,7 +355,7 @@ const pageController = {
             ]);
 
             res.render('chapitre-details', {
-                title: `${chapter.titre} - PhyChi`,
+                title: `${chapter.titre} - PhyChemia`,
                 page: 'chapitre-details',
                 chapter,
                 courses,
@@ -371,12 +371,12 @@ const pageController = {
 
     /** Exercices Physique - filtres + pagination + statistiques reelles */
     exercicesPhysique(req, res, next) {
-        return renderExercises(req, res, next, 'physique', 'exercices-physique', 'Exercices de Physique - PhyChi');
+        return renderExercises(req, res, next, 'physique', 'exercices-physique', 'Exercices de Physique - PhyChemia');
     },
 
     /** Exercices Chimie - filtres + pagination + statistiques reelles */
     exercicesChimie(req, res, next) {
-        return renderExercises(req, res, next, 'chimie', 'exercices-chimie', 'Exercices de Chimie - PhyChi');
+        return renderExercises(req, res, next, 'chimie', 'exercices-chimie', 'Exercices de Chimie - PhyChemia');
     },
 
     /**
@@ -404,7 +404,7 @@ const pageController = {
             const isChimie = exercise.discipline_slug === 'chimie';
 
             res.render('exercice-details', {
-                title: `${exercise.titre} - PhyChi`,
+                title: `${exercise.titre} - PhyChemia`,
                 page: 'exercice-details',
                 exercise,
                 related,
@@ -421,42 +421,42 @@ const pageController = {
 
     /** Login page */
     login(req, res) {
-        res.render('login', { title: 'Connexion - PhyChi', page: 'login', next: req.query.next || '' });
+        res.render('login', { title: 'Connexion - PhyChemia', page: 'login', next: req.query.next || '' });
     },
 
     /** Register page */
     inscription(req, res) {
-        res.render('inscription', { title: 'Inscription - PhyChi', page: 'inscription' });
+        res.render('inscription', { title: 'Inscription - PhyChemia', page: 'inscription' });
     },
 
     /** Contact */
     contact(req, res) {
-        res.render('contact', { title: 'Contact - PhyChi', page: 'contact' });
+        res.render('contact', { title: 'Contact - PhyChemia', page: 'contact' });
     },
 
     /** A propos */
     apropos(req, res) {
-        res.render('apropos', { title: 'A propos - PhyChi', page: 'apropos' });
+        res.render('apropos', { title: 'A propos - PhyChemia', page: 'apropos' });
     },
 
     /** FAQ */
     faq(req, res) {
-        res.render('faq', { title: 'Foire Aux Questions - PhyChi', page: 'faq' });
+        res.render('faq', { title: 'Foire Aux Questions - PhyChemia', page: 'faq' });
     },
 
     /** Recherche */
     recherche(req, res) {
-        res.render('recherche', { title: 'Recherche - PhyChi', query: req.query.q || '', page: 'recherche' });
+        res.render('recherche', { title: 'Recherche - PhyChemia', query: req.query.q || '', page: 'recherche' });
     },
 
     /** Mentions Legales */
     mentionsLegales(req, res) {
-        res.render('mentions-legales', { title: 'Mentions Legales - PhyChi', page: 'mentions-legales' });
+        res.render('mentions-legales', { title: 'Mentions Legales - PhyChemia', page: 'mentions-legales' });
     },
 
     /** Politique de Confidentialite */
     politiqueConfidentialite(req, res) {
-        res.render('politique-confidentialite', { title: 'Politique de Confidentialite - PhyChi', page: 'politique-confidentialite' });
+        res.render('politique-confidentialite', { title: 'Politique de Confidentialite - PhyChemia', page: 'politique-confidentialite' });
     },
 
     /** 404 - Page non trouvee */
