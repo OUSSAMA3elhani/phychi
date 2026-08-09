@@ -12,6 +12,10 @@ async function attachUser(req, res, next) {
     // connexion (?next=...). Definie avant tout acces a la base pour rester
     // disponible meme si le chargement de l'utilisateur echoue.
     res.locals.currentUrl = req.originalUrl;
+    res.locals.reqPath = req.path;
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.get('host') || 'phychemia.com';
+    res.locals.reqHost = process.env.SITE_URL || `${protocol}://${host}`;
 
     try {
         if (req.session && req.session.userId) {

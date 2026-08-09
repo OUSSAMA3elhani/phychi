@@ -1,40 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PhyChi - Exercices et problèmes corrigés de chimie pour l'enseignement supérieur (Thermodynamique chimique, Cinétique, Chimie organique, Solutions, Électrochimie).">
-    <meta name="theme-color" content="#0f172a">
-    <title>PhyChi - Exercices de Chimie</title>
-
-    <!-- Application du thème avant le rendu (évite le flash blanc) -->
-    <script>
-        (function () {
-            try {
-                var saved = localStorage.getItem('psychi_theme');
-                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (saved === 'dark' || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark-theme');
-                }
-            } catch (e) { /* localStorage indisponible */ }
-        })();
-    </script>
-
-    <!-- Typographie -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS + design system partagé -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <script src="assets/theme.js"></script>
-    <link rel="stylesheet" href="assets/ui.css">
-
-    <script src="assets/ui.js" defer></script>
-    <script src="script.js" defer></script>
-    <!-- Liaison des formulaires avec l'API Express (servi par public/js/app.js) -->
-    <script src="/js/app.js" defer></script>
-</head>
+<%- include('partials/head') %>
 
 <body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
 

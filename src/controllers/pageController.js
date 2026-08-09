@@ -44,7 +44,7 @@ function paginate(total, page, perPage, filters) {
  * Rendu commun aux deux pages d'exercices : seule la discipline change.
  * Evite de dupliquer la logique de filtre et de pagination.
  */
-async function renderExercises(req, res, next, disciplineSlug, view, title) {
+async function renderExercises(req, res, next, disciplineSlug, view, title, metaDescription) {
     try {
         const filters = {
             chapitre: req.query.chapitre || 'tous',
@@ -70,6 +70,7 @@ async function renderExercises(req, res, next, disciplineSlug, view, title) {
 
         res.render(view, {
             title,
+            metaDescription,
             page: view,
             exercises: rows,
             chapters,
@@ -240,7 +241,8 @@ const pageController = {
             const initialEquation = HERO_EQUATIONS[Math.floor(Math.random() * HERO_EQUATIONS.length)];
 
             res.render('index', {
-                title: 'PhyChemia - Physique & Chimie pour l\'Enseignement Supérieur | Accueil',
+                title: 'PhyChemia - Physique & Chimie pour l\'Enseignement Supérieur | Cours & Exercices Corrigés',
+                metaDescription: 'Plateforme de référence en physique et chimie pour le supérieur : cours complets, fiches de révision et exercices corrigés pas à pas (CPGE, Licence, Master).',
                 page: 'index',
                 stats: {
                     chapters: chaptersCount,
@@ -261,7 +263,12 @@ const pageController = {
     async profil(req, res, next) {
         try {
             const user = res.locals.user || await User.findById(req.session.userId);
-            res.render('profil', { title: 'Mon Profil - PhyChemia', user, page: 'profil' });
+            res.render('profil', {
+                title: 'Mon Profil - Espace Utilisateur | PhyChemia',
+                metaDescription: 'Consultez et gérez vos informations personnelles sur votre profil PhyChemia.',
+                user,
+                page: 'profil'
+            });
         } catch (err) {
             next(err);
         }
@@ -275,7 +282,8 @@ const pageController = {
                 Favorite.listExercises(req.session.userId),
             ]);
             res.render('favoris', {
-                title: 'Mes Favoris - PhyChemia',
+                title: 'Mes Cours et Exercices Favoris - PhyChemia',
+                metaDescription: 'Accédez rapidement à tous vos cours, chapitres et exercices enregistrés dans vos favoris PhyChemia.',
                 page: 'favoris',
                 favoriteCourses: courses,
                 favoriteExercises: exercises,
@@ -292,7 +300,8 @@ const pageController = {
             const disciplines = await Discipline.findAll();
             const chapters = await Chapter.findAll();
             res.render('chapitres', {
-                title: 'Chapitres - PhyChemia',
+                title: 'Programme & Chapitres de Physique-Chimie (L1, L2, L3, CPGE) - PhyChemia',
+                metaDescription: 'Découvrez la structure complète des chapitres de physique et de chimie : mécanique, thermodynamique, électromagnétisme et chimie organique.',
                 page: 'chapitres',
                 disciplines,
                 chapters,
@@ -325,7 +334,8 @@ const pageController = {
             ]);
 
             res.render('cours', {
-                title: 'Fiches de Cours - PhyChemia',
+                title: 'Fiches de Cours & Leçons de Physique et Chimie - CPGE, Licence & Master | PhyChemia',
+                metaDescription: 'Consultez et téléchargez nos cours complets et fiches de synthèse de physique et chimie rédigés pour l\'enseignement supérieur.',
                 page: 'cours',
                 chapters: rows,
                 disciplines,
@@ -355,7 +365,8 @@ const pageController = {
             ]);
 
             res.render('chapitre-details', {
-                title: `${chapter.titre} - PhyChemia`,
+                title: `${chapter.titre} - Cours & Exercices Corrigés de ${chapter.discipline_nom} | PhyChemia`,
+                metaDescription: `Chapitre ${chapter.titre} (${chapter.discipline_nom} ${chapter.niveau.toUpperCase()}) : cours théoriques complets, fiches de révision et exercices corrigés pas à pas.`,
                 page: 'chapitre-details',
                 chapter,
                 courses,
@@ -371,12 +382,24 @@ const pageController = {
 
     /** Exercices Physique - filtres + pagination + statistiques reelles */
     exercicesPhysique(req, res, next) {
-        return renderExercises(req, res, next, 'physique', 'exercices-physique', 'Exercices de Physique - PhyChemia');
+        return renderExercises(
+            req, res, next,
+            'physique',
+            'exercices-physique',
+            'Exercices & Problèmes Corrigés de Physique - CPGE, Licence | PhyChemia',
+            'Base d\'exercices corrigés de physique pour le supérieur : mécanique du point, thermodynamique, électromagnétisme et physique quantique.'
+        );
     },
 
     /** Exercices Chimie - filtres + pagination + statistiques reelles */
     exercicesChimie(req, res, next) {
-        return renderExercises(req, res, next, 'chimie', 'exercices-chimie', 'Exercices de Chimie - PhyChemia');
+        return renderExercises(
+            req, res, next,
+            'chimie',
+            'exercices-chimie',
+            'Exercices & Corrigés de Chimie Organique & Générale - Licence, CPGE | PhyChemia',
+            'Banque d\'exercices et problèmes corrigés en chimie : cinétique chimique, chimie organique, stéréochimie et solutions aquatiques.'
+        );
     },
 
     /**
@@ -404,7 +427,8 @@ const pageController = {
             const isChimie = exercise.discipline_slug === 'chimie';
 
             res.render('exercice-details', {
-                title: `${exercise.titre} - PhyChemia`,
+                title: `${exercise.titre} - Énoncé & Corrigé Détaillé | PhyChemia`,
+                metaDescription: `Exercice corrigé : ${exercise.titre} en ${exercise.discipline_nom} (${exercise.niveau.toUpperCase()}). Énoncé et solution étape par étape téléchargeables.`,
                 page: 'exercice-details',
                 exercise,
                 related,
@@ -421,42 +445,76 @@ const pageController = {
 
     /** Login page */
     login(req, res) {
-        res.render('login', { title: 'Connexion - PhyChemia', page: 'login', next: req.query.next || '' });
+        res.render('login', {
+            title: 'Connexion à votre Espace Étudiant - PhyChemia',
+            metaDescription: 'Connectez-vous à votre compte PhyChemia pour accéder à l\'intégralité des exercices corrigés et fiches PDF.',
+            page: 'login',
+            next: req.query.next || ''
+        });
     },
 
     /** Register page */
     inscription(req, res) {
-        res.render('inscription', { title: 'Inscription - PhyChemia', page: 'inscription' });
+        res.render('inscription', {
+            title: 'Créer un Compte Etudiant Gratuit - PhyChemia',
+            metaDescription: 'Inscrivez-vous gratuitement sur PhyChemia pour suivre vos cours, enregistrer vos favoris et télécharger les corrigés.',
+            page: 'inscription'
+        });
     },
 
     /** Contact */
     contact(req, res) {
-        res.render('contact', { title: 'Contact - PhyChemia', page: 'contact' });
+        res.render('contact', {
+            title: 'Contact & Support Pédagogique - PhyChemia',
+            metaDescription: 'Une question sur un cours ou une suggestion ? Contactez l\'équipe d\'enseignants de PhyChemia.',
+            page: 'contact'
+        });
     },
 
     /** A propos */
     apropos(req, res) {
-        res.render('apropos', { title: 'A propos - PhyChemia', page: 'apropos' });
+        res.render('apropos', {
+            title: 'À Propos & Mission Pédagogique - PhyChemia',
+            metaDescription: 'Découvrez la vision et la mission de PhyChemia, plateforme éducative libre et gratuite en physique-chimie pour l\'enseignement supérieur.',
+            page: 'apropos'
+        });
     },
 
     /** FAQ */
     faq(req, res) {
-        res.render('faq', { title: 'Foire Aux Questions - PhyChemia', page: 'faq' });
+        res.render('faq', {
+            title: 'Foire Aux Questions (FAQ) - PhyChemia',
+            metaDescription: 'Réponses à toutes vos questions sur l\'accès aux cours, le téléchargement des exercices et l\'utilisation de PhyChemia.',
+            page: 'faq'
+        });
     },
 
     /** Recherche */
     recherche(req, res) {
-        res.render('recherche', { title: 'Recherche - PhyChemia', query: req.query.q || '', page: 'recherche' });
+        res.render('recherche', {
+            title: 'Moteur de Recherche de Cours & Corrigés - PhyChemia',
+            metaDescription: 'Recherchez rapidement parmi nos fiches de cours, chapitres et exercices corrigés de physique et chimie.',
+            query: req.query.q || '',
+            page: 'recherche'
+        });
     },
 
     /** Mentions Legales */
     mentionsLegales(req, res) {
-        res.render('mentions-legales', { title: 'Mentions Legales - PhyChemia', page: 'mentions-legales' });
+        res.render('mentions-legales', {
+            title: 'Mentions Légales & Droits d\'Auteur - PhyChemia',
+            metaDescription: 'Informations réglementaires, hébergement et droits de propriété intellectuelle du site PhyChemia.',
+            page: 'mentions-legales'
+        });
     },
 
     /** Politique de Confidentialite */
     politiqueConfidentialite(req, res) {
-        res.render('politique-confidentialite', { title: 'Politique de Confidentialite - PhyChemia', page: 'politique-confidentialite' });
+        res.render('politique-confidentialite', {
+            title: 'Politique de Confidentialité & RGPD - PhyChemia',
+            metaDescription: 'Découvrez comment PhyChemia protège vos données personnelles et respecte votre vie privée.',
+            page: 'politique-confidentialite'
+        });
     },
 
     /** 404 - Page non trouvee */

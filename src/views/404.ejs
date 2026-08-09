@@ -1,32 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex">
-    <meta name="theme-color" content="#0f172a">
-    <title>PhyChi - Page introuvable (404)</title>
-
-    <script>
-        (function () {
-            try {
-                var saved = localStorage.getItem('psychi_theme');
-                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (saved === 'dark' || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark-theme');
-                }
-            } catch (e) { /* localStorage indisponible */ }
-        })();
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/assets/theme.js"></script>
-    <link rel="stylesheet" href="/assets/ui.css">
-</head>
+<%- include('partials/head') %>
 
 <body class="grid min-h-screen place-items-center bg-slate-50 px-6 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
 

@@ -3,9 +3,13 @@
  */
 const express = require('express');
 const pageController = require('../controllers/pageController');
+const sitemapController = require('../controllers/sitemapController');
 const { requireAuth, requireGuest } = require('../middlewares/auth');
 
 const router = express.Router();
+
+// Sitemap.xml
+router.get('/sitemap.xml', sitemapController.getSitemap);
 
 // Accueil
 router.get(['/', '/index.html', '/index'], pageController.home);

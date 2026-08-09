@@ -1,0 +1,66 @@
+<%
+    var siteName = 'PhyChemia';
+    var defaultTitle = 'PhyChemia - Physique & Chimie pour l\'Enseignement Supérieur';
+    var defaultDesc = 'PhyChemia est la plateforme de référence en physique et chimie pour l\'enseignement supérieur : cours complets, fiches de révision et exercices corrigés en CPGE, Licence et Master.';
+    var baseUrl = (typeof reqHost !== 'undefined' && reqHost) ? reqHost : 'https://phychemia.com';
+
+    var pageTitle = (typeof title !== 'undefined' && title) ? title : defaultTitle;
+    var metaDesc = (typeof metaDescription !== 'undefined' && metaDescription) ? metaDescription : defaultDesc;
+    var reqPathStr = (typeof reqPath !== 'undefined' && reqPath) ? reqPath : '';
+    var canonical = (typeof canonicalUrl !== 'undefined' && canonicalUrl) ? canonicalUrl : (baseUrl + reqPathStr);
+    var ogImage = (typeof metaImage !== 'undefined' && metaImage) ? metaImage : (baseUrl + '/images/og-image.png');
+%>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <meta name="description" content="<%= metaDesc %>">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="canonical" href="<%= canonical %>">
+
+    <!-- Favicon Integration -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Open Graph (OG) Meta Tags for Social Sharing & Indexing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="<%= siteName %>">
+    <meta property="og:url" content="<%= canonical %>">
+    <meta property="og:title" content="<%= pageTitle %>">
+    <meta property="og:description" content="<%= metaDesc %>">
+    <meta property="og:image" content="<%= ogImage %>">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= pageTitle %>">
+    <meta name="twitter:description" content="<%= metaDesc %>">
+    <meta name="twitter:image" content="<%= ogImage %>">
+
+    <!-- Application du thème (évite le flash blanc) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('psychi_theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) { /* localStorage indisponible */ }
+        })();
+    </script>
+
+    <!-- Typographie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS + design system partagé -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+
+    <script src="/assets/ui.js" defer></script>
+    <script src="/script.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
