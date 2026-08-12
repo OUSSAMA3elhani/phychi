@@ -21,16 +21,12 @@ const OUT = path.join(ROOT, 'deploy');
 
 /** Entrees copiees telles quelles quand elles existent. */
 const INCLUDE_DIRS = [
-    'assets',
     'config',
-    'controllers',
     'database',
-    'middleware',
-    'models',
     'public',
-    'routes',
     'services',
-    'views',
+    'src',
+    'tools',
 ];
 
 const INCLUDE_FILES = ['package.json', 'package-lock.json', '.npmrc', 'server.js', 'script.js'];

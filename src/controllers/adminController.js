@@ -42,7 +42,15 @@ const adminController = {
     async listUsers(req, res, next) {
         try {
             const users = await User.findAll();
-            res.render('admin/users', { title: 'Gestion des Utilisateurs', page: 'admin-users', users });
+            const successMsg = req.query.success || null;
+            const errorMsg = req.query.error || null;
+            res.render('admin/users', {
+                title: 'Gestion des Utilisateurs',
+                page: 'admin-users',
+                users,
+                successMsg,
+                errorMsg
+            });
         } catch (err) {
             next(err);
         }
@@ -52,8 +60,17 @@ const adminController = {
         try {
             const { id } = req.params;
             const { role } = req.body;
+
+            if (!['user', 'admin'].includes(role)) {
+                return res.redirect('/admin/users?error=R%C3%B4le+invalide.');
+            }
+
+            if (req.user && parseInt(id, 10) === req.user.id && role !== 'admin') {
+                return res.redirect('/admin/users?error=Vous+ne+pouvez+pas+retirer+vos+propres+droits+d%27administrateur.');
+            }
+
             await User.updateRole(id, role);
-            res.redirect('/admin/users');
+            res.redirect('/admin/users?success=R%C3%B4le+mis+%C3%A0+jour+avec+succ%C3%A8s.');
         } catch (err) {
             next(err);
         }

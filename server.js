@@ -138,6 +138,7 @@ const STATIC_OPTIONS = {
 };
 
 app.use('/assets', express.static(path.join(ROOT, 'public', 'assets'), STATIC_OPTIONS));
+app.use('/uploads', express.static(path.join(ROOT, 'public', 'uploads'), STATIC_OPTIONS));
 app.use(express.static(path.join(ROOT, 'public'), STATIC_OPTIONS));
 
 // Fallback script.js legacy si demande a la racine

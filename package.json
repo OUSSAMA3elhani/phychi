@@ -4,7 +4,7 @@
   "description": "PhyChi - plateforme de cours, d'exercices et de ressources en physique et chimie pour l'enseignement superieur",
   "main": "server.js",
   "scripts": {
-    "build": "echo build",
+    "build": "node tools/create-sample-pdfs.js",
     "start": "node server.js",
     "dev": "node --watch server.js",
     "db:init": "node database/init.js",
