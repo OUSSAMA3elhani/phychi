@@ -110,27 +110,41 @@ const Exercise = {
 
     async stats(disciplineSlug) {
         await ensureColumnsExist();
-        const [rows] = await pool.query(
-            `SELECT COUNT(DISTINCT e.id) AS total_exercises,
-                    COUNT(DISTINCT e.chapter_id) AS chapters_with_exercises,
-                    SUM(CASE WHEN e.niveau = 'l1' THEN 1 ELSE 0 END) AS l1_count,
-                    SUM(CASE WHEN e.niveau = 'l2' THEN 1 ELSE 0 END) AS l2_count,
-                    SUM(CASE WHEN e.niveau = 'l3' THEN 1 ELSE 0 END) AS l3_count,
-                    SUM(CASE WHEN e.niveau = 'master' THEN 1 ELSE 0 END) AS master_count
-             FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
-             WHERE d.slug = ?`,
-            [disciplineSlug]
-        );
-        return rows[0] || {
-            total_exercises: 0,
-            chapters_with_exercises: 0,
-            l1_count: 0,
-            l2_count: 0,
-            l3_count: 0,
-            master_count: 0,
-        };
+        try {
+            const [rows] = await pool.query(
+                `SELECT COUNT(DISTINCT e.id) AS total_exercises,
+                        COUNT(DISTINCT e.chapter_id) AS chapters_with_exercises,
+                        SUM(CASE WHEN e.correction_file IS NOT NULL AND e.correction_file != '' THEN 1 ELSE 0 END) AS corriges_count
+                 FROM exercises e
+                 JOIN chapters ch ON e.chapter_id = ch.id
+                 JOIN disciplines d ON ch.discipline_id = d.id
+                 WHERE d.slug = ?`,
+                [disciplineSlug]
+            );
+            const r = rows[0] || {};
+            const total = Number(r.total_exercises) || 0;
+            const chapters = Number(r.chapters_with_exercises) || 0;
+            const corriges = Number(r.corriges_count) || 0;
+            const percent = total > 0 ? Math.round((corriges / total) * 100) : 100;
+
+            return {
+                series: total,
+                enonces: total,
+                chapitres: chapters,
+                corrigesPercent: percent,
+                total_exercises: total,
+                chapters_with_exercises: chapters,
+            };
+        } catch (err) {
+            return {
+                series: 0,
+                enonces: 0,
+                chapitres: 0,
+                corrigesPercent: 100,
+                total_exercises: 0,
+                chapters_with_exercises: 0,
+            };
+        }
     },
 
     async findByChapter(chapterId) {
