@@ -187,7 +187,8 @@
                                         </a>
                                     <% } else if (st === 'pending') { %>
                                         <span class="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
-                                            ⏳ En attente...
+                                            <svg class="h-4 w-4 animate-spin text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
+                                            <span>En attente...</span>
                                         </span>
                                     <% } else { %>
                                         <button type="button"

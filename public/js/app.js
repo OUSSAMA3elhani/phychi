@@ -458,21 +458,23 @@
         toolbar.className = 'flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-slate-300';
         toolbar.innerHTML = `
             <div class="flex items-center gap-2">
-                <button type="button" data-pdf-prev class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
-                    ◀️ Précédent
+                <button type="button" data-pdf-prev class="inline-flex items-center gap-1.5 justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>Précédent</span>
                 </button>
                 <span class="font-medium text-slate-300">Page <strong data-pdf-page class="text-white">1</strong> / <span data-pdf-total>...</span></span>
-                <button type="button" data-pdf-next class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
-                    Suivant ▶️
+                <button type="button" data-pdf-next class="inline-flex items-center gap-1.5 justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
+                    <span>Suivant</span>
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
             </div>
             <div class="flex items-center gap-2">
-                <button type="button" data-pdf-zoom-out class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
-                    🔍 -
+                <button type="button" data-pdf-zoom-out aria-label="Zoom arrière" class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg>
                 </button>
                 <span data-pdf-scale class="font-bold text-white">125%</span>
-                <button type="button" data-pdf-zoom-in class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
-                    🔍 +
+                <button type="button" data-pdf-zoom-in aria-label="Zoom avant" class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
                 </button>
                 <button type="button" data-pdf-fit class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 transition-colors hover:bg-slate-700">
                     Ajuster largeur

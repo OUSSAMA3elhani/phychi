@@ -30,10 +30,10 @@ function initThemeToggle() {
 
     if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
         document.documentElement.classList.add('dark-theme');
-        themeBtn.textContent = '☀️ Mode Clair';
+        themeBtn.textContent = 'Mode Clair';
     } else {
         document.documentElement.classList.remove('dark-theme');
-        themeBtn.textContent = '🌙 Mode Sombre';
+        themeBtn.textContent = 'Mode Sombre';
     }
 
     themeLi.appendChild(themeBtn);
@@ -43,10 +43,10 @@ function initThemeToggle() {
         const isDark = document.documentElement.classList.toggle('dark-theme');
         if (isDark) {
             localStorage.setItem('psychi_theme', 'dark');
-            themeBtn.textContent = '☀️ Mode Clair';
+            themeBtn.textContent = 'Mode Clair';
         } else {
             localStorage.setItem('psychi_theme', 'light');
-            themeBtn.textContent = '🌙 Mode Sombre';
+            themeBtn.textContent = 'Mode Sombre';
         }
     });
 }
