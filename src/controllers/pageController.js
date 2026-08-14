@@ -10,6 +10,7 @@ const Exercise = require('../models/Exercise');
 const Concours = require('../models/Concours');
 const Book = require('../models/Book');
 const DownloadRequest = require('../models/DownloadRequest');
+const { pool } = require('../../config/db');
 
 /**
  * Metadonnees de pagination + fabrique d'URL conservant les filtres actifs.
@@ -676,6 +677,88 @@ const pageController = {
                 page: 'livres',
                 book: item,
                 downloadStatus,
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /** GET /recherche - Moteur de recherche globale (Concours, Livres, Exercices) */
+    async recherche(req, res, next) {
+        try {
+            const query = String(req.query.q || '').trim();
+            let results = [];
+
+            if (query.length > 0) {
+                const searchTerm = `%${query}%`;
+
+                // Recherche dans les Concours
+                const [concoursRows] = await pool.query(
+                    `SELECT id, titre, ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file
+                     FROM concours
+                     WHERE titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?
+                     ORDER BY annee DESC LIMIT 20`,
+                    [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm]
+                );
+
+                // Recherche dans les Livres
+                const [bookRows] = await pool.query(
+                    `SELECT id, titre, collection, auteur, discipline, pdf_file
+                     FROM books
+                     WHERE titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?
+                     ORDER BY titre ASC LIMIT 20`,
+                    [searchTerm, searchTerm, searchTerm, searchTerm]
+                );
+
+                // Recherche dans les Exercices
+                const [exerciseRows] = await pool.query(
+                    `SELECT e.id, e.titre, e.description, e.niveau, e.difficulte, e.enonce_file, e.correction_file
+                     FROM exercises e
+                     WHERE e.titre LIKE ? OR e.description LIKE ?
+                     ORDER BY e.id ASC LIMIT 20`,
+                    [searchTerm, searchTerm]
+                );
+
+                results = [
+                    ...concoursRows.map(r => ({
+                        type: 'Concours',
+                        badgeClass: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400',
+                        titre: `${r.ecole} (${r.annee}) — ${r.epreuve}`,
+                        description: `${r.filiere} • ${r.matiere}`,
+                        url: `/concours/${r.id}`,
+                        file: r.enonce_file || r.correction_file,
+                        id: r.id,
+                        itemType: 'concours'
+                    })),
+                    ...bookRows.map(r => ({
+                        type: 'Livre',
+                        badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
+                        titre: `${r.titre} (${r.collection})`,
+                        description: `Auteur : ${r.auteur} • Discipline : ${r.discipline}`,
+                        url: `/livres/${r.id}`,
+                        file: r.pdf_file,
+                        id: r.id,
+                        itemType: 'book'
+                    })),
+                    ...exerciseRows.map(r => ({
+                        type: 'Exercice',
+                        badgeClass: 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400',
+                        titre: r.titre,
+                        description: r.description,
+                        url: `/exercices/${r.id}`,
+                        file: r.enonce_file || r.correction_file,
+                        id: r.id,
+                        itemType: 'exercise'
+                    }))
+                ];
+            }
+
+            res.render('recherche', {
+                title: query ? `Recherche : ${query} | PhyChemia` : 'Moteur de Recherche - PhyChemia',
+                metaDescription: 'Recherchez parmi nos concours, annales, livres CPGE et séries d exercices corrigés.',
+                page: 'recherche',
+                q: query,
+                results,
             });
         } catch (err) {
             next(err);
