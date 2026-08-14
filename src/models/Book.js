@@ -115,6 +115,31 @@ const Book = {
         } catch (err) {
             return null;
         }
+    },
+
+    async create(data) {
+        await ensureTableExists();
+        const [result] = await pool.query(
+            `INSERT INTO books (titre, collection, auteur, discipline, niveau, pdf_file, slug)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [data.titre, data.collection, data.auteur || null, data.discipline, data.niveau || 'CPGE', data.pdf_file, data.slug]
+        );
+        return result.insertId;
+    },
+
+    async update(id, data) {
+        await ensureTableExists();
+        await pool.query(
+            `UPDATE books
+             SET titre = ?, collection = ?, auteur = ?, discipline = ?, niveau = ?, pdf_file = ?, slug = ?
+             WHERE id = ?`,
+            [data.titre, data.collection, data.auteur || null, data.discipline, data.niveau || 'CPGE', data.pdf_file, data.slug, id]
+        );
+    },
+
+    async delete(id) {
+        await ensureTableExists();
+        await pool.query('DELETE FROM books WHERE id = ?', [id]);
     }
 };
 

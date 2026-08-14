@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %> - PhyChi Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+    <script src="/assets/ui.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
+    <%- include('partials/sidebar') %>
+    <div class="pl-72">
+        <%- include('partials/header') %>
+        <main class="p-8">
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div role="alert" class="mb-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    <span><%= error %></span>
+                </div>
+            <% } %>
+
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6 dark:border-slate-800">
+                    <div>
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Livres CPGE &amp; Ouvrages (<%= total %>)</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gestion des références bibliographiques et fichiers PDF de référence.</p>
+                    </div>
+                    <button type="button"
+                            data-modal-open="book-modal"
+                            data-modal-title="Ajouter un livre"
+                            data-fields='{"id":"","titre":"","collection":"","auteur":"","discipline":"Physique","niveau":"CPGE"}'
+                            class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        Nouveau Livre
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[52rem] text-left text-sm">
+                        <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/50">
+                            <tr>
+                                <th class="px-6 py-4">Livre &amp; Collection</th>
+                                <th class="px-6 py-4">Discipline</th>
+                                <th class="px-6 py-4">Fichier PDF</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <% if (books && books.length > 0) { %>
+                                <% books.forEach(function(b) { %>
+                                    <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                        <td class="px-6 py-4">
+                                            <p class="font-bold text-slate-900 dark:text-white"><%= b.titre %></p>
+                                            <p class="text-xs text-slate-500"><%= b.collection %> <%= b.auteur ? '• ' + b.auteur : '' %></p>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold">
+                                            <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= b.discipline === 'Chimie' ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                                                <%= b.discipline %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs">
+                                            <% if (b.pdf_file) { %>
+                                                <button type="button"
+                                                        data-file-modal
+                                                        data-file-url="<%= b.pdf_file %>"
+                                                        data-file-title="<%= b.titre %>"
+                                                        class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
+                                                    <svg class="h-4 w-4 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                    Visualiser PDF
+                                                </button>
+                                            <% } else { %>
+                                                <span class="text-slate-400">Aucun fichier</span>
+                                            <% } %>
+                                        </td>
+                                        <td class="px-6 py-4 text-right text-xs">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button type="button"
+                                                        data-modal-open="book-modal"
+                                                        data-modal-title="Modifier le livre"
+                                                        data-fields='<%- JSON.stringify({ id: b.id, titre: b.titre, collection: b.collection, auteur: b.auteur || "", discipline: b.discipline, niveau: b.niveau || "CPGE" }) %>'
+                                                        class="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">
+                                                    Modifier
+                                                </button>
+                                                <form action="/admin/books/<%= b.id %>/delete" method="POST" onsubmit="return confirm('Supprimer ce livre ?');">
+                                                    <button type="submit" class="font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-400">
+                                                        Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="p-8 text-center text-slate-400">Aucun livre enregistré.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% if (totalPages > 1) { %>
+                    <div class="flex items-center justify-between border-t border-slate-200 p-4 dark:border-slate-800 text-xs">
+                        <span class="text-slate-500">Page <%= currentPage %> sur <%= totalPages %></span>
+                        <div class="flex gap-2">
+                            <% if (currentPage > 1) { %>
+                                <a href="/admin/books?page=<%= currentPage - 1 %>" class="rounded-lg bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">Précédent</a>
+                            <% } %>
+                            <% if (currentPage < totalPages) { %>
+                                <a href="/admin/books?page=<%= currentPage + 1 %>" class="rounded-lg bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">Suivant</a>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Form Livre -->
+    <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="mx-auto mt-20 max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-lift dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+                <h3 id="book-modal-title" class="font-display text-lg font-bold text-slate-900 dark:text-white">Livre CPGE</h3>
+                <button type="button" data-modal-close="book-modal" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form action="/admin/books/save" method="POST" enctype="multipart/form-data" class="mt-4 space-y-4 text-xs font-medium">
+                <input type="hidden" name="id" id="book-id">
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300">Titre de l'ouvrage</label>
+                    <input type="text" name="titre" id="book-titre" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Collection</label>
+                        <input type="text" name="collection" id="book-collection" required placeholder="H-Prepa, Dunod..." class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Auteur(s)</label>
+                        <input type="text" name="auteur" id="book-auteur" placeholder="Jean Dupont..." class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Discipline</label>
+                        <select name="discipline" id="book-discipline" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="Physique">Physique</option>
+                            <option value="Chimie">Chimie</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Niveau</label>
+                        <input type="text" name="niveau" id="book-niveau" value="CPGE" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300">Fichier PDF (Si modification, laisser vide pour conserver l'existant)</label>
+                    <input type="file" name="pdf_file" accept=".pdf" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" data-modal-close="book-modal" class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-300">Annuler</button>
+                    <button type="submit" class="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow hover:bg-brand-700">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/file-modal') %>
+</body>
+</html>

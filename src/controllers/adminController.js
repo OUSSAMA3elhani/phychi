@@ -8,6 +8,8 @@ const Chapter = require('../models/Chapter');
 const Course = require('../models/Course');
 const Exercise = require('../models/Exercise');
 const DownloadRequest = require('../models/DownloadRequest');
+const Book = require('../models/Book');
+const Concours = require('../models/Concours');
 
 const adminController = {
     /** GET /admin - Tableau de bord avec statistiques */
@@ -20,6 +22,8 @@ const adminController = {
                 chaptersCount: await Chapter.countAll(),
                 coursesCount: await Course.countAll(),
                 exercisesCount: await Exercise.countAll(),
+                booksCount: await Book.countAll(),
+                concoursCount: await Concours.countAll(),
                 pendingDownloads: (await DownloadRequest.countByStatus()).pending,
             };
 
@@ -324,6 +328,135 @@ const adminController = {
         try {
             await DownloadRequest.delete(req.params.id);
             res.redirect('/admin/downloads');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    // --- LIVRES CPGE -----------------------------------------------------------
+    async listBooks(req, res, next) {
+        try {
+            const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
+            const { rows: books, total } = await Book.findPage({ page, perPage: 20 });
+            res.render('admin/books', {
+                title: 'Gestion des Livres CPGE - Admin',
+                page: 'admin-books',
+                books,
+                total,
+                currentPage: page,
+                totalPages: Math.ceil(total / 20),
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async saveBook(req, res, next) {
+        try {
+            const { id, titre, collection, auteur, discipline, niveau } = req.body;
+            const pdfFile = req.file ? `/uploads/${req.file.filename}` : null;
+            const slug = titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `livre-${Date.now()}`;
+
+            if (id) {
+                const existing = await Book.findById(id);
+                if (!existing) return res.redirect('/admin/books');
+                await Book.update(id, {
+                    titre,
+                    collection,
+                    auteur: auteur || null,
+                    discipline: discipline || 'Physique',
+                    niveau: niveau || 'CPGE',
+                    pdf_file: pdfFile || existing.pdf_file,
+                    slug: existing.slug || slug,
+                });
+            } else {
+                await Book.create({
+                    titre,
+                    collection,
+                    auteur: auteur || null,
+                    discipline: discipline || 'Physique',
+                    niveau: niveau || 'CPGE',
+                    pdf_file: pdfFile || '',
+                    slug,
+                });
+            }
+            res.redirect('/admin/books');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async deleteBook(req, res, next) {
+        try {
+            await Book.delete(req.params.id);
+            res.redirect('/admin/books');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    // --- CONCOURS & ANNALES ----------------------------------------------------
+    async listConcours(req, res, next) {
+        try {
+            const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
+            const { rows: concoursList, total } = await Concours.findPage({ page, perPage: 20 });
+            res.render('admin/concours', {
+                title: 'Gestion des Concours & Annales - Admin',
+                page: 'admin-concours',
+                concoursList,
+                total,
+                currentPage: page,
+                totalPages: Math.ceil(total / 20),
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async saveConcours(req, res, next) {
+        try {
+            const { id, titre, ecole, annee, filiere, epreuve, matiere } = req.body;
+            const enonceFile = req.files && req.files.enonce_file ? `/uploads/${req.files.enonce_file[0].filename}` : null;
+            const correctionFile = req.files && req.files.correction_file ? `/uploads/${req.files.correction_file[0].filename}` : null;
+            const slug = (titre || `${ecole}-${annee}-${epreuve}`).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `concours-${Date.now()}`;
+
+            if (id) {
+                const existing = await Concours.findById(id);
+                if (!existing) return res.redirect('/admin/concours');
+                await Concours.update(id, {
+                    titre: titre || `${ecole} ${annee} ${epreuve}`,
+                    ecole,
+                    annee: parseInt(annee, 10) || 2024,
+                    filiere: filiere || 'MP',
+                    epreuve: epreuve || 'Épreuve U',
+                    matiere: matiere || 'Physique',
+                    enonce_file: enonceFile || existing.enonce_file,
+                    correction_file: correctionFile || existing.correction_file,
+                    slug: existing.slug || slug,
+                });
+            } else {
+                await Concours.create({
+                    titre: titre || `${ecole} ${annee} ${epreuve}`,
+                    ecole,
+                    annee: parseInt(annee, 10) || 2024,
+                    filiere: filiere || 'MP',
+                    epreuve: epreuve || 'Épreuve U',
+                    matiere: matiere || 'Physique',
+                    enonce_file: enonceFile || null,
+                    correction_file: correctionFile || null,
+                    slug,
+                });
+            }
+            res.redirect('/admin/concours');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async deleteConcours(req, res, next) {
+        try {
+            await Concours.delete(req.params.id);
+            res.redirect('/admin/concours');
         } catch (err) {
             next(err);
         }

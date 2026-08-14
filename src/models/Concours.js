@@ -157,6 +157,31 @@ const Concours = {
         } catch (err) {
             return [];
         }
+    },
+
+    async create(data) {
+        await ensureTableExists();
+        const [result] = await pool.query(
+            `INSERT INTO concours (titre, ecole, annee, filiere, epreuve, matiere, enonce_file, correction_file, slug)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [data.titre, data.ecole, data.annee, data.filiere, data.epreuve, data.matiere, data.enonce_file || null, data.correction_file || null, data.slug]
+        );
+        return result.insertId;
+    },
+
+    async update(id, data) {
+        await ensureTableExists();
+        await pool.query(
+            `UPDATE concours
+             SET titre = ?, ecole = ?, annee = ?, filiere = ?, epreuve = ?, matiere = ?, enonce_file = ?, correction_file = ?, slug = ?
+             WHERE id = ?`,
+            [data.titre, data.ecole, data.annee, data.filiere, data.epreuve, data.matiere, data.enonce_file || null, data.correction_file || null, data.slug, id]
+        );
+    },
+
+    async delete(id) {
+        await ensureTableExists();
+        await pool.query('DELETE FROM concours WHERE id = ?', [id]);
     }
 };
 

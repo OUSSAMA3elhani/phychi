@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %> - PhyChi Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="/assets/theme.js"></script>
+    <link rel="stylesheet" href="/assets/ui.css">
+    <script src="/assets/ui.js" defer></script>
+    <script src="/js/app.js" defer></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
+    <%- include('partials/sidebar') %>
+    <div class="pl-72">
+        <%- include('partials/header') %>
+        <main class="p-8">
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div role="alert" class="mb-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    <span><%= error %></span>
+                </div>
+            <% } %>
+
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6 dark:border-slate-800">
+                    <div>
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Concours &amp; Annales Corrigées (<%= total %>)</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gestion des sujets d'examens officiels et de leurs corrigés respectifs.</p>
+                    </div>
+                    <button type="button"
+                            data-modal-open="concours-modal"
+                            data-modal-title="Ajouter un sujet de concours"
+                            data-fields='{"id":"","titre":"","ecole":"Mines-Ponts","annee":"2024","filiere":"MP","epreuve":"Physique 1","matiere":"Physique"}'
+                            class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        Nouveau Concours
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[52rem] text-left text-sm">
+                        <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/50">
+                            <tr>
+                                <th class="px-6 py-4">Sujet / Épreuve</th>
+                                <th class="px-6 py-4">École &amp; Année</th>
+                                <th class="px-6 py-4">Filière / Matière</th>
+                                <th class="px-6 py-4">Énoncé &amp; Corrigé</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <% if (concoursList && concoursList.length > 0) { %>
+                                <% concoursList.forEach(function(c) { %>
+                                    <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                        <td class="px-6 py-4">
+                                            <p class="font-bold text-slate-900 dark:text-white"><%= c.titre %></p>
+                                            <p class="text-xs text-slate-500"><%= c.epreuve %></p>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold">
+                                            <span class="text-slate-900 dark:text-white"><%= c.ecole %></span><br>
+                                            <span class="text-slate-500">Session <%= c.annee %></span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold">
+                                            <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-slate-700 dark:bg-slate-800 dark:text-slate-300 me-1"><%= c.filiere %></span>
+                                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 <%= c.matiere === 'Chimie' ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                                                <%= c.matiere %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs">
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                <% if (c.enonce_file) { %>
+                                                    <button type="button"
+                                                            data-file-modal
+                                                            data-file-url="<%= c.enonce_file %>"
+                                                            data-file-title="<%= c.titre %> - Énoncé"
+                                                            class="inline-flex items-center gap-1 rounded-lg bg-brand-50 px-2.5 py-1 text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-400">
+                                                        Énoncé (PDF)
+                                                    </button>
+                                                <% } else { %>
+                                                    <span class="text-slate-400">Pas d'énoncé</span>
+                                                <% } %>
+                                                <% if (c.correction_file) { %>
+                                                    <button type="button"
+                                                            data-file-modal
+                                                            data-file-url="<%= c.correction_file %>"
+                                                            data-file-title="<%= c.titre %> - Corrigé"
+                                                            class="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                                        Corrigé (PDF)
+                                                    </button>
+                                                <% } else { %>
+                                                    <span class="text-slate-400">Pas de corrigé</span>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-right text-xs">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button type="button"
+                                                        data-modal-open="concours-modal"
+                                                        data-modal-title="Modifier le concours"
+                                                        data-fields='<%- JSON.stringify({ id: c.id, titre: c.titre, ecole: c.ecole, annee: c.annee, filiere: c.filiere, epreuve: c.epreuve, matiere: c.matiere }) %>'
+                                                        class="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">
+                                                    Modifier
+                                                </button>
+                                                <form action="/admin/concours/<%= c.id %>/delete" method="POST" onsubmit="return confirm('Supprimer cette annale ?');">
+                                                    <button type="submit" class="font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-400">
+                                                        Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-slate-400">Aucun sujet de concours enregistré.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% if (totalPages > 1) { %>
+                    <div class="flex items-center justify-between border-t border-slate-200 p-4 dark:border-slate-800 text-xs">
+                        <span class="text-slate-500">Page <%= currentPage %> sur <%= totalPages %></span>
+                        <div class="flex gap-2">
+                            <% if (currentPage > 1) { %>
+                                <a href="/admin/concours?page=<%= currentPage - 1 %>" class="rounded-lg bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">Précédent</a>
+                            <% } %>
+                            <% if (currentPage < totalPages) { %>
+                                <a href="/admin/concours?page=<%= currentPage + 1 %>" class="rounded-lg bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">Suivant</a>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Form Concours -->
+    <div id="concours-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="mx-auto mt-16 max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-lift dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+                <h3 id="concours-modal-title" class="font-display text-lg font-bold text-slate-900 dark:text-white">Concours &amp; Annales</h3>
+                <button type="button" data-modal-close="concours-modal" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form action="/admin/concours/save" method="POST" enctype="multipart/form-data" class="mt-4 space-y-4 text-xs font-medium">
+                <input type="hidden" name="id" id="concours-id">
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300">Titre du sujet</label>
+                    <input type="text" name="titre" id="concours-titre" required placeholder="Mines-Ponts 2024 Physique 1" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">École / Établissement</label>
+                        <input type="text" name="ecole" id="concours-ecole" required placeholder="Mines-Ponts, Centrale..." class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Année (Session)</label>
+                        <input type="number" name="annee" id="concours-annee" required value="2024" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Filière</label>
+                        <input type="text" name="filiere" id="concours-filiere" value="MP" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Épreuve</label>
+                        <input type="text" name="epreuve" id="concours-epreuve" placeholder="Physique 1" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-700 dark:text-slate-300">Matière</label>
+                        <select name="matiere" id="concours-matiere" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="Physique">Physique</option>
+                            <option value="Chimie">Chimie</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300">Fichier Énoncé (PDF)</label>
+                    <input type="file" name="enonce_file" accept=".pdf" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                </div>
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300">Fichier Corrigé (PDF)</label>
+                    <input type="file" name="correction_file" accept=".pdf" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" data-modal-close="concours-modal" class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-300">Annuler</button>
+                    <button type="submit" class="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow hover:bg-brand-700">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../partials/file-modal') %>
+</body>
+</html>

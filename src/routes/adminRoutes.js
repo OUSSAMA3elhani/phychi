@@ -64,4 +64,28 @@ router.get('/downloads', adminController.listDownloads);
 router.post('/downloads/:id/status', adminController.updateDownloadStatus);
 router.post('/downloads/:id/delete', adminController.deleteDownload);
 
+// Livres CPGE
+router.get('/books', adminController.listBooks);
+router.post(
+    '/books/save',
+    withUploadErrors(upload.single('pdf_file'), '/admin/books'),
+    adminController.saveBook
+);
+router.post('/books/:id/delete', adminController.deleteBook);
+
+// Concours & Annales
+router.get('/concours', adminController.listConcours);
+router.post(
+    '/concours/save',
+    withUploadErrors(
+        upload.fields([
+            { name: 'enonce_file', maxCount: 1 },
+            { name: 'correction_file', maxCount: 1 },
+        ]),
+        '/admin/concours'
+    ),
+    adminController.saveConcours
+);
+router.post('/concours/:id/delete', adminController.deleteConcours);
+
 module.exports = router;
