@@ -25,6 +25,15 @@ function cleanText(str) {
     return str.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function shortenDesc(str) {
+    if (!str) return '';
+    const cleaned = cleanText(str);
+    if (cleaned.length > 140) {
+        return cleaned.slice(0, 140).trim() + '...';
+    }
+    return cleaned;
+}
+
 function mapEcoleCategory(rawName) {
     const r = rawName.toLowerCase();
     if (r.includes('polytechnique') && (r.includes('normales') || r.includes('ens'))) return 'École Polytechnique & ENS (Conjoint)';
@@ -84,7 +93,7 @@ function parsePhysicsCatalog() {
                 filiere: filiereMatch ? filiereMatch[1].trim() : 'Toutes',
                 matiere: matiereMatch ? matiereMatch[1].trim() : 'Physique',
                 epreuve: rawEpreuve,
-                description: themeMatch ? themeMatch[1].trim() : 'Sujet officiel du concours ' + ecole + ' (' + anneeMatch[1] + ').',
+                description: themeMatch ? shortenDesc(themeMatch[1]) : 'Sujet officiel du concours ' + ecole + ' (' + anneeMatch[1] + ').',
                 enonce_file: exists ? '/assets/downloads/UPS de physique/fichiers/' + pdfRelPath : null,
                 correction_file: corrExists ? '/assets/downloads/UPS de physique/fichiers/' + corrPdfRel : null
             });
@@ -151,7 +160,7 @@ function parseChemistryCatalog() {
                         filiere: currentFiliere || 'PC',
                         matiere: 'Chimie',
                         epreuve: epreuveTitle,
-                        description: themeText || 'Sujet officiel de chimie des concours d entrée aux grandes écoles.',
+                        description: themeText ? shortenDesc(themeText) : 'Sujet officiel de chimie des concours d entrée aux grandes écoles.',
                         enonce_file: exists ? '/assets/downloads/UPS de chimie/' + pdfRelPath : null,
                         correction_file: corrRelPath
                     });
