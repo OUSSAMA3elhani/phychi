@@ -27,12 +27,18 @@ router.get(['/chapitres', '/chapitres.html'], pageController.chapitres);
 // Declaree apres la liste pour qu'un segment litteral ne soit pas pris pour un :id.
 router.get('/chapitres/:id', pageController.chapitreDetails);
 router.get(['/cours', '/cours.html'], pageController.cours);
+// Section Exercices
+router.get(['/exercices', '/exercices.html'], pageController.exercicesPhysique);
 router.get(['/exercices-physique', '/exercices-physique.html'], pageController.exercicesPhysique);
 router.get(['/exercices-chimie', '/exercices-chimie.html'], pageController.exercicesChimie);
 
 // Section Concours & Annales
 router.get(['/concours', '/concours.html'], pageController.concours);
 router.get('/concours/:id', pageController.concoursDetails);
+
+// Section Livres & Manuels CPGE
+router.get(['/livres', '/livres.html'], pageController.livres);
+router.get('/livres/:id', pageController.livresDetails);
 
 // Fiche detaillee d'un exercice. Declaree apres les listes pour qu'un segment
 // litteral ne soit jamais capture comme un `:id`.

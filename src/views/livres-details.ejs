@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<%- include('partials/head') %>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+<%- include('partials/header') %>
+
+<main id="main-content" class="min-h-screen bg-slate-50 py-10 dark:bg-slate-950">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+
+        <!-- Fil d'Ariane -->
+        <nav class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400" aria-label="Fil d'Ariane">
+            <a href="/" class="hover:text-brand-600 dark:hover:text-brand-400">Accueil</a>
+            <span>/</span>
+            <a href="/livres" class="hover:text-brand-600 dark:hover:text-brand-400">Livres</a>
+            <span>/</span>
+            <span class="text-slate-900 dark:text-white"><%= book.titre %></span>
+        </nav>
+
+        <!-- Carte Principale du Livre -->
+        <article class="mt-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center rounded-xl bg-brand-50 px-3 py-1 text-xs font-extrabold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                    <%= book.collection %>
+                </span>
+                <span class="inline-flex items-center rounded-xl <%= book.discipline === 'Chimie' ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' %> px-3 py-1 text-xs font-bold">
+                    <%= book.discipline %>
+                </span>
+                <span class="inline-flex items-center rounded-xl bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    <%= book.niveau %>
+                </span>
+            </div>
+
+            <h1 class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                <%= book.titre %>
+            </h1>
+
+            <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+                Auteur : <span class="font-semibold text-slate-800 dark:text-slate-200"><%= book.auteur %></span>
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+                <button type="button"
+                        data-file-modal
+                        data-file-url="<%= book.pdf_file %>"
+                        data-file-title="<%= book.titre %>"
+                        data-file-label="<%= book.collection %> — <%= book.discipline %>"
+                        class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-xs font-bold text-white shadow-soft transition-all hover:bg-brand-700">
+                    <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span>Ouvrir le livre en grand format</span>
+                </button>
+
+                <a href="<%= book.pdf_file %>" download class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
+                    Télécharger PDF
+                </a>
+            </div>
+
+            <!-- Visionneur PDF Intégré -->
+            <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950/5 dark:border-slate-800 dark:bg-slate-950">
+                <iframe src="<%= book.pdf_file %>" class="h-[600px] w-full border-none" title="<%= book.titre %>"></iframe>
+            </div>
+        </article>
+    </div>
+</main>
+
+<%- include('partials/file-modal') %>
+<%- include('partials/footer') %>
+</body>
+</html>

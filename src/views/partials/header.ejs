@@ -61,70 +61,12 @@
                         <a href="/" data-nav="index"<%- aria('index') %> class="<%- on('index') ? TOP_ON : TOP_OFF %>">Accueil</a>
                     </li>
 
-                    <li class="group relative">
-                        <button type="button" data-navgroup="apprendre" class="<%- inLearn ? GROUP_ON : GROUP_OFF %>">
-                            Apprendre
-                            <svg class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                        <div class="invisible absolute left-0 top-full z-10 w-64 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                            <ul class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lift dark:border-slate-800 dark:bg-slate-900">
-                                <li>
-                                    <a href="/cours" data-nav="cours"<%- aria('cours') %> class="<%- on('cours') ? ITEM_ON : ITEM_OFF %>">
-                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
-                                        </span>
-                                        <span>
-                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Cours</span>
-                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Leçons complètes et structurées</span>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/chapitres" data-nav="chapitres"<%- aria('chapitres') %> class="<%- on('chapitres') ? ITEM_ON : ITEM_OFF %>">
-                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
-                                        </span>
-                                        <span>
-                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Chapitres</span>
-                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Parcourir par programme</span>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <li>
+                        <a href="/exercices" data-nav="exercices"<%- aria('exercices') %> class="<%- on('exercices') || inTrain ? TOP_ON : TOP_OFF %>">S'entraîner</a>
                     </li>
 
-                    <li class="group relative">
-                        <button type="button" data-navgroup="entrainer" class="<%- inTrain ? GROUP_ON : GROUP_OFF %>">
-                            S'entraîner
-                            <svg class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                        <div class="invisible absolute left-0 top-full z-10 w-72 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                            <ul class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lift dark:border-slate-800 dark:bg-slate-900">
-                                <li>
-                                    <a href="/exercices-physique" data-nav="exercices-physique"<%- aria('exercices-physique') %> class="<%- on('exercices-physique') ? ITEM_ON : ITEM_OFF %>">
-                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
-                                        </span>
-                                        <span>
-                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Exercices de Physique</span>
-                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Mécanique, thermo, électromagnétisme</span>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/exercices-chimie" data-nav="exercices-chimie"<%- aria('exercices-chimie') %> class="<%- on('exercices-chimie') ? ITEM_ON : ITEM_OFF %>">
-                                        <span class="mt-0.5 text-flask-600 dark:text-flask-400" aria-hidden="true">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
-                                        </span>
-                                        <span>
-                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Exercices de Chimie</span>
-                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Organique, cinétique, solutions</span>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <li>
+                        <a href="/livres" data-nav="livres"<%- aria('livres') %> class="<%- on('livres') ? TOP_ON : TOP_OFF %>">Livres</a>
                     </li>
 
                     <li><a href="/concours" data-nav="concours"<%- aria('concours') %> class="<%- on('concours') ? TOP_ON : TOP_OFF %>">Concours</a></li>
@@ -170,10 +112,8 @@
             <p class="px-1 pb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Navigation</p>
             <ul class="grid gap-1 text-[15px] font-medium sm:grid-cols-2">
                 <li><a href="/" data-mnav="index"<%- aria('index') %> class="<%- on('index') ? MOB_ON : MOB_OFF %>">Accueil</a></li>
-                <li><a href="/cours" data-mnav="cours"<%- aria('cours') %> class="<%- on('cours') ? MOB_ON : MOB_OFF %>">Cours</a></li>
-                <li><a href="/chapitres" data-mnav="chapitres"<%- aria('chapitres') %> class="<%- on('chapitres') ? MOB_ON : MOB_OFF %>">Chapitres</a></li>
-                <li><a href="/exercices-physique" data-mnav="exercices-physique"<%- aria('exercices-physique') %> class="<%- on('exercices-physique') ? MOB_ON : MOB_OFF %>">Exercices Physique</a></li>
-                <li><a href="/exercices-chimie" data-mnav="exercices-chimie"<%- aria('exercices-chimie') %> class="<%- on('exercices-chimie') ? MOB_ON : MOB_OFF %>">Exercices Chimie</a></li>
+                <li><a href="/exercices" data-mnav="exercices"<%- aria('exercices') %> class="<%- on('exercices') || inTrain ? MOB_ON : MOB_OFF %>">S'entraîner</a></li>
+                <li><a href="/livres" data-mnav="livres"<%- aria('livres') %> class="<%- on('livres') ? MOB_ON : MOB_OFF %>">Livres CPGE</a></li>
                 <li><a href="/concours" data-mnav="concours"<%- aria('concours') %> class="<%- on('concours') ? MOB_ON : MOB_OFF %>">Concours &amp; Annales</a></li>
                 <li><a href="/recherche" data-mnav="recherche"<%- aria('recherche') %> class="<%- on('recherche') ? MOB_ON : MOB_OFF %>">Recherche</a></li>
                 <li><a href="/favoris" data-mnav="favoris"<%- aria('favoris') %> class="<%- on('favoris') ? MOB_ON : MOB_OFF %>">Favoris</a></li>

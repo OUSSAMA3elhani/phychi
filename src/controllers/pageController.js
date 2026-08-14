@@ -8,6 +8,7 @@ const Chapter = require('../models/Chapter');
 const Course = require('../models/Course');
 const Exercise = require('../models/Exercise');
 const Concours = require('../models/Concours');
+const Book = require('../models/Book');
 const DownloadRequest = require('../models/DownloadRequest');
 
 /**
@@ -588,6 +589,61 @@ const pageController = {
                 page: 'concours',
                 concours: item,
                 related,
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /** GET /livres - Liste des livres et manuels de référence CPGE */
+    async livres(req, res, next) {
+        try {
+            const filters = {
+                discipline: req.query.discipline || null,
+                collection: req.query.collection || null,
+                search: req.query.search || null,
+            };
+
+            const perPage = 12;
+            const currentPage = req.query.page || 1;
+
+            const [result, filterOptions] = await Promise.all([
+                Book.findPage({
+                    ...filters,
+                    page: currentPage,
+                    perPage,
+                }),
+                Book.findFilters(),
+            ]);
+
+            const pagination = paginate(result.total, currentPage, perPage, filters);
+
+            res.render('livres', {
+                title: 'Livres & Manuels de Référence CPGE (Physique & Chimie) | PhyChemia',
+                metaDescription: 'Consultez et téléchargez les livres et manuels de référence CPGE (H-Prépa, Lumbroso, Pérez, Nathan, Garing) en Physique et Chimie.',
+                page: 'livres',
+                booksList: result.rows,
+                filterOptions,
+                filters,
+                pagination,
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /** GET /livres/:id - Détails d'un livre */
+    async livresDetails(req, res, next) {
+        try {
+            const id = req.params.id;
+            const item = await Book.findById(id);
+            if (!item) return pageController.notFound(req, res);
+
+            res.render('livres-details', {
+                title: `${item.titre} - Livre CPGE | PhyChemia`,
+                metaDescription: `Consultez et téléchargez le manuel ${item.titre} (${item.collection}).`,
+                page: 'livres',
+                book: item,
             });
         } catch (err) {
             next(err);
