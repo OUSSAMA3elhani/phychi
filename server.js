@@ -83,6 +83,32 @@ app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 // -----------------------------------------------------------------------------
 // Sessions
 // -----------------------------------------------------------------------------
+// Securite & Gestion Globale des Exceptions Processeur
+// -----------------------------------------------------------------------------
+process.on('uncaughtException', (err) => {
+    console.error('Global uncaughtException caught gracefully:', err ? err.message : err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Global unhandledRejection caught gracefully:', reason);
+});
+
+async function ensureSessionsTable() {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS \`sessions\` (
+              \`session_id\` varchar(128) COLLATE utf8mb4_bin NOT NULL,
+              \`expires\` int(11) unsigned NOT NULL,
+              \`data\` mediumtext COLLATE utf8mb4_bin,
+              PRIMARY KEY (\`session_id\`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+        `);
+    } catch (e) {
+        console.warn('Sessions table check event:', e.message);
+    }
+}
+ensureSessionsTable();
+
 const sessionSecret = process.env.SESSION_SECRET || 'phychemia_session_secret_default_key_2026';
 if (!process.env.SESSION_SECRET && isProduction) {
     console.warn(
@@ -103,7 +129,7 @@ const sessionStore = new MySQLStore({
 }, pool);
 
 sessionStore.on('error', (error) => {
-    console.warn('MySQL Session Store event caught gracefully:', error.message);
+    console.warn('MySQL Session Store event caught gracefully:', error ? error.message : error);
 });
 
 app.use(
