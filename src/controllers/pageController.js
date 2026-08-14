@@ -595,6 +595,18 @@ const pageController = {
         }
     },
 
+    /** GET /livres/physique - Livres de Physique uniquement */
+    async livresPhysique(req, res, next) {
+        req.query.discipline = 'Physique';
+        return pageController.livres(req, res, next);
+    },
+
+    /** GET /livres/chimie - Livres de Chimie uniquement */
+    async livresChimie(req, res, next) {
+        req.query.discipline = 'Chimie';
+        return pageController.livres(req, res, next);
+    },
+
     /** GET /livres - Liste des livres et manuels de référence CPGE */
     async livres(req, res, next) {
         try {
@@ -618,10 +630,24 @@ const pageController = {
 
             const pagination = paginate(result.total, currentPage, perPage, filters);
 
+            let pageKey = 'livres';
+            let title = 'Livres & Manuels de Référence CPGE (Physique & Chimie) | PhyChemia';
+            let metaDescription = 'Consultez et téléchargez les livres et manuels de référence CPGE (H-Prépa, Lumbroso, Pérez, Nathan, Garing) en Physique et Chimie.';
+
+            if (filters.discipline === 'Physique') {
+                pageKey = 'livres-physique';
+                title = 'Livres de Physique CPGE — Collection complète | PhyChemia';
+                metaDescription = 'Consultez et téléchargez les manuels de cours et d\'exercices de Physique CPGE (Pérez, Lumbroso, H-Prépa, Nathan, Garing).';
+            } else if (filters.discipline === 'Chimie') {
+                pageKey = 'livres-chimie';
+                title = 'Livres de Chimie CPGE — Collection complète | PhyChemia';
+                metaDescription = 'Consultez et téléchargez les manuels de cours et d\'exercices de Chimie CPGE (Grécias, Dunod, H-Prépa).';
+            }
+
             res.render('livres', {
-                title: 'Livres & Manuels de Référence CPGE (Physique & Chimie) | PhyChemia',
-                metaDescription: 'Consultez et téléchargez les livres et manuels de référence CPGE (H-Prépa, Lumbroso, Pérez, Nathan, Garing) en Physique et Chimie.',
-                page: 'livres',
+                title,
+                metaDescription,
+                page: pageKey,
                 booksList: result.rows,
                 filterOptions,
                 filters,

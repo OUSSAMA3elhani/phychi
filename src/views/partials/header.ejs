@@ -16,6 +16,7 @@
     // Un groupe reste surligne quand l'une de ses entrees est la page courante.
     var inLearn = ['cours', 'chapitres'].indexOf(current) !== -1;
     var inTrain = ['exercices-physique', 'exercices-chimie', 'exercice-details'].indexOf(current) !== -1;
+    var inBooks = ['livres', 'livres-physique', 'livres-chimie'].indexOf(current) !== -1;
 
     var TOP_ON    = 'rounded-lg bg-brand-50 px-3.5 py-2 font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400';
     var TOP_OFF   = 'rounded-lg px-3.5 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white';
@@ -65,8 +66,45 @@
                         <a href="/exercices" data-nav="exercices"<%- aria('exercices') %> class="<%- on('exercices') || inTrain ? TOP_ON : TOP_OFF %>">S'entraîner</a>
                     </li>
 
-                    <li>
-                        <a href="/livres" data-nav="livres"<%- aria('livres') %> class="<%- on('livres') ? TOP_ON : TOP_OFF %>">Livres</a>
+                    <li class="group relative">
+                        <button type="button" data-navgroup="livres" class="<%- inBooks ? GROUP_ON : GROUP_OFF %>">
+                            Livres
+                            <svg class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="invisible absolute left-0 top-full z-10 w-72 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                            <ul class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                                <li>
+                                    <a href="/livres/physique" data-nav="livres-physique"<%- aria('livres-physique') %> class="<%- on('livres-physique') ? ITEM_ON : ITEM_OFF %>">
+                                        <span class="mt-0.5 text-brand-600 dark:text-brand-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Livres de Physique</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Pérez, Lumbroso, H-Prépa... (56 livres)</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/livres/chimie" data-nav="livres-chimie"<%- aria('livres-chimie') %> class="<%- on('livres-chimie') ? ITEM_ON : ITEM_OFF %>">
+                                        <span class="mt-0.5 text-flask-600 dark:text-flask-400" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                                        </span>
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Livres de Chimie</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Grécias, Dunod, H-Prépa... (19 livres)</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="border-t border-slate-100 dark:border-slate-800 pt-1 mt-1">
+                                    <a href="/livres" data-nav="livres"<%- aria('livres') %> class="<%- on('livres') ? ITEM_ON : ITEM_OFF %>">
+                                        <span>
+                                            <span class="block text-sm font-semibold text-slate-900 dark:text-white">Tous les livres CPGE</span>
+                                            <span class="block text-xs text-slate-500 dark:text-slate-400">Collection complète (75 livres)</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                     <li><a href="/concours" data-nav="concours"<%- aria('concours') %> class="<%- on('concours') ? TOP_ON : TOP_OFF %>">Concours</a></li>
@@ -113,7 +151,9 @@
             <ul class="grid gap-1 text-[15px] font-medium sm:grid-cols-2">
                 <li><a href="/" data-mnav="index"<%- aria('index') %> class="<%- on('index') ? MOB_ON : MOB_OFF %>">Accueil</a></li>
                 <li><a href="/exercices" data-mnav="exercices"<%- aria('exercices') %> class="<%- on('exercices') || inTrain ? MOB_ON : MOB_OFF %>">S'entraîner</a></li>
-                <li><a href="/livres" data-mnav="livres"<%- aria('livres') %> class="<%- on('livres') ? MOB_ON : MOB_OFF %>">Livres CPGE</a></li>
+                <li><a href="/livres/physique" data-mnav="livres-physique"<%- aria('livres-physique') %> class="<%- on('livres-physique') ? MOB_ON : MOB_OFF %>">⚡ Livres Physique</a></li>
+                <li><a href="/livres/chimie" data-mnav="livres-chimie"<%- aria('livres-chimie') %> class="<%- on('livres-chimie') ? MOB_ON : MOB_OFF %>">🧪 Livres Chimie</a></li>
+                <li><a href="/livres" data-mnav="livres"<%- aria('livres') %> class="<%- on('livres') ? MOB_ON : MOB_OFF %>">Tous les Livres</a></li>
                 <li><a href="/concours" data-mnav="concours"<%- aria('concours') %> class="<%- on('concours') ? MOB_ON : MOB_OFF %>">Concours &amp; Annales</a></li>
                 <li><a href="/recherche" data-mnav="recherche"<%- aria('recherche') %> class="<%- on('recherche') ? MOB_ON : MOB_OFF %>">Recherche</a></li>
                 <li><a href="/favoris" data-mnav="favoris"<%- aria('favoris') %> class="<%- on('favoris') ? MOB_ON : MOB_OFF %>">Favoris</a></li>

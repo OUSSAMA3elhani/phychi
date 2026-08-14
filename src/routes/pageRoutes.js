@@ -37,6 +37,8 @@ router.get(['/concours', '/concours.html'], pageController.concours);
 router.get('/concours/:id', pageController.concoursDetails);
 
 // Section Livres & Manuels CPGE
+router.get(['/livres/physique', '/livres/physique.html'], pageController.livresPhysique);
+router.get(['/livres/chimie', '/livres/chimie.html'], pageController.livresChimie);
 router.get(['/livres', '/livres.html'], pageController.livres);
 router.get('/livres/:id', pageController.livresDetails);
 

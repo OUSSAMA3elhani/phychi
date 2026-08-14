@@ -19,10 +19,10 @@
                     Bibliothèque de Référence CPGE
                 </span>
                 <h1 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-                    Livres &amp; Manuels de Référence
+                    <%= filters.discipline === 'Physique' ? 'Livres & Manuels de Physique' : (filters.discipline === 'Chimie' ? 'Livres & Manuels de Chimie' : 'Livres & Manuels de Référence') %>
                 </h1>
                 <p class="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
-                    Accédez à la collection complète des manuels de cours, exercices corrigés et problèmes de Physique et Chimie pour classes préparatoires (H-Prépa, Lumbroso, Pérez, Nathan CPGE, Garing, Dunod...).
+                    <%= filters.discipline === 'Physique' ? 'Collection complète des manuels de cours, exercices corrigés et problèmes de Physique pour classes préparatoires (Pérez, Lumbroso, H-Prépa, Nathan, Garing).' : (filters.discipline === 'Chimie' ? 'Collection complète des manuels de cours, exercices corrigés et problèmes de Chimie pour classes préparatoires (Grécias, Dunod, H-Prépa).' : 'Accédez à la collection complète des manuels de cours, exercices corrigés et problèmes de Physique et Chimie pour classes préparatoires (H-Prépa, Lumbroso, Pérez, Nathan CPGE, Garing, Dunod...).') %>
                 </p>
 
                 <div class="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
@@ -31,8 +31,8 @@
                         <span class="text-xs text-slate-300">Livres numérisés</span>
                     </div>
                     <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
-                        <span class="block text-xl font-bold text-brand-300">Physique &amp; Chimie</span>
-                        <span class="text-xs text-slate-300">7 Grandes Collections</span>
+                        <span class="block text-xl font-bold text-brand-300"><%= filters.discipline || 'Physique & Chimie' %></span>
+                        <span class="text-xs text-slate-300">Grandes Collections CPGE</span>
                     </div>
                     <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
                         <span class="block text-xl font-bold text-emerald-400">100% PDF</span>
@@ -46,20 +46,20 @@
         <section class="mt-8" aria-label="Filtre par Discipline">
             <div class="flex flex-wrap gap-2">
                 <a href="/livres" class="inline-flex items-center gap-2 rounded-xl border <%= !filters.discipline ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
-                    Tous les livres (<%= pagination.total %>)
+                    Tous les livres
                 </a>
-                <a href="/livres?discipline=Physique" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Physique' ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
-                    ⚡ Livres de Physique
+                <a href="/livres/physique" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Physique' ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
+                    ⚡ Livres de Physique (56)
                 </a>
-                <a href="/livres?discipline=Chimie" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Chimie' ? 'border-flask-500 bg-flask-50 font-bold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
-                    🧪 Livres de Chimie
+                <a href="/livres/chimie" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Chimie' ? 'border-flask-500 bg-flask-50 font-bold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
+                    🧪 Livres de Chimie (19)
                 </a>
             </div>
         </section>
 
         <!-- ================= BARRE DE RECHERCHE ET FILTRES ================= -->
         <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900" aria-label="Filtres des livres">
-            <form method="GET" action="/livres" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <form method="GET" action="<%= filters.discipline === 'Physique' ? '/livres/physique' : (filters.discipline === 'Chimie' ? '/livres/chimie' : '/livres') %>" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 
                 <!-- Recherche texte -->
                 <div class="lg:col-span-2">
