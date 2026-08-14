@@ -1,14 +1,5 @@
-/**
- * Ingestion Script: Imports and pairs all 4,600+ concours PDFs from
- * both Physics (UPS_Concours_Organises) and Chemistry (UPS_Concours_Organises_2)
- * into the MySQL database.
- * 
- * Usage: node tools/import-concours-files.js
- */
-require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { pool } = require('../config/db');
 
 const folders = [
     { baseDir: 'public/assets/downloads/UPS_Concours_Organises', defaultMatiere: 'Physique' },
@@ -17,15 +8,6 @@ const folders = [
 
 function cleanCategoryName(dirName) {
     return dirName.replace(/^\d+\.\s*/, '').trim();
-}
-
-function slugify(text) {
-    return text
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
 }
 
 function detectMatiere(epreuveStr, defaultMatiere) {
@@ -45,7 +27,7 @@ function detectMatiere(epreuveStr, defaultMatiere) {
 function parsePdfFile(fullPdfPath, ecoleDir, defaultMatiere) {
     const filename = path.basename(fullPdfPath);
     
-    // Detect year in full path or filename
+    // Detect year
     const yearMatch = fullPdfPath.match(/\b(199[5-9]|20[0-2][0-9])\b/);
     const annee = yearMatch ? parseInt(yearMatch[1], 10) : 2020;
 
@@ -56,10 +38,10 @@ function parsePdfFile(fullPdfPath, ecoleDir, defaultMatiere) {
         filiere = filiereMatch[1].toUpperCase();
     }
 
-    // Detect doc type (enonce vs corrige)
+    // Detect doc type
     const isCorrige = /corrige/i.test(filename);
 
-    // Clean epreuve title without stripping physics/chemistry terms
+    // Clean epreuve title
     let cleanEpreuve = filename
         .replace(/\.pdf$/i, '')
         .replace(/^(\d{4})_([A-Z0-9]+)_(\d{4})_/i, '')
@@ -77,11 +59,10 @@ function parsePdfFile(fullPdfPath, ecoleDir, defaultMatiere) {
         cleanEpreuve = defaultMatiere === 'Chimie' ? 'Épreuve de Chimie' : 'Épreuve de Physique';
     }
 
-    // Capitalize clean title
     cleanEpreuve = cleanEpreuve.charAt(0).toUpperCase() + cleanEpreuve.slice(1);
     const matiere = detectMatiere(cleanEpreuve + ' ' + filename, defaultMatiere);
 
-    // Refine ecole category using filename
+    // Refine ecole category
     let ecole = cleanCategoryName(ecoleDir);
     const fn = filename.toLowerCase();
     if (ecoleDir.includes('Agrégation') || ecoleDir.includes('CAPES')) {
@@ -105,36 +86,11 @@ function parsePdfFile(fullPdfPath, ecoleDir, defaultMatiere) {
     };
 }
 
-async function runConcoursImport() {
-    console.log('Démarrage de l importation globale des 4 600+ sujets de Concours (Physique & Chimie)...');
-
-    // Ensure `concours` table exists
-    await pool.query(`
-        CREATE TABLE IF NOT EXISTS \`concours\` (
-          \`id\`              INT UNSIGNED NOT NULL AUTO_INCREMENT,
-          \`ecole\`           VARCHAR(255) NOT NULL,
-          \`annee\`           INT UNSIGNED NOT NULL,
-          \`filiere\`         VARCHAR(100) NOT NULL DEFAULT 'Toutes',
-          \`matiere\`         VARCHAR(100) NOT NULL DEFAULT 'Physique',
-          \`epreuve\`         VARCHAR(255) NOT NULL,
-          \`titre\`           VARCHAR(255) NOT NULL,
-          \`slug\`            VARCHAR(255) NOT NULL,
-          \`enonce_file\`     VARCHAR(500) NULL,
-          \`correction_file\` VARCHAR(500) NULL,
-          \`created_at\`      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-          PRIMARY KEY (\`id\`),
-          UNIQUE KEY \`uq_concours_slug\` (\`slug\`),
-          KEY \`idx_concours_ecole_annee\` (\`ecole\`, \`annee\`),
-          KEY \`idx_concours_filiere\` (\`filiere\`),
-          KEY \`idx_concours_matiere\` (\`matiere\`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `);
-
-    // Clean existing entries to regenerate clean paired entries
-    await pool.query('DELETE FROM concours');
-
-    const concoursGroups = new Map();
+function testFullImport() {
+    console.log('Testing full import across BOTH Physics AND Chemistry UPS folders...');
+    
     let totalPdfFiles = 0;
+    const concoursGroups = new Map();
 
     for (const config of folders) {
         const basePath = path.join(__dirname, '..', config.baseDir);
@@ -199,37 +155,24 @@ async function runConcoursImport() {
         }
     }
 
-    console.log(`Fichiers PDF traités : ${totalPdfFiles}`);
-    console.log(`Nombre total de sujets de concours uniques appariés : ${concoursGroups.size}`);
+    console.log(`Total PDF files processed: ${totalPdfFiles}`);
+    console.log(`Total unique concours entries created: ${concoursGroups.size}`);
 
-    let insertedCount = 0;
-    const usedSlugs = new Set();
+    let physiqueCount = 0, chimieCount = 0, pcCount = 0;
+    let pairedCount = 0;
 
-    for (const group of concoursGroups.values()) {
-        const titre = group.epreuve;
-        let rawSlug = `${group.ecole}-${group.annee}-${group.filiere}-${group.matiere}-${group.epreuve}`;
-        let slug = slugify(rawSlug);
+    for (const g of concoursGroups.values()) {
+        if (g.matiere === 'Physique') physiqueCount++;
+        else if (g.matiere === 'Chimie') chimieCount++;
+        else pcCount++;
 
-        let counter = 1;
-        while (usedSlugs.has(slug)) {
-            slug = `${slugify(rawSlug)}-${counter}`;
-            counter++;
-        }
-        usedSlugs.add(slug);
-
-        await pool.query(
-            `INSERT INTO concours (ecole, annee, filiere, matiere, epreuve, titre, slug, enonce_file, correction_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [group.ecole, group.annee, group.filiere, group.matiere, group.epreuve, titre, slug, group.enonce_file, group.correction_file]
-        );
-        insertedCount++;
+        if (g.enonce_file && g.correction_file) pairedCount++;
     }
 
-    const [totalRows] = await pool.query('SELECT COUNT(*) AS count FROM concours');
-    console.log(`\nImportation globale réussie ! ${insertedCount} sujets enregistrés en base. Total en base : ${totalRows[0].count}`);
-    process.exit(0);
+    console.log(`- Matière Physique: ${physiqueCount}`);
+    console.log(`- Matière Chimie: ${chimieCount}`);
+    console.log(`- Matière Physique-Chimie: ${pcCount}`);
+    console.log(`- Concours avec Énoncé ET Corrigé appariés: ${pairedCount}`);
 }
 
-runConcoursImport().catch(err => {
-    console.error('Erreur lors de l importation des concours :', err);
-    process.exit(1);
-});
+testFullImport();
