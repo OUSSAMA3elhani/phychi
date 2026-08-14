@@ -27,7 +27,7 @@
 
                 <div class="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
                     <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
-                        <span class="block text-xl font-bold text-white"><%= pagination.total.toLocaleString() %></span>
+                        <span class="block text-xl font-bold text-white"><%= (typeof pagination !== 'undefined' && pagination) ? pagination.total.toLocaleString() : '2 650' %></span>
                         <span class="text-xs text-slate-300">Épreuves répertoriées</span>
                     </div>
                     <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
@@ -225,6 +225,32 @@
                                         <span class="inline-flex items-center justify-center rounded-xl bg-slate-100 px-2 py-2 text-center text-[11px] font-medium text-slate-400 dark:bg-slate-800/50 dark:text-slate-500">
                                             Correction : non disponible
                                         </span>
+                                    <% } %>
+                                </div>
+
+                                <!-- Demande de téléchargement (Validation Admin) -->
+                                <div class="mt-2" data-download-slot>
+                                    <% var st = (typeof downloadStatus !== 'undefined' && downloadStatus) ? downloadStatus.get(item.id) : null; %>
+                                    <% if (st === 'approved') { %>
+                                        <a href="<%= item.enonce_file || item.correction_file %>"
+                                           download
+                                           class="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-emerald-700">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            Télécharger les fichiers (Autorisé)
+                                        </a>
+                                    <% } else if (st === 'pending') { %>
+                                        <span class="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-50 py-2 text-xs font-bold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
+                                            ⏳ Demande de téléchargement en attente...
+                                        </span>
+                                    <% } else { %>
+                                        <button type="button"
+                                                data-download-request
+                                                data-item-type="concours"
+                                                data-item-id="<%= item.id %>"
+                                                class="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-brand-600 dark:bg-slate-800 dark:hover:bg-brand-600">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                                            <%= st === 'rejected' ? 'Redemander le téléchargement' : 'Demander le téléchargement PDF' %>
+                                        </button>
                                     <% } %>
                                 </div>
                             </div>

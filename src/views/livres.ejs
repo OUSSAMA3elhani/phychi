@@ -146,9 +146,9 @@
                                 </p>
                             </div>
 
-                            <!-- Actions Consultation & Téléchargement -->
+                            <!-- Actions Consultation & Demande de Téléchargement -->
                             <div class="mt-6 border-t border-slate-100 pt-4 dark:border-slate-800">
-                                <div class="grid grid-cols-2 gap-2">
+                                <div class="grid grid-cols-2 gap-2" data-download-slot>
                                     
                                     <!-- Bouton Consulter le livre -->
                                     <button type="button"
@@ -161,13 +161,29 @@
                                         Consulter
                                     </button>
 
-                                    <!-- Bouton Télécharger PDF -->
-                                    <a href="<%= book.pdf_file %>"
-                                       download
-                                       class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-3 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-soft">
-                                        <svg width="14" height="14" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
-                                        Télécharger
-                                    </a>
+                                    <!-- Demande de Téléchargement / Téléchargement Autorisé -->
+                                    <% var st = (typeof downloadStatus !== 'undefined' && downloadStatus) ? downloadStatus.get(book.id) : null; %>
+                                    <% if (st === 'approved') { %>
+                                        <a href="<%= book.pdf_file %>"
+                                           download
+                                           class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-emerald-700">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            Télécharger
+                                        </a>
+                                    <% } else if (st === 'pending') { %>
+                                        <span class="inline-flex items-center justify-center gap-1 rounded-xl bg-amber-50 px-2 py-2.5 text-[11px] font-bold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
+                                            ⏳ En attente...
+                                        </span>
+                                    <% } else { %>
+                                        <button type="button"
+                                                data-download-request
+                                                data-item-type="book"
+                                                data-item-id="<%= book.id %>"
+                                                class="inline-flex items-center justify-center gap-1 rounded-xl bg-brand-600 px-2 py-2.5 text-[11px] font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-soft">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                                            <span><%= st === 'rejected' ? 'Redemander' : 'Demander PDF' %></span>
+                                        </button>
+                                    <% } %>
                                 </div>
                             </div>
                         </article>

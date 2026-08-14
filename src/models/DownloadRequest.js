@@ -9,7 +9,7 @@
  */
 const { pool } = require('../../config/db');
 
-const ITEM_TYPES = ['course', 'exercise'];
+const ITEM_TYPES = ['course', 'exercise', 'concours', 'book'];
 const STATUSES = ['pending', 'approved', 'rejected'];
 
 const DownloadRequest = {
@@ -87,10 +87,12 @@ const DownloadRequest = {
         const [rows] = await pool.query(
             `SELECT dr.*,
                     u.nom AS user_nom, u.prenom AS user_prenom, u.email AS user_email,
-                    COALESCE(c.titre, e.titre) AS item_titre,
-                    COALESCE(c.course_file, e.enonce_file) AS item_file
+                    COALESCE(cc.titre, b.titre, c.titre, e.titre) AS item_titre,
+                    COALESCE(cc.enonce_file, b.pdf_file, c.course_file, e.enonce_file) AS item_file
              FROM download_requests dr
              JOIN users u ON u.id = dr.user_id
+             LEFT JOIN concours cc ON dr.item_type = 'concours' AND cc.id = dr.item_id
+             LEFT JOIN books b     ON dr.item_type = 'book'     AND b.id = dr.item_id
              LEFT JOIN courses c   ON dr.item_type = 'course'   AND c.id = dr.item_id
              LEFT JOIN exercises e ON dr.item_type = 'exercise' AND e.id = dr.item_id
              ${where}

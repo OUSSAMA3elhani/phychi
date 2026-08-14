@@ -7,6 +7,8 @@
 const DownloadRequest = require('../models/DownloadRequest');
 const Course = require('../models/Course');
 const Exercise = require('../models/Exercise');
+const Concours = require('../models/Concours');
+const Book = require('../models/Book');
 
 /** Lit et valide le couple { item_type, item_id }. */
 function readTarget(body) {
@@ -14,7 +16,7 @@ function readTarget(body) {
     const itemId = Number.parseInt(body.item_id, 10);
 
     if (!DownloadRequest.isValidType(itemType)) {
-        return { error: "Type de ressource invalide : attendu 'course' ou 'exercise'." };
+        return { error: 'Type de ressource invalide.' };
     }
     if (!Number.isInteger(itemId) || itemId <= 0) {
         return { error: 'Identifiant de ressource invalide.' };
@@ -33,9 +35,11 @@ const downloadController = {
 
             // La ressource doit exister : sinon on creerait une demande
             // pointant vers un contenu supprime.
-            const item = target.itemType === 'course'
-                ? await Course.findById(target.itemId)
-                : await Exercise.findById(target.itemId);
+            let item = null;
+            if (target.itemType === 'course') item = await Course.findById(target.itemId);
+            else if (target.itemType === 'exercise') item = await Exercise.findById(target.itemId);
+            else if (target.itemType === 'concours') item = await Concours.findById(target.itemId);
+            else if (target.itemType === 'book') item = await Book.findById(target.itemId);
 
             if (!item) {
                 return res.status(404).json({ success: false, message: 'Cette ressource n existe plus.' });

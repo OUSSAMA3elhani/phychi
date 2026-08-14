@@ -544,18 +544,14 @@ const pageController = {
             };
 
             const PER_PAGE = 12;
-            const [{ rows, total }, filterOptions, courseStats, exerciseCount] = await Promise.all([
+            const [{ rows, total }, filterOptions, totalCount, downloadStatus] = await Promise.all([
                 Concours.findPage({ ...filters, page: req.query.page, perPage: PER_PAGE }),
                 Concours.findFilters(),
-                Course.stats().catch(() => ({ courses: 0, chapters: 0 })),
-                Exercise.countAll().catch(() => 0),
+                Concours.countAll(),
+                DownloadRequest.statusMap(req.session.userId, 'concours'),
             ]);
 
-            const stats = {
-                courses: courseStats.courses || 0,
-                chapters: courseStats.chapters || 0,
-                exercises: exerciseCount || 0,
-            };
+            const stats = { total: totalCount };
 
             res.render('concours', {
                 title: 'Concours & Annales Corrigées CPGE - Physique & Chimie | PhyChemia',
@@ -565,6 +561,7 @@ const pageController = {
                 filterOptions,
                 stats,
                 filters,
+                downloadStatus,
                 pagination: paginate(total, req.query.page, PER_PAGE, filters),
             });
         } catch (err) {
@@ -581,13 +578,17 @@ const pageController = {
             const item = await Concours.findById(id);
             if (!item) return pageController.notFound(req, res);
 
-            const related = await Concours.findRelated(item, 4);
+            const [related, downloadStatus] = await Promise.all([
+                Concours.findRelated(item, 4),
+                DownloadRequest.statusMap(req.session.userId, 'concours'),
+            ]);
 
             res.render('concours-details', {
                 title: `${item.titre} - Sujet & Corrigé Officiel | PhyChemia`,
                 metaDescription: `Consultez et téléchargez l'énoncé et la correction du concours ${item.titre}.`,
                 page: 'concours',
                 concours: item,
+                downloadStatus,
                 related,
             });
         } catch (err) {
@@ -619,13 +620,14 @@ const pageController = {
             const perPage = 12;
             const currentPage = req.query.page || 1;
 
-            const [result, filterOptions] = await Promise.all([
+            const [result, filterOptions, downloadStatus] = await Promise.all([
                 Book.findPage({
                     ...filters,
                     page: currentPage,
                     perPage,
                 }),
                 Book.findFilters(),
+                DownloadRequest.statusMap(req.session.userId, 'book'),
             ]);
 
             const pagination = paginate(result.total, currentPage, perPage, filters);
@@ -651,6 +653,7 @@ const pageController = {
                 booksList: result.rows,
                 filterOptions,
                 filters,
+                downloadStatus,
                 pagination,
             });
         } catch (err) {
@@ -665,11 +668,14 @@ const pageController = {
             const item = await Book.findById(id);
             if (!item) return pageController.notFound(req, res);
 
+            const downloadStatus = await DownloadRequest.statusMap(req.session.userId, 'book');
+
             res.render('livres-details', {
                 title: `${item.titre} - Livre CPGE | PhyChemia`,
                 metaDescription: `Consultez et téléchargez le manuel ${item.titre} (${item.collection}).`,
                 page: 'livres',
                 book: item,
+                downloadStatus,
             });
         } catch (err) {
             next(err);

@@ -75,7 +75,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                                            <%= r.item_type === 'course' ? 'Cours' : 'Exercice' %>
+                                            <%= r.item_type === 'course' ? 'Cours' : (r.item_type === 'exercise' ? 'Exercice' : (r.item_type === 'concours' ? 'Concours' : 'Livre')) %>
                                         </span>
                                         <p class="mt-1.5 font-semibold text-slate-900 dark:text-white">
                                             <%= r.item_titre || '(ressource supprimée)' %>
