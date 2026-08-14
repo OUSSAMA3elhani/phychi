@@ -70,13 +70,13 @@ function parsePdfFile(fullPdfPath, ecoleDir) {
     // Capitalize clean title
     cleanEpreuve = cleanEpreuve.charAt(0).toUpperCase() + cleanEpreuve.slice(1);
 
-    // Refine ecole category
+    // Refine ecole category using filename
     let ecole = cleanCategoryName(ecoleDir);
-    const lowerName = fullPdfPath.toLowerCase();
-    if (ecole.includes('Agrégation') || ecole.includes('CAPES')) {
-        if (lowerName.includes('interne') || lowerName.includes('dossier') || lowerName.includes('theme') || lowerName.includes('thème')) {
+    const fn = filename.toLowerCase();
+    if (ecoleDir.includes('Agrégation') || ecoleDir.includes('CAPES')) {
+        if (fn.includes('applications') || fn.includes('probleme_de_physique') || fn.includes('probleme de physique') || fn.includes('interne')) {
             ecole = 'Agrégation Interne';
-        } else if (lowerName.includes('capes') || lowerName.includes('cafep') || lowerName.includes('traitement')) {
+        } else if (fn.includes('dossier') || fn.includes('traitement') || fn.includes('theme') || fn.includes('thème') || fn.includes('capes') || fn.includes('cafep')) {
             ecole = 'CAPES & CAFEP';
         } else {
             ecole = 'Agrégation Externe';
