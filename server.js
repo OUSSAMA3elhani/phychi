@@ -92,11 +92,6 @@ if (!process.env.SESSION_SECRET && isProduction) {
 }
 
 const sessionStore = new MySQLStore({
-    host: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT) || 3306,
-    database: process.env.DB_NAME || 'phychi',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
     createDatabaseTable: true,
     clearExpired: true,
     checkExpirationInterval: 15 * 60 * 1000, // 15 min
@@ -105,10 +100,10 @@ const sessionStore = new MySQLStore({
         tableName: 'sessions',
         columnNames: { session_id: 'session_id', expires: 'expires', data: 'data' },
     },
-});
+}, pool);
 
 sessionStore.on('error', (error) => {
-    console.warn('MySQL Session Store connection event:', error.message);
+    console.warn('MySQL Session Store event caught gracefully:', error.message);
 });
 
 app.use(
