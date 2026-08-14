@@ -31,7 +31,7 @@ router.get('/api/health', (req, res) => {
 });
 
 // --- Administration --------------------------------------------------------
-router.use('/admin', adminRoutes);
+router.use(['/admin', '/Admin'], adminRoutes);
 
 // --- Pages SSR EJS ---------------------------------------------------------
 router.use('/', pageRoutes);
