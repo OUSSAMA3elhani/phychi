@@ -74,10 +74,6 @@
                                 <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                 <span>Afficher l'énoncé</span>
                             </button>
-
-                            <a href="<%= concours.enonce_file %>" download class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
-                                Télécharger PDF
-                            </a>
                         <% } else { %>
                             <p class="text-xs font-medium text-slate-400">Sujet non disponible au format PDF.</p>
                         <% } %>
@@ -107,14 +103,34 @@
                                 <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                 <span>Afficher le corrigé</span>
                             </button>
-
-                            <a href="<%= concours.correction_file %>" download class="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-xs font-semibold text-emerald-800 shadow-sm transition-colors hover:bg-emerald-50 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-400 dark:hover:bg-slate-800">
-                                Télécharger le corrigé PDF
-                            </a>
                         <% } else { %>
                             <p class="text-xs font-medium text-slate-400">Corrigé non disponible au format PDF.</p>
                         <% } %>
                     </div>
+                </div>
+
+                <!-- Demande de téléchargement globale -->
+                <div class="col-span-1 md:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900" data-download-slot>
+                    <% var st = (typeof downloadStatus !== 'undefined' && downloadStatus) ? downloadStatus.get(concours.id) : null; %>
+                    <% if (st === 'approved') { %>
+                        <a href="<%= concours.enonce_file || concours.correction_file %>" download class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-xs font-bold text-white shadow-sm transition-all hover:bg-emerald-700">
+                            <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                            Télécharger les annales (Autorisé par l'administration)
+                        </a>
+                    <% } else if (st === 'pending') { %>
+                        <span class="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-6 py-3 text-xs font-bold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
+                            ⏳ Demande de téléchargement en attente d'approbation...
+                        </span>
+                    <% } else { %>
+                        <button type="button"
+                                data-download-request
+                                data-item-type="concours"
+                                data-item-id="<%= concours.id %>"
+                                class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-xs font-bold text-white shadow-sm transition-all hover:bg-brand-600 dark:bg-slate-800 dark:hover:bg-brand-600">
+                            <svg width="16" height="16" class="h-4 w-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                            <span><%= st === 'rejected' ? 'Redemander le téléchargement' : 'Demander le téléchargement PDF' %></span>
+                        </button>
+                    <% } %>
                 </div>
 
             </div>

@@ -30,17 +30,6 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <!-- Bouton Ouvrir Nouvel Onglet -->
-                <a id="file-modal-newtab"
-                   href="#"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   title="Ouvrir dans un nouvel onglet plein écran"
-                   class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    <span class="hidden sm:inline">Plein Écran Web</span>
-                </a>
-
                 <!-- Bouton Fermer -->
                 <button type="button"
                         data-modal-close
@@ -58,25 +47,16 @@
 
         <footer class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-6 py-3.5 dark:border-slate-800">
             <div class="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
-                <svg width="16" height="16" class="h-4 w-4 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-                <span class="hidden sm:inline">Pour une meilleure lisibilité, utilisez le bouton « Plein Écran Web » ou téléchargez le PDF.</span>
+                <svg width="16" height="16" class="h-4 w-4 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Document protégé — Consultation sur la plateforme PhyChemia.</span>
             </div>
 
             <div class="flex items-center gap-3">
                 <button type="button"
                         data-modal-close
-                        class="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
-                    Fermer
+                        class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-2.5 text-xs font-bold text-slate-800 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                    Fermer la lecture
                 </button>
-                <a id="file-modal-download"
-                   href="#"
-                   download
-                   class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-xs font-bold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
-                    </svg>
-                    Télécharger PDF
-                </a>
             </div>
         </footer>
     </div>
