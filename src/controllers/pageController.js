@@ -33,14 +33,75 @@ function paginate(total, page, perPage, filters) {
         from: total === 0 ? 0 : (current - 1) * size + 1,
         to: Math.min(current * size, total),
         queryFor(n) {
-            const params = new URLSearchParams();
-            Object.entries(filters || {}).forEach(([k, v]) => {
-                if (v !== undefined && v !== null && v !== '') params.set(k, v);
-            });
-            params.set('page', n);
+            const params = new URLSearchParams(filters || {});
+            params.set('page', String(n));
             return '?' + params.toString();
         },
     };
+}
+
+/** Helper de normalisation de texte pour la recherche intelligente (sans accents, minuscules, ponctuation) */
+function normalizeText(text) {
+    if (!text) return '';
+    return text
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Supprime les diacritiques (accents)
+        .replace(/[^a-z0-9\s]/g, ' ')   // Remplace la ponctuation par un espace
+        .replace(/\s+/g, ' ')           // Supprime les espaces multiples
+        .trim();
+}
+
+/** Dictionnaire des synonymes & abréviations académiques */
+const SCIENTIFIC_SYNONYMS = {
+    'thermo': 'thermodynamique',
+    'meca': 'mecanique',
+    'elec': 'electromagnetisme',
+    'em': 'electromagnetisme maxwell',
+    'orga': 'organique',
+    'agreg': 'agregation',
+    'capes': 'capes cafep',
+    'centrale': 'centrale supelec',
+    'mines': 'mines ponts',
+    'ens': 'ecole normale superieure',
+    'opto': 'optique',
+    'quantique': 'quantique mecanique',
+    'fluide': 'mecanique des fluides navier stokes',
+    'cinetique': 'cinetique chimique'
+};
+
+/**
+ * Calcul d'un score de pertinence intelligent pour ordonner les résultats.
+ */
+function calculateRelevanceScore(item, queryWords, rawQueryNorm) {
+    let score = 0;
+    const titleNorm = normalizeText(item.rawTitle || item.titre);
+    const descNorm = normalizeText(item.rawDesc || item.description);
+    const typeNorm = normalizeText(item.type);
+
+    // 1. Correspondance exacte ou partielle du titre (+30 à +50 pts)
+    if (titleNorm === rawQueryNorm) score += 50;
+    else if (titleNorm.includes(rawQueryNorm)) score += 30;
+
+    // 2. Score par mot de la requête
+    queryWords.forEach(word => {
+        if (!word || word.length < 2) return;
+
+        // Synonymes
+        const expandedWord = SCIENTIFIC_SYNONYMS[word] || word;
+
+        // Présence dans le titre (+10 pts)
+        if (titleNorm.includes(word) || titleNorm.includes(expandedWord)) score += 10;
+
+        // Présence dans la description/métadonnées (+5 pts)
+        if (descNorm.includes(word) || descNorm.includes(expandedWord)) score += 5;
+
+        // Présence dans le type / catégorie (+3 pts)
+        if (typeNorm.includes(word)) score += 3;
+    });
+
+    return score;
 }
 
 /**
@@ -683,48 +744,58 @@ const pageController = {
         }
     },
 
-    /** GET /recherche - Moteur de recherche globale (Concours, Livres, Exercices) */
+    /** GET /recherche - Moteur de Recherche Intelligent Academic Search Engine */
     async recherche(req, res, next) {
         try {
-            const query = String(req.query.q || '').trim();
+            const rawQuery = String(req.query.q || '').trim();
+            const typeFilter = req.query.type || 'tous';
+            const rawQueryNorm = normalizeText(rawQuery);
             let results = [];
 
-            if (query.length > 0) {
-                const searchTerm = `%${query}%`;
+            if (rawQueryNorm.length > 0) {
+                // Découpage des mots clés
+                const queryWords = rawQueryNorm.split(/\s+/).filter(w => w.length > 1);
 
-                // Recherche dans les Concours
-                const [concoursRows] = await pool.query(
-                    `SELECT id, titre, ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file
-                     FROM concours
-                     WHERE titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?
-                     ORDER BY annee DESC LIMIT 20`,
-                    [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm]
-                );
+                // Mots de recherche élargis avec les synonymes
+                const expandedTerms = new Set(queryWords);
+                queryWords.forEach(w => {
+                    if (SCIENTIFIC_SYNONYMS[w]) {
+                        SCIENTIFIC_SYNONYMS[w].split(/\s+/).forEach(syn => expandedTerms.add(syn));
+                    }
+                });
 
-                // Recherche dans les Livres
-                const [bookRows] = await pool.query(
-                    `SELECT id, titre, collection, auteur, discipline, pdf_file
-                     FROM books
-                     WHERE titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?
-                     ORDER BY titre ASC LIMIT 20`,
-                    [searchTerm, searchTerm, searchTerm, searchTerm]
-                );
+                // Construire la clause SQL dynamique avec LIKE %term%
+                const termList = Array.from(expandedTerms);
+                const concoursConditions = termList.map(() => `(titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?)`).join(' OR ');
+                const bookConditions = termList.map(() => `(titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?)`).join(' OR ');
+                const exerciseConditions = termList.map(() => `(e.titre LIKE ? OR e.description LIKE ?)`).join(' OR ');
 
-                // Recherche dans les Exercices
-                const [exerciseRows] = await pool.query(
-                    `SELECT e.id, e.titre, e.description, e.niveau, e.difficulte, e.enonce_file, e.correction_file
-                     FROM exercises e
-                     WHERE e.titre LIKE ? OR e.description LIKE ?
-                     ORDER BY e.id ASC LIMIT 20`,
-                    [searchTerm, searchTerm]
-                );
+                const concoursParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+                const bookParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+                const exerciseParams = termList.flatMap(t => [`%${t}%`, `%${t}%`]);
 
-                results = [
+                // Exécution parallèle des requêtes DB
+                const [concoursRows, bookRows, exerciseRows] = await Promise.all([
+                    (typeFilter === 'tous' || typeFilter === 'concours')
+                        ? pool.query(`SELECT id, titre, ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file FROM concours WHERE ${concoursConditions} LIMIT 40`, concoursParams).then(r => r[0])
+                        : [],
+                    (typeFilter === 'tous' || typeFilter === 'livres')
+                        ? pool.query(`SELECT id, titre, collection, auteur, discipline, pdf_file FROM books WHERE ${bookConditions} LIMIT 40`, bookParams).then(r => r[0])
+                        : [],
+                    (typeFilter === 'tous' || typeFilter === 'exercices')
+                        ? pool.query(`SELECT e.id, e.titre, e.description, e.niveau, e.difficulte, e.enonce_file, e.correction_file FROM exercises e WHERE ${exerciseConditions} LIMIT 40`, exerciseParams).then(r => r[0])
+                        : []
+                ]);
+
+                // Standardisation des items avec score de pertinence intelligent
+                const rawResults = [
                     ...concoursRows.map(r => ({
                         type: 'Concours',
                         badgeClass: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400',
                         titre: `${r.ecole} (${r.annee}) — ${r.epreuve}`,
                         description: `${r.filiere} • ${r.matiere}`,
+                        rawTitle: `${r.ecole} ${r.epreuve} ${r.annee}`,
+                        rawDesc: `${r.filiere} ${r.matiere}`,
                         url: `/concours/${r.id}`,
                         file: r.enonce_file || r.correction_file,
                         id: r.id,
@@ -735,6 +806,8 @@ const pageController = {
                         badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
                         titre: `${r.titre} (${r.collection})`,
                         description: `Auteur : ${r.auteur} • Discipline : ${r.discipline}`,
+                        rawTitle: r.titre,
+                        rawDesc: `${r.collection} ${r.auteur} ${r.discipline}`,
                         url: `/livres/${r.id}`,
                         file: r.pdf_file,
                         id: r.id,
@@ -744,20 +817,33 @@ const pageController = {
                         type: 'Exercice',
                         badgeClass: 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400',
                         titre: r.titre,
-                        description: r.description,
+                        description: r.description || 'Série d exercices corrigés avec énoncé et solution.',
+                        rawTitle: r.titre,
+                        rawDesc: r.description || '',
                         url: `/exercices/${r.id}`,
                         file: r.enonce_file || r.correction_file,
                         id: r.id,
                         itemType: 'exercise'
                     }))
                 ];
+
+                // Calcul du score de pertinence et tri
+                results = rawResults
+                    .map(item => {
+                        const score = calculateRelevanceScore(item, queryWords, rawQueryNorm);
+                        return { ...item, score };
+                    })
+                    .filter(item => item.score > 0)
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 30);
             }
 
             res.render('recherche', {
-                title: query ? `Recherche : ${query} | PhyChemia` : 'Moteur de Recherche - PhyChemia',
-                metaDescription: 'Recherchez parmi nos concours, annales, livres CPGE et séries d exercices corrigés.',
+                title: rawQuery ? `Recherche Intelligente : ${rawQuery} | PhyChemia` : 'Moteur de Recherche Intelligent - PhyChemia',
+                metaDescription: 'Moteur de recherche académique intelligent pour trouver cours, concours et livres CPGE.',
                 page: 'recherche',
-                q: query,
+                q: rawQuery,
+                type: typeFilter,
                 results,
             });
         } catch (err) {

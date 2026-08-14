@@ -54,7 +54,7 @@
         </section>
 
         <!-- Recherches fréquentes -->
-        <section class="popular-searches mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-populaires">
+        <section class="popular-searches mx-auto max-w-7xl px-6 py-8 lg:px-8" aria-labelledby="titre-populaires">
             <h2 id="titre-populaires" class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
                 Recherches fréquentes
             </h2>
@@ -67,6 +67,20 @@
                 <li><a href="/recherche?q=H-Prepa" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">H-Prépa</a></li>
             </ul>
         </section>
+
+        <!-- Filtres par catégorie -->
+        <% if (typeof q !== 'undefined' && q) { %>
+            <div class="mx-auto max-w-7xl px-6 pt-4 pb-2 lg:px-8">
+                <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-4 dark:border-slate-800">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-2">Filtrer par :</span>
+                    <% var curType = typeof type !== 'undefined' ? type : 'tous'; %>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=tous" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'tous' ? 'bg-brand-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Tous les types</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=concours" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'concours' ? 'bg-indigo-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Concours & Annales</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=livres" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'livres' ? 'bg-emerald-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Livres Physique / Chimie</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=exercices" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'exercices' ? 'bg-amber-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Exercices & TD</a>
+                </div>
+            </div>
+        <% } %>
 
         <!-- Résultats -->
         <section class="search-results mx-auto max-w-7xl px-6 pb-16 lg:px-8" aria-labelledby="titre-resultats">
