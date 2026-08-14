@@ -111,7 +111,7 @@ const Concours = {
             const [rows] = await pool.query(
                 `SELECT * FROM concours
                  WHERE ${whereSql}
-                 ORDER BY annee DESC, ecole ASC, filiere ASC
+                 ORDER BY CASE WHEN correction_file IS NOT NULL AND correction_file != '' THEN 0 ELSE 1 END ASC, annee DESC, ecole ASC, filiere ASC
                  LIMIT ? OFFSET ?`,
                 [...params, limit, offset]
             );
