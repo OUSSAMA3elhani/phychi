@@ -448,6 +448,181 @@
     const FOCUSABLE =
         'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
 
+    /** Liseuse PDF Canvas securisee sans barre de telechargement ni impression. */
+    function buildPdfCanvasViewer(url, title) {
+        const container = document.createElement('div');
+        container.className = 'flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
+
+        // Barre d'outils de la liseuse PDF
+        const toolbar = document.createElement('div');
+        toolbar.className = 'flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-slate-300';
+        toolbar.innerHTML = `
+            <div class="flex items-center gap-2">
+                <button type="button" data-pdf-prev class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
+                    ◀️ Précédent
+                </button>
+                <span class="font-medium text-slate-300">Page <strong data-pdf-page class="text-white">1</strong> / <span data-pdf-total>...</span></span>
+                <button type="button" data-pdf-next class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
+                    Suivant ▶️
+                </button>
+            </div>
+            <div class="flex items-center gap-2">
+                <button type="button" data-pdf-zoom-out class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
+                    🔍 -
+                </button>
+                <span data-pdf-scale class="font-bold text-white">125%</span>
+                <button type="button" data-pdf-zoom-in class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
+                    🔍 +
+                </button>
+                <button type="button" data-pdf-fit class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 transition-colors hover:bg-slate-700">
+                    Ajuster largeur
+                </button>
+            </div>
+        `;
+        container.appendChild(toolbar);
+
+        // Zone d'affichage scrollable du Canvas
+        const scrollArea = document.createElement('div');
+        scrollArea.className = 'relative flex-1 overflow-auto bg-slate-900/90 p-4 text-center select-none';
+        scrollArea.oncontextmenu = (e) => e.preventDefault(); // Protection contre clic droit enregistrer image
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'mx-auto rounded-lg bg-white shadow-2xl transition-transform duration-200';
+        scrollArea.appendChild(canvas);
+
+        const loadingMsg = document.createElement('div');
+        loadingMsg.className = 'absolute inset-0 flex items-center justify-center bg-slate-900/80 text-sm font-semibold text-slate-300 backdrop-blur-xs';
+        loadingMsg.innerHTML = '<span class="inline-flex items-center gap-2"><svg class="h-5 w-5 animate-spin text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg> Chargement de la liseuse sécurisée PhyChemia...</span>';
+        scrollArea.appendChild(loadingMsg);
+
+        container.appendChild(scrollArea);
+
+        // State PDF.js
+        let pdfDoc = null;
+        let currentPage = 1;
+        let currentScale = 1.25;
+        let isRendering = false;
+        let pageNumPending = null;
+
+        const pageEl = toolbar.querySelector('[data-pdf-page]');
+        const totalEl = toolbar.querySelector('[data-pdf-total]');
+        const scaleEl = toolbar.querySelector('[data-pdf-scale]');
+        const prevBtn = toolbar.querySelector('[data-pdf-prev]');
+        const nextBtn = toolbar.querySelector('[data-pdf-next]');
+        const zoomOutBtn = toolbar.querySelector('[data-pdf-zoom-out]');
+        const zoomInBtn = toolbar.querySelector('[data-pdf-zoom-in]');
+        const fitBtn = toolbar.querySelector('[data-pdf-fit]');
+
+        function renderPage(num) {
+            if (!pdfDoc) return;
+            isRendering = true;
+
+            pdfDoc.getPage(num).then((page) => {
+                const viewport = page.getViewport({ scale: currentScale });
+                const ctx = canvas.getContext('2d');
+
+                const outputScale = window.devicePixelRatio || 1;
+                canvas.width = Math.floor(viewport.width * outputScale);
+                canvas.height = Math.floor(viewport.height * outputScale);
+                canvas.style.width = Math.floor(viewport.width) + 'px';
+                canvas.style.height = Math.floor(viewport.height) + 'px';
+
+                const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    transform: transform,
+                    viewport: viewport,
+                };
+
+                const renderTask = page.render(renderContext);
+                renderTask.promise.then(() => {
+                    isRendering = false;
+                    loadingMsg.style.display = 'none';
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            pageEl.textContent = num;
+            prevBtn.disabled = num <= 1;
+            nextBtn.disabled = num >= pdfDoc.numPages;
+            scaleEl.textContent = Math.round(currentScale * 100) + '%';
+        }
+
+        function queueRenderPage(num) {
+            if (isRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentPage <= 1) return;
+            currentPage--;
+            queueRenderPage(currentPage);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!pdfDoc || currentPage >= pdfDoc.numPages) return;
+            currentPage++;
+            queueRenderPage(currentPage);
+        });
+
+        zoomOutBtn.addEventListener('click', () => {
+            if (currentScale <= 0.5) return;
+            currentScale = Math.max(0.5, currentScale - 0.25);
+            queueRenderPage(currentPage);
+        });
+
+        zoomInBtn.addEventListener('click', () => {
+            if (currentScale >= 3.0) return;
+            currentScale = Math.min(3.0, currentScale + 0.25);
+            queueRenderPage(currentPage);
+        });
+
+        fitBtn.addEventListener('click', () => {
+            if (!pdfDoc) return;
+            const containerWidth = scrollArea.clientWidth - 48;
+            pdfDoc.getPage(currentPage).then((page) => {
+                const unscaledViewport = page.getViewport({ scale: 1.0 });
+                currentScale = containerWidth / unscaledViewport.width;
+                queueRenderPage(currentPage);
+            });
+        });
+
+        function initPdfJsAndLoad() {
+            if (window.pdfjsLib) {
+                window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.min.js';
+                window.pdfjsLib.getDocument(url).promise.then((pdf) => {
+                    pdfDoc = pdf;
+                    totalEl.textContent = pdf.numPages;
+                    renderPage(currentPage);
+                }).catch((err) => {
+                    console.error('Erreur chargement PDF.js:', err);
+                    loadingMsg.innerHTML = '<span class="text-rose-400">Impossible d afficher ce document dans la liseuse sécurisée.</span>';
+                });
+            } else {
+                const s = document.createElement('script');
+                s.src = '/js/pdf.min.js';
+                s.onload = () => {
+                    initPdfJsAndLoad();
+                };
+                s.onerror = () => {
+                    loadingMsg.innerHTML = '<span class="text-rose-400">Erreur de chargement du moteur de lecture.</span>';
+                };
+                document.head.appendChild(s);
+            }
+        }
+
+        initPdfJsAndLoad();
+
+        return container;
+    }
+
     /** Construit le corps de la modale selon le type de fichier. */
     function buildPreview(url, title) {
         if (IMAGE_RE.test(url)) {
@@ -459,11 +634,7 @@
         }
 
         if (PDF_RE.test(url)) {
-            const frame = document.createElement('iframe');
-            frame.src = url;
-            frame.title = title || 'Aperçu du document PDF';
-            frame.className = 'h-full min-h-[500px] w-full rounded-2xl border-0 bg-white shadow-soft';
-            return frame;
+            return buildPdfCanvasViewer(url, title);
         }
 
         // Format non previsualisable : on invite au telechargement.
