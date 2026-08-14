@@ -51,15 +51,17 @@ function parsePdfFile(fullPdfPath, ecoleDir) {
     // Detect doc type (enonce vs corrige)
     const isCorrige = /corrige/i.test(nameWithoutExt);
 
-    // Clean epreuve title completely
-    let cleanEpreuve = nameWithoutExt
+    // Clean epreuve title without stripping physics/chemistry words
+    let cleanEpreuve = filename
+        .replace(/\.pdf$/i, '')
+        .replace(/^(\d{4})_([A-Z0-9]+)_(\d{4})_/i, '')
+        .replace(/^(\d{4})_/i, '')
         .replace(/_(Enonce|Corrige|Sujet).*/i, '')
         .replace(/\b(Enonce|Corrige|Sujet)\b.*/i, '')
         .replace(/Part[1-9]/gi, '')
+        .replace(/^Autres_concours_/i, '')
+        .replace(/^Concours_de_recrutement_des_enseignants_/i, '')
         .replace(/_/g, ' ')
-        .replace(/\b\d{4}\b/g, '')
-        .replace(/\b(Autres concours|Autres_concours|Concours|Recrutement des enseignants)\b/gi, '')
-        .replace(/\b(Physique|Chimie|Physique Chimie|Physique-Chimie)\b/gi, '')
         .replace(/\s+/g, ' ')
         .trim();
 
