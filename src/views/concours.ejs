@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<%- include('partials/head') %>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+<%- include('partials/header') %>
+
+<main id="main-content" class="min-h-screen bg-slate-50 py-10 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <!-- ================= HERO HEADER ================= -->
+        <header class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 p-8 text-white shadow-lift sm:p-12">
+            <div class="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-brand-500/10 blur-3xl" aria-hidden="true"></div>
+            <div class="absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-flask-500/10 blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative max-w-3xl">
+                <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-300 backdrop-blur-md">
+                    <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/></svg>
+                    Base Officielle Annales CPGE
+                </span>
+                <h1 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+                    Concours &amp; Annales Corrigées
+                </h1>
+                <p class="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
+                    Accédez aux sujets officiels et à leurs corrections détaillées des plus grands concours d'écoles d'ingénieurs (Polytechnique X, Centrale-Supélec, Mines-Ponts, CCINP, ENS, e3a...).
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
+                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-xl font-bold text-white"><%= pagination.total.toLocaleString() %></span>
+                        <span class="text-xs text-slate-300">Épreuves répertoriées</span>
+                    </div>
+                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-xl font-bold text-emerald-400">100%</span>
+                        <span class="text-xs text-slate-300">Sujets &amp; Corrigés liés</span>
+                    </div>
+                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-xl font-bold text-brand-300"><%= filterOptions.annees.length %> ans</span>
+                        <span class="text-xs text-slate-300">D'annales (1974-2019)</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ================= NAVIGATION PAR CONCOURS / ÉTABLISSEMENT ================= -->
+        <section class="mt-8" aria-label="Principaux Concours">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Accès rapide par concours</h2>
+            <div class="mt-3 flex flex-wrap gap-2">
+                <a href="/concours" class="inline-flex items-center gap-1.5 rounded-xl border <%= !filters.ecole ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-3.5 py-2 text-xs transition-all">
+                    Tous (<%= pagination.total %>)
+                </a>
+                <% filterOptions.ecoles.forEach(function(ecoleName) { %>
+                    <a href="/concours?ecole=<%= encodeURIComponent(ecoleName) %>"
+                       class="inline-flex items-center gap-1.5 rounded-xl border <%= filters.ecole === ecoleName ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-3.5 py-2 text-xs transition-all">
+                        <%= ecoleName %>
+                    </a>
+                <% }); %>
+            </div>
+        </section>
+
+        <!-- ================= BARRE DE RECHERCHE ET FILTRES ================= -->
+        <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900" aria-label="Filtres des concours">
+            <form method="GET" action="/concours" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+                
+                <!-- Recherche texte -->
+                <div class="lg:col-span-2">
+                    <label for="search" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Rechercher</label>
+                    <div class="relative mt-1.5">
+                        <input type="text" id="search" name="search" value="<%= filters.search || '' %>"
+                               placeholder="École, filière, sujet ex: Centrale 2019..."
+                               class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-brand-400">
+                        <svg width="16" height="16" class="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+                </div>
+
+                <!-- Filtre École -->
+                <div>
+                    <label for="ecole" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Établissement</label>
+                    <select id="ecole" name="ecole" class="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                        <option value="">Tous les établissements</option>
+                        <% filterOptions.ecoles.forEach(function(e) { %>
+                            <option value="<%= e %>" <%= filters.ecole === e ? 'selected' : '' %>><%= e %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <!-- Filtre Année -->
+                <div>
+                    <label for="annee" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Année</label>
+                    <select id="annee" name="annee" class="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                        <option value="">Toutes les années</option>
+                        <% filterOptions.annees.forEach(function(a) { %>
+                            <option value="<%= a %>" <%= String(filters.annee) === String(a) ? 'selected' : '' %>><%= a %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <!-- Filtre Filière -->
+                <div>
+                    <label for="filiere" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Filière</label>
+                    <select id="filiere" name="filiere" class="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                        <option value="">Toutes les filières</option>
+                        <% filterOptions.filieres.forEach(function(f) { %>
+                            <option value="<%= f %>" <%= filters.filiere === f ? 'selected' : '' %>><%= f %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <!-- Filtre Matière -->
+                <div>
+                    <label for="matiere" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Matière</label>
+                    <select id="matiere" name="matiere" class="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                        <option value="">Toutes les matières</option>
+                        <% filterOptions.matieres.forEach(function(m) { %>
+                            <option value="<%= m %>" <%= filters.matiere === m ? 'selected' : '' %>><%= m %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="sm:col-span-2 lg:col-span-6 flex flex-wrap items-center justify-between gap-4 pt-2">
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                            <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                            Filtrer les concours
+                        </button>
+
+                        <% if (filters.ecole || filters.annee || filters.filiere || filters.matiere || filters.search) { %>
+                            <a href="/concours" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900">
+                                Réinitialiser les filtres
+                            </a>
+                        <% } %>
+                    </div>
+
+                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Affichage de <span class="font-bold text-slate-900 dark:text-white"><%= concoursList.length %></span> sur <span class="font-bold text-slate-900 dark:text-white"><%= pagination.total.toLocaleString() %></span> épreuves
+                    </p>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= LISTE ET CARTES DES CONCOURS ================= -->
+        <section class="mt-8" aria-label="Liste des épreuves de concours">
+            <% if (concoursList.length === 0) { %>
+                <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+                    <svg width="48" height="48" class="mx-auto h-12 w-12 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <h2 class="mt-4 text-lg font-bold text-slate-900 dark:text-white">Aucun concours ne correspond à votre recherche</h2>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Essayez de modifier vos critères de filtrage ou réinitialisez la recherche.</p>
+                    <a href="/concours" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-semibold text-white shadow-soft transition-all hover:bg-brand-700">
+                        Voir toutes les annales
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <% concoursList.forEach(function(item) { %>
+                        <article class="group relative flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700">
+                            <div>
+                                <!-- Entête Badges -->
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                                        <%= item.ecole %>
+                                    </span>
+                                    <span class="inline-flex items-center rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                        <%= item.annee %>
+                                    </span>
+                                    <span class="inline-flex items-center rounded-lg bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                                        Filière <%= item.filiere %>
+                                    </span>
+                                </div>
+
+                                <!-- Titre de l'épreuve -->
+                                <h3 class="mt-4 font-display text-base font-bold text-slate-900 transition-colors group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
+                                    <a href="/concours/<%= item.id %>">
+                                        <%= item.epreuve %>
+                                    </a>
+                                </h3>
+
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                    Discipline : <span class="font-semibold text-slate-700 dark:text-slate-300"><%= item.matiere %></span>
+                                </p>
+                            </div>
+
+                            <!-- Actions Sujet & Correction -->
+                            <div class="mt-6 border-t border-slate-100 pt-4 dark:border-slate-800">
+                                <div class="grid grid-cols-2 gap-2">
+                                    
+                                    <!-- Bouton Sujet (Aperçu grand format) -->
+                                    <% if (item.enonce_file) { %>
+                                        <button type="button"
+                                                data-file-modal
+                                                data-file-url="<%= item.enonce_file %>"
+                                                data-file-title="<%= item.titre %>"
+                                                data-file-label="Sujet Officiel du Concours"
+                                                class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-800 shadow-sm transition-all hover:bg-slate-100 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                            📄 Sujet
+                                        </button>
+                                    <% } else { %>
+                                        <span class="inline-flex items-center justify-center rounded-xl bg-slate-100 px-3 py-2 text-xs font-medium text-slate-400 dark:bg-slate-800/50 dark:text-slate-600">
+                                            Sujet N/A
+                                        </span>
+                                    <% } %>
+
+                                    <!-- Bouton Correction (Aperçu grand format) -->
+                                    <% if (item.correction_file) { %>
+                                        <button type="button"
+                                                data-file-modal
+                                                data-file-url="<%= item.correction_file %>"
+                                                data-file-title="<%= item.titre %>"
+                                                data-file-label="Correction Officielle du Concours"
+                                                class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-soft">
+                                            <svg width="14" height="14" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            ✅ Correction
+                                        </button>
+                                    <% } else { %>
+                                        <span class="inline-flex items-center justify-center rounded-xl bg-slate-100 px-3 py-2 text-xs font-medium text-slate-400 dark:bg-slate-800/50 dark:text-slate-600">
+                                            Corrige N/A
+                                        </span>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </article>
+                    <% }); %>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-10">
+                    <%- include('partials/pagination') %>
+                </div>
+            <% } %>
+        </section>
+
+    </div>
+</main>
+
+<%- include('partials/file-modal') %>
+<%- include('partials/footer') %>
+</body>
+</html>

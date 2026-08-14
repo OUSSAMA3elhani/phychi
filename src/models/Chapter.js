@@ -103,10 +103,22 @@ const Chapter = {
              FROM chapters c
              JOIN disciplines d ON c.discipline_id = d.id
              WHERE d.slug = ?
-             ORDER BY c.ordre ASC`,
+             ORDER BY c.order_num ASC, c.ordre ASC`,
             [disciplineSlug]
         );
         return rows;
+    },
+
+    async findTomesByDiscipline(disciplineSlug) {
+        const [rows] = await pool.query(
+            `SELECT DISTINCT c.tome
+             FROM chapters c
+             JOIN disciplines d ON c.discipline_id = d.id
+             WHERE d.slug = ? AND c.tome IS NOT NULL
+             ORDER BY c.order_num ASC`,
+            [disciplineSlug]
+        );
+        return rows.map(r => r.tome);
     },
 
     async findBySlug(slug) {

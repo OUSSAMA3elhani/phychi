@@ -64,6 +64,12 @@
 
                     <!-- Métadonnées -->
                     <dl class="mt-7 grid grid-cols-2 gap-5 border-y border-slate-200 py-6 sm:grid-cols-4 dark:border-slate-800">
+                        <% if (exercise.course_titre || exercise.partie_cours) { %>
+                            <div class="col-span-2 sm:col-span-4 rounded-xl bg-brand-50/70 p-3.5 border border-brand-200 dark:bg-brand-500/10 dark:border-brand-500/20">
+                                <dt class="text-xs font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400">Partie exacte du cours associée</dt>
+                                <dd class="mt-1 text-sm font-extrabold text-slate-900 dark:text-white"><%= exercise.course_titre || exercise.partie_cours %></dd>
+                            </div>
+                        <% } %>
                         <div>
                             <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Chapitre</dt>
                             <dd class="mt-1 text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre %></dd>
@@ -86,34 +92,49 @@
 
                     <!-- Actions principales -->
                     <div class="mt-7 flex flex-wrap gap-3">
-                        <% if (exercise.enonce_file) { %>
+                        <% if (exercise.enonce_file && exercise.enonce_file === exercise.correction_file) { %>
                             <button type="button"
                                     data-doc-toggle
                                     aria-expanded="false"
                                     aria-controls="doc-enonce"
                                     data-doc-url="<%= exercise.enonce_file %>"
-                                    data-doc-title="Énoncé — <%= exercise.titre %>"
-                                    data-label-show="Voir l'énoncé"
-                                    data-label-hide="Masquer l'énoncé"
+                                    data-doc-title="Énoncé & Corrigé — <%= exercise.titre %>"
+                                    data-label-show="Consulter l'énoncé & le corrigé"
+                                    data-label-hide="Masquer le document"
                                     class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                <span data-doc-label>Voir l'énoncé</span>
+                                <span data-doc-label>Consulter l'énoncé &amp; le corrigé</span>
                             </button>
-                        <% } %>
+                        <% } else { %>
+                            <% if (exercise.enonce_file) { %>
+                                <button type="button"
+                                        data-doc-toggle
+                                        aria-expanded="false"
+                                        aria-controls="doc-enonce"
+                                        data-doc-url="<%= exercise.enonce_file %>"
+                                        data-doc-title="Énoncé — <%= exercise.titre %>"
+                                        data-label-show="Voir l'énoncé"
+                                        data-label-hide="Masquer l'énoncé"
+                                        class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <span data-doc-label>Voir l'énoncé</span>
+                                </button>
+                            <% } %>
 
-                        <% if (exercise.correction_file) { %>
-                            <button type="button"
-                                    data-doc-toggle
-                                    aria-expanded="false"
-                                    aria-controls="doc-correction"
-                                    data-doc-url="<%= exercise.correction_file %>"
-                                    data-doc-title="Correction — <%= exercise.titre %>"
-                                    data-label-show="Voir la correction"
-                                    data-label-hide="Masquer la correction"
-                                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                                <span data-doc-label>Voir la correction</span>
-                            </button>
+                            <% if (exercise.correction_file) { %>
+                                <button type="button"
+                                        data-doc-toggle
+                                        aria-expanded="false"
+                                        aria-controls="doc-correction"
+                                        data-doc-url="<%= exercise.correction_file %>"
+                                        data-doc-title="Correction — <%= exercise.titre %>"
+                                        data-label-show="Voir la correction"
+                                        data-label-hide="Masquer la correction"
+                                        class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                                    <span data-doc-label>Voir la correction</span>
+                                </button>
+                            <% } %>
                         <% } %>
 
                         <% var isFav = (typeof favoriteIds !== 'undefined' && favoriteIds ? favoriteIds : []).indexOf(exercise.id) !== -1; %>

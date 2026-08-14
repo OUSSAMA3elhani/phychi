@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `chapters` (
   `titre`         VARCHAR(255) NOT NULL,
   `slug`          VARCHAR(255) NOT NULL,
   `description`   TEXT         NULL,
+  `tome`          VARCHAR(150) NULL,
   `niveau`        ENUM('l1','l2','l3','master','autre') NOT NULL DEFAULT 'l1',
   `ordre`         INT UNSIGNED NOT NULL DEFAULT 1,
   `order_num`     INT NOT NULL DEFAULT 0,
@@ -114,6 +115,8 @@ CREATE TABLE IF NOT EXISTS `courses` (
 CREATE TABLE IF NOT EXISTS `exercises` (
   `id`              INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `chapter_id`      INT UNSIGNED NOT NULL,
+  `course_id`       INT UNSIGNED NULL,
+  `partie_cours`    VARCHAR(255) NULL,
   `titre`           VARCHAR(255) NOT NULL,
   `slug`            VARCHAR(255) NOT NULL,
   `description`     TEXT         NULL,
@@ -124,7 +127,8 @@ CREATE TABLE IF NOT EXISTS `exercises` (
   `created_at`      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_exercises_slug` (`slug`),
-  CONSTRAINT `fk_exercises_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_exercises_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_exercises_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Demandes de telechargement --------------------------------------------------
@@ -137,9 +141,26 @@ CREATE TABLE IF NOT EXISTS `download_requests` (
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_download_requests_item` (`user_id`, `item_type`, `item_id`),
-  KEY `idx_download_requests_status` (`status`, `created_at`),
-  CONSTRAINT `fk_download_requests_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Concours & Annales (Sujets + Corriges associes) -----------------------------
+CREATE TABLE IF NOT EXISTS `concours` (
+  `id`              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ecole`           VARCHAR(255) NOT NULL,
+  `annee`           INT UNSIGNED NOT NULL,
+  `filiere`         VARCHAR(100) NOT NULL DEFAULT 'Toutes',
+  `matiere`         VARCHAR(100) NOT NULL DEFAULT 'Physique',
+  `epreuve`         VARCHAR(255) NOT NULL,
+  `titre`           VARCHAR(255) NOT NULL,
+  `slug`            VARCHAR(255) NOT NULL,
+  `enonce_file`     VARCHAR(500) NULL,
+  `correction_file` VARCHAR(500) NULL,
+  `created_at`      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_concours_slug` (`slug`),
+  KEY `idx_concours_ecole_annee` (`ecole`, `annee`),
+  KEY `idx_concours_filiere` (`filiere`),
+  KEY `idx_concours_matiere` (`matiere`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================================================

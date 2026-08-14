@@ -50,7 +50,8 @@ app.use(
                 fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
                 imgSrc: ["'self'", 'data:'],
                 connectSrc: ["'self'"],
-                objectSrc: ["'none'"],
+                objectSrc: ["'self'"],
+                frameSrc: ["'self'"],
                 frameAncestors: ["'self'"],
                 baseUri: ["'self'"],
                 formAction: ["'self'"],
@@ -90,19 +91,21 @@ if (!process.env.SESSION_SECRET && isProduction) {
     );
 }
 
-const sessionStore = new MySQLStore(
-    {
-        createDatabaseTable: true,
-        clearExpired: true,
-        checkExpirationInterval: 15 * 60 * 1000, // 15 min
-        expiration: 7 * 24 * 60 * 60 * 1000, // 7 jours
-        schema: {
-            tableName: 'sessions',
-            columnNames: { session_id: 'session_id', expires: 'expires', data: 'data' },
-        },
+const sessionStore = new MySQLStore({
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+    database: process.env.DB_NAME || 'phychi',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    createDatabaseTable: true,
+    clearExpired: true,
+    checkExpirationInterval: 15 * 60 * 1000, // 15 min
+    expiration: 7 * 24 * 60 * 60 * 1000, // 7 jours
+    schema: {
+        tableName: 'sessions',
+        columnNames: { session_id: 'session_id', expires: 'expires', data: 'data' },
     },
-    pool
-);
+});
 
 sessionStore.on('error', (error) => {
     console.warn('MySQL Session Store connection event:', error.message);

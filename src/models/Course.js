@@ -113,6 +113,22 @@ const Course = {
         return rows;
     },
 
+    /** Cours d'un chapitre avec leurs exercices directement associes. */
+    async findByChapterWithExercises(chapterId) {
+        const [courses] = await pool.query(
+            `SELECT * FROM courses WHERE chapter_id = ? ORDER BY order_num ASC, id ASC`,
+            [chapterId]
+        );
+        for (const course of courses) {
+            const [exos] = await pool.query(
+                `SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC`,
+                [course.id]
+            );
+            course.exercises = exos;
+        }
+        return courses;
+    },
+
     async create({ chapter_id, titre, slug, description, contenu, course_file, niveau = 'l1', order_num = 0 }) {
         const safeSlug = slug || titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const [result] = await pool.query(

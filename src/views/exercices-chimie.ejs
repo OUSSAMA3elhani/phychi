@@ -168,10 +168,14 @@
                                     <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
                                 </button>
 
-                                <!-- Disponibilite des documents, sans les charger -->
+                                <!-- Disponibilite des documents -->
                                 <span class="ml-auto flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
-                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
-                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                    <% if (exo.enonce_file && exo.enonce_file === exo.correction_file) { %>
+                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Énoncé &amp; Corrigé inclus (PDF)</span>
+                                    <% } else { %>
+                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
+                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                    <% } %>
                                 </span>
                             </div>
                         </article>

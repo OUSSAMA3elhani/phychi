@@ -48,6 +48,7 @@ CREATE TABLE `chapters` (
   `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
+  `tome` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `niveau` enum('l1','l2','l3','master','autre') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'l1',
   `ordre` int unsigned NOT NULL DEFAULT '1',
   `order_num` int NOT NULL DEFAULT '0',
@@ -97,6 +98,8 @@ DROP TABLE IF EXISTS `exercises`;
 CREATE TABLE `exercises` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `chapter_id` int unsigned NOT NULL,
+  `course_id` int unsigned DEFAULT NULL,
+  `partie_cours` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
@@ -108,7 +111,9 @@ CREATE TABLE `exercises` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_exercises_slug` (`slug`),
   KEY `fk_exercises_chapter` (`chapter_id`),
-  CONSTRAINT `fk_exercises_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE
+  KEY `fk_exercises_course` (`course_id`),
+  CONSTRAINT `fk_exercises_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_exercises_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `exercises` (`id`, `chapter_id`, `titre`, `slug`, `description`, `enonce_file`, `correction_file`, `niveau`, `difficulte`, `created_at`) VALUES
@@ -134,6 +139,27 @@ CREATE TABLE `download_requests` (
 INSERT INTO `download_requests` (`id`, `user_id`, `item_type`, `item_id`, `status`, `created_at`, `updated_at`) VALUES
 (1, 1, 'course', 1, 'approved', '2026-08-09 22:16:24', '2026-08-09 22:16:41'),
 (2, 1, 'course', 2, 'approved', '2026-08-10 00:04:43', '2026-08-10 00:05:07');
+
+-- 6b. Table: concours
+DROP TABLE IF EXISTS `concours`;
+CREATE TABLE `concours` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ecole` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `annee` int unsigned NOT NULL,
+  `filiere` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Toutes',
+  `matiere` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Physique',
+  `epreuve` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `enonce_file` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correction_file` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_concours_slug` (`slug`),
+  KEY `idx_concours_ecole_annee` (`ecole`,`annee`),
+  KEY `idx_concours_filiere` (`filiere`),
+  KEY `idx_concours_matiere` (`matiere`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 7. Table: favorites
 DROP TABLE IF EXISTS `favorites`;

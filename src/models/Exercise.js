@@ -41,13 +41,17 @@ const Exercise = {
      * difficulte sont valides contre des listes blanches. Toutes les valeurs
      * passent par des placeholders.
      */
-    async findPage({ disciplineSlug, chapitre = null, niveau = null, difficulte = null, page = 1, perPage = 5 } = {}) {
+    async findPage({ disciplineSlug, tome = null, chapitre = null, niveau = null, difficulte = null, page = 1, perPage = 10 } = {}) {
         const NIVEAUX = ['l1', 'l2', 'l3', 'master', 'autre'];
         const DIFFICULTES = ['facile', 'moyen', 'difficile', 'avance'];
 
         const where = ['d.slug = ?'];
         const params = [disciplineSlug];
 
+        if (tome && tome !== 'tous') {
+            where.push('ch.tome = ?');
+            params.push(tome);
+        }
         const chapterId = Number.parseInt(chapitre, 10);
         if (Number.isInteger(chapterId) && chapterId > 0) {
             where.push('e.chapter_id = ?');
@@ -73,18 +77,18 @@ const Exercise = {
         );
         const total = countRows[0].total;
 
-        const size = Math.max(1, Number.parseInt(perPage, 10) || 5);
+        const size = Math.max(1, Number.parseInt(perPage, 10) || 10);
         const current = Math.max(1, Number.parseInt(page, 10) || 1);
         const offset = (current - 1) * size;
 
         const [rows] = await pool.query(
-            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug,
+            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.tome AS chapter_tome,
                     d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
              ${clause}
-             ORDER BY ch.order_num ASC, e.created_at DESC
+             ORDER BY ch.order_num ASC, e.id ASC
              LIMIT ? OFFSET ?`,
             params.concat([size, offset])
         );
@@ -144,13 +148,24 @@ const Exercise = {
         return rows[0] || null;
     },
 
-    /** Comme findById, mais avec le chapitre et la discipline joints. */
+    /** Exercices d'un cours / partie de cours specifique. */
+    async findByCourse(courseId) {
+        const [rows] = await pool.query(
+            'SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC',
+            [courseId]
+        );
+        return rows;
+    },
+
+    /** Comme findById, mais avec le chapitre, le cours et la discipline joints. */
     async findByIdDetailed(id) {
         const [rows] = await pool.query(
             `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.description AS chapter_description,
+                    co.titre AS course_titre,
                     d.id AS discipline_id, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
+             LEFT JOIN courses co ON e.course_id = co.id
              JOIN disciplines d ON ch.discipline_id = d.id
              WHERE e.id = ? LIMIT 1`,
             [id]

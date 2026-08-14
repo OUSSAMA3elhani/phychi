@@ -7,6 +7,7 @@ const Discipline = require('../models/Discipline');
 const Chapter = require('../models/Chapter');
 const Course = require('../models/Course');
 const Exercise = require('../models/Exercise');
+const Concours = require('../models/Concours');
 const DownloadRequest = require('../models/DownloadRequest');
 
 /**
@@ -47,15 +48,17 @@ function paginate(total, page, perPage, filters) {
 async function renderExercises(req, res, next, disciplineSlug, view, title, metaDescription) {
     try {
         const filters = {
+            tome: req.query.tome || 'tous',
             chapitre: req.query.chapitre || 'tous',
             niveau: req.query.niveau || 'tous',
             difficulte: req.query.difficulte || 'toutes',
         };
-        const PER_PAGE = 5;
+        const PER_PAGE = 10;
 
-        const [{ rows, total }, stats, chapters, favoriteIds, downloadStatus] = await Promise.all([
+        const [{ rows, total }, stats, chapters, favoriteIds, downloadStatus, tomes] = await Promise.all([
             Exercise.findPage({
                 disciplineSlug,
+                tome: filters.tome === 'tous' ? null : filters.tome,
                 chapitre: filters.chapitre === 'tous' ? null : filters.chapitre,
                 niveau: filters.niveau,
                 difficulte: filters.difficulte,
@@ -66,6 +69,7 @@ async function renderExercises(req, res, next, disciplineSlug, view, title, meta
             Chapter.findByDisciplineSlug(disciplineSlug),
             Favorite.idsFor(req.session.userId, 'exercise'),
             DownloadRequest.statusMap(req.session.userId, 'exercise'),
+            Chapter.findTomesByDiscipline(disciplineSlug),
         ]);
 
         res.render(view, {
@@ -74,6 +78,7 @@ async function renderExercises(req, res, next, disciplineSlug, view, title, meta
             page: view,
             exercises: rows,
             chapters,
+            tomes,
             stats,
             filters,
             favoriteIds,
@@ -294,17 +299,26 @@ const pageController = {
         }
     },
 
-    /** Chapitres (Dynamic from DB) */
+    /** Chapitres (Dynamic from DB grouped by Tome) */
     async chapitres(req, res, next) {
         try {
             const disciplines = await Discipline.findAll();
             const chapters = await Chapter.findAll();
+
+            const tomesMap = {};
+            chapters.forEach(ch => {
+                const tomeKey = ch.tome || (ch.discipline_slug === 'chimie' ? 'Chimie' : 'Autres Chapitres');
+                if (!tomesMap[tomeKey]) tomesMap[tomeKey] = [];
+                tomesMap[tomeKey].push(ch);
+            });
+
             res.render('chapitres', {
-                title: 'Programme & Chapitres de Physique-Chimie (L1, L2, L3, CPGE) - PhyChemia',
-                metaDescription: 'Découvrez la structure complète des chapitres de physique et de chimie : mécanique, thermodynamique, électromagnétisme et chimie organique.',
+                title: 'Programme & Chapitres par Tome (Ondes Mécaniques, Électromagnétisme, Diélectriques) - PhyChemia',
+                metaDescription: 'Découvrez les chapitres de physique organisés par Tomes : Ondes Mécaniques, Ondes Électromagnétiques Vide et Milieux, Diélectriques, et Chimie.',
                 page: 'chapitres',
                 disciplines,
                 chapters,
+                tomesMap,
             });
         } catch (err) {
             next(err);
@@ -358,7 +372,7 @@ const pageController = {
             if (!chapter) return pageController.notFound(req, res);
 
             const [courses, exercises, siblings, downloadStatus] = await Promise.all([
-                Course.findByChapter(chapter.id),
+                Course.findByChapterWithExercises(chapter.id),
                 Exercise.findByChapter(chapter.id),
                 Chapter.findSiblings(chapter, 6),
                 DownloadRequest.statusMap(req.session.userId, 'course'),
@@ -515,6 +529,69 @@ const pageController = {
             metaDescription: 'Découvrez comment PhyChemia protège vos données personnelles et respecte votre vie privée.',
             page: 'politique-confidentialite'
         });
+    },
+
+    /** Page catalogue des Concours & Annales : /concours */
+    async concours(req, res, next) {
+        try {
+            const filters = {
+                ecole: req.query.ecole || null,
+                annee: req.query.annee || null,
+                filiere: req.query.filiere || null,
+                matiere: req.query.matiere || null,
+                search: req.query.search || null,
+            };
+
+            const PER_PAGE = 12;
+            const [{ rows, total }, filterOptions, courseStats, exerciseCount] = await Promise.all([
+                Concours.findPage({ ...filters, page: req.query.page, perPage: PER_PAGE }),
+                Concours.findFilters(),
+                Course.stats().catch(() => ({ courses: 0, chapters: 0 })),
+                Exercise.countAll().catch(() => 0),
+            ]);
+
+            const stats = {
+                courses: courseStats.courses || 0,
+                chapters: courseStats.chapters || 0,
+                exercises: exerciseCount || 0,
+            };
+
+            res.render('concours', {
+                title: 'Concours & Annales Corrigées CPGE - Physique & Chimie | PhyChemia',
+                metaDescription: 'Accédez à plus de 1 400 sujets et corrigés officiels des concours CPGE (Polytechnique, Centrale, Mines-Ponts, CCINP, ENS, e3a...).',
+                page: 'concours',
+                concoursList: rows,
+                filterOptions,
+                stats,
+                filters,
+                pagination: paginate(total, req.query.page, PER_PAGE, filters),
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /** Detail d'un concours : /concours/:id */
+    async concoursDetails(req, res, next) {
+        try {
+            const id = Number.parseInt(req.params.id, 10);
+            if (!Number.isInteger(id) || id <= 0) return pageController.notFound(req, res);
+
+            const item = await Concours.findById(id);
+            if (!item) return pageController.notFound(req, res);
+
+            const related = await Concours.findRelated(item, 4);
+
+            res.render('concours-details', {
+                title: `${item.titre} - Sujet & Corrigé Officiel | PhyChemia`,
+                metaDescription: `Consultez et téléchargez l'énoncé et la correction du concours ${item.titre}.`,
+                page: 'concours',
+                concours: item,
+                related,
+            });
+        } catch (err) {
+            next(err);
+        }
     },
 
     /** 404 - Page non trouvee */

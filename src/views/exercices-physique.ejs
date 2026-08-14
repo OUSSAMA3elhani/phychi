@@ -65,11 +65,22 @@
                     Filtrer les exercices
                 </h2>
 
-                <form action="/exercices-physique" method="get" class="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+                <form action="/exercices-physique" method="get" class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto] lg:items-end">
+                    <div>
+                        <label for="tome" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Tome (Volume)</label>
+                        <select name="tome" id="tome"
+                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                            <option value="tous"<%= (filters.tome === 'tous' || !filters.tome) ? ' selected' : '' %>>Tous les Tomes</option>
+                            <% if (typeof tomes !== 'undefined' && tomes) { %>
+                                <% tomes.forEach(function (t) { %>
+                                    <option value="<%= t %>"<%= filters.tome === t ? ' selected' : '' %>><%= t %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+
                     <div>
                         <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Chapitre</label>
-                        <%# Les chapitres proviennent de la base : l'ancienne liste de domaines
-                            etait figee dans le gabarit et ne correspondait a aucune donnee. -%>
                         <select name="chapitre" id="domaine"
                                 class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                             <option value="tous"<%= filters.chapitre === 'tous' ? ' selected' : '' %>>Tous les chapitres</option>
@@ -94,7 +105,7 @@
                         <label for="difficulte" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Difficulté</label>
                         <select name="difficulte" id="difficulte"
                                 class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                            <% var DIFFS = [['toutes','Toutes'],['facile','Débutant (*)'],['moyen','Intermédiaire (**)'],['difficile','Difficile (***)'],['avance','Avancé (***)']]; %>
+                            <% var DIFFS = [['toutes','Toutes'],['facile','Débutant (*)'],['moyen','Intermédiaire (**)'],['difficile','Difficile (***)'],['avance','Avancé (****)']]; %>
                             <% DIFFS.forEach(function (d) { %>
                                 <option value="<%= d[0] %>"<%= filters.difficulte === d[0] ? ' selected' : '' %>><%= d[1] %></option>
                             <% }); %>
@@ -107,7 +118,7 @@
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
                             Filtrer
                         </button>
-                        <% if (filters.chapitre !== 'tous' || filters.niveau !== 'tous' || filters.difficulte !== 'toutes') { %>
+                        <% if ((filters.tome && filters.tome !== 'tous') || filters.chapitre !== 'tous' || filters.niveau !== 'tous' || filters.difficulte !== 'toutes') { %>
                             <a href="/exercices-physique" class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
                                 Réinitialiser
                             </a>
@@ -131,14 +142,23 @@
                         <article class="exercise-card group relative flex flex-col rounded-3xl border border-brand-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
                             <header>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
-                                        Physique — <%= exo.niveau.toUpperCase() %>
+                                    <% if (exo.chapter_tome) { %>
+                                        <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <%= exo.chapter_tome %>
+                                        </span>
+                                    <% } else { %>
+                                        <span class="badge badge-physique inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                                            Physique — <%= exo.niveau.toUpperCase() %>
+                                        </span>
+                                    <% } %>
+                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                        Niveau : <%= exo.niveau.toUpperCase() %>
                                     </span>
-                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold capitalize text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                    <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold capitalize text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
                                         Difficulté : <%= exo.difficulte %>
                                     </span>
                                 </div>
-<h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                                <h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                                     <a href="/exercices/<%= exo.id %>" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">
                                         <!-- Rend toute la carte cliquable ; le bouton favori repasse au-dessus via z-10 -->
                                         <span class="absolute inset-0" aria-hidden="true"></span>
@@ -168,10 +188,14 @@
                                     <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
                                 </button>
 
-                                <!-- Disponibilite des documents, sans les charger -->
+                                <!-- Disponibilite des documents -->
                                 <span class="ml-auto flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
-                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
-                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                    <% if (exo.enonce_file && exo.enonce_file === exo.correction_file) { %>
+                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Énoncé &amp; Corrigé inclus (PDF)</span>
+                                    <% } else { %>
+                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
+                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                    <% } %>
                                 </span>
                             </div>
                         </article>

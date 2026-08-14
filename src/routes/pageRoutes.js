@@ -30,6 +30,10 @@ router.get(['/cours', '/cours.html'], pageController.cours);
 router.get(['/exercices-physique', '/exercices-physique.html'], pageController.exercicesPhysique);
 router.get(['/exercices-chimie', '/exercices-chimie.html'], pageController.exercicesChimie);
 
+// Section Concours & Annales
+router.get(['/concours', '/concours.html'], pageController.concours);
+router.get('/concours/:id', pageController.concoursDetails);
+
 // Fiche detaillee d'un exercice. Declaree apres les listes pour qu'un segment
 // litteral ne soit jamais capture comme un `:id`.
 router.get('/exercices/:id', pageController.exerciceDetails);

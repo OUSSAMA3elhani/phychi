@@ -27,3 +27,9 @@ deploy/
 # Uploads dynamiques - ne pas suivre les fichiers televerses par les utilisateurs
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Telechargements volumineux PDF
+public/assets/downloads/garing_decoupe/
+public/assets/downloads/H-prepa_decoupe/
+public/assets/downloads/UPS_Concours_Organises/
+

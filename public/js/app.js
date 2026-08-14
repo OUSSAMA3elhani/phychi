@@ -462,7 +462,7 @@
             const frame = document.createElement('iframe');
             frame.src = url;
             frame.title = title || 'Aperçu du document PDF';
-            frame.className = 'h-[70vh] w-full rounded-xl border-0 bg-white';
+            frame.className = 'h-[75vh] min-h-[550px] w-full rounded-2xl border-0 bg-white shadow-soft';
             return frame;
         }
 

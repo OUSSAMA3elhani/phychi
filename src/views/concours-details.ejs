@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<%- include('partials/head') %>
+
+<body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
+<%- include('partials/header') %>
+
+<main id="main-content" class="min-h-screen bg-slate-50 py-10 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <!-- ================= BREADCRUMB ================= -->
+        <nav aria-label="Fil d'Ariane" class="mb-6">
+            <ol class="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
+                <li aria-hidden="true">/</li>
+                <li><a href="/concours" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Concours</a></li>
+                <li aria-hidden="true">/</li>
+                <li class="font-semibold text-slate-900 dark:text-white" aria-current="page"><%= concours.ecole %> <%= concours.annee %></li>
+            </ol>
+        </nav>
+
+        <!-- ================= CARTUCHE DU CONCOURS ================= -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-6 dark:border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center rounded-lg bg-brand-50 px-3 py-1 text-xs font-extrabold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                            <%= concours.ecole %>
+                        </span>
+                        <span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                            Session <%= concours.annee %>
+                        </span>
+                        <span class="inline-flex items-center rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                            Filière <%= concours.filiere %>
+                        </span>
+                        <span class="inline-flex items-center rounded-lg bg-flask-50 px-2.5 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">
+                            <%= concours.matiere %>
+                        </span>
+                    </div>
+
+                    <h1 class="mt-4 font-display text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">
+                        <%= concours.epreuve %>
+                    </h1>
+                </div>
+
+                <a href="/concours" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                    ← Retour aux concours
+                </a>
+            </div>
+
+            <!-- Métadonnées et Actions de consultation -->
+            <div class="mt-8 grid gap-6 md:grid-cols-2">
+                
+                <!-- Bloc Sujet du Concours -->
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-950/40">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
+                            📄
+                        </span>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900 dark:text-white">Sujet officiel de l'épreuve</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Document d'énoncé complet fourni pour le concours</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <% if (concours.enonce_file) { %>
+                            <button type="button"
+                                    data-file-modal
+                                    data-file-url="<%= concours.enonce_file %>"
+                                    data-file-title="<%= concours.titre %>"
+                                    data-file-label="Sujet Officiel du Concours"
+                                    class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-bold text-white shadow-soft transition-all hover:bg-brand-700">
+                                <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span>Afficher l'énoncé</span>
+                            </button>
+
+                            <a href="<%= concours.enonce_file %>" download class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
+                                Télécharger PDF
+                            </a>
+                        <% } else { %>
+                            <p class="text-xs font-medium text-slate-400">Sujet non disponible au format PDF.</p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Bloc Correction du Concours -->
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6 dark:border-emerald-900/40 dark:bg-emerald-950/20">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">
+                            ✅
+                        </span>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900 dark:text-white">Correction détaillée</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Proposition de corrigé rédigée par l'UPS</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <% if (concours.correction_file) { %>
+                            <button type="button"
+                                    data-file-modal
+                                    data-file-url="<%= concours.correction_file %>"
+                                    data-file-title="<%= concours.titre %>"
+                                    data-file-label="Correction Officielle du Concours"
+                                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-soft transition-all hover:bg-emerald-700">
+                                <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span>Afficher le corrigé</span>
+                            </button>
+
+                            <a href="<%= concours.correction_file %>" download class="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-xs font-semibold text-emerald-800 shadow-sm transition-colors hover:bg-emerald-50 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-400 dark:hover:bg-slate-800">
+                                Télécharger le corrigé PDF
+                            </a>
+                        <% } else { %>
+                            <p class="text-xs font-medium text-slate-400">Corrigé non disponible au format PDF.</p>
+                        <% } %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= ANNALES SIMILAIRES ================= -->
+        <% if (related && related.length > 0) { %>
+            <section class="mt-12" aria-labelledby="titre-similaires">
+                <h2 id="titre-similaires" class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    Annales similaires (<%= concours.ecole %>)
+                </h2>
+
+                <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <% related.forEach(function(item) { %>
+                        <a href="/concours/<%= item.id %>" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:border-brand-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700">
+                            <div class="flex items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400">
+                                <span><%= item.annee %></span>
+                                <span>•</span>
+                                <span><%= item.filiere %></span>
+                            </div>
+                            <h3 class="mt-2 text-sm font-bold text-slate-900 transition-colors group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
+                                <%= item.epreuve %>
+                            </h3>
+                            <p class="mt-1 text-xs text-slate-400"><%= item.ecole %></p>
+                        </a>
+                    <% }); %>
+                </div>
+            </section>
+        <% } %>
+
+    </div>
+</main>
+
+<%- include('partials/file-modal') %>
+<%- include('partials/footer') %>
+</body>
+</html>
