@@ -1,10 +1,25 @@
 /**
- * Modele Exercise - acces a la table `exercises`.
+ * Modèle Exercise - accès sécurisé et tolérant aux pannes à la table `exercises`.
  */
 const { pool } = require('../../config/db');
 
+let columnsChecked = false;
+async function ensureColumnsExist() {
+    if (columnsChecked) return;
+    try {
+        const [cols] = await pool.query('SHOW COLUMNS FROM exercises LIKE "course_id"');
+        if (cols.length === 0) {
+            await pool.query('ALTER TABLE exercises ADD COLUMN course_id INT UNSIGNED DEFAULT NULL, ADD COLUMN partie_cours VARCHAR(255) DEFAULT NULL');
+        }
+        columnsChecked = true;
+    } catch (err) {
+        console.warn('Vérification colonnes exercises:', err.message);
+    }
+}
+
 const Exercise = {
     async findAll() {
+        await ensureColumnsExist();
         const [rows] = await pool.query(
             `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
@@ -16,11 +31,13 @@ const Exercise = {
     },
 
     async countAll() {
+        await ensureColumnsExist();
         const [rows] = await pool.query('SELECT COUNT(*) AS total FROM exercises');
         return rows[0].total;
     },
 
     async findByDisciplineSlug(disciplineSlug) {
+        await ensureColumnsExist();
         const [rows] = await pool.query(
             `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
@@ -33,107 +50,102 @@ const Exercise = {
         return rows;
     },
 
-    /**
-     * Page d'exercices d'une discipline, filtres par chapitre, niveau et
-     * difficulte. Renvoie { rows, total }.
-     *
-     * `chapitre` est compare a l'identifiant numerique du chapitre ; niveau et
-     * difficulte sont valides contre des listes blanches. Toutes les valeurs
-     * passent par des placeholders.
-     */
     async findPage({ disciplineSlug, tome = null, chapitre = null, niveau = null, difficulte = null, page = 1, perPage = 10 } = {}) {
+        await ensureColumnsExist();
         const NIVEAUX = ['l1', 'l2', 'l3', 'master', 'autre'];
         const DIFFICULTES = ['facile', 'moyen', 'difficile', 'avance'];
 
         const where = ['d.slug = ?'];
         const params = [disciplineSlug];
 
-        if (tome && tome !== 'tous') {
+        if (tome && String(tome).trim() !== '' && String(tome) !== 'tous') {
             where.push('ch.tome = ?');
-            params.push(tome);
+            params.push(String(tome).trim());
         }
-        const chapterId = Number.parseInt(chapitre, 10);
-        if (Number.isInteger(chapterId) && chapterId > 0) {
+
+        if (chapitre && !Number.isNaN(Number.parseInt(chapitre, 10)) && Number.parseInt(chapitre, 10) > 0) {
             where.push('e.chapter_id = ?');
-            params.push(chapterId);
+            params.push(Number.parseInt(chapitre, 10));
         }
-        if (niveau && niveau !== 'tous' && NIVEAUX.indexOf(niveau) !== -1) {
+
+        if (niveau && NIVEAUX.includes(String(niveau).toLowerCase())) {
             where.push('e.niveau = ?');
-            params.push(niveau);
+            params.push(String(niveau).toLowerCase());
         }
-        if (difficulte && difficulte !== 'toutes' && DIFFICULTES.indexOf(difficulte) !== -1) {
+
+        if (difficulte && DIFFICULTES.includes(String(difficulte).toLowerCase())) {
             where.push('e.difficulte = ?');
-            params.push(difficulte);
+            params.push(String(difficulte).toLowerCase());
         }
-        const clause = 'WHERE ' + where.join(' AND ');
+
+        const whereSql = where.join(' AND ');
 
         const [countRows] = await pool.query(
             `SELECT COUNT(*) AS total
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
-             ${clause}`,
+             WHERE ${whereSql}`,
             params
         );
         const total = countRows[0].total;
 
-        const size = Math.max(1, Number.parseInt(perPage, 10) || 10);
-        const current = Math.max(1, Number.parseInt(page, 10) || 1);
-        const offset = (current - 1) * size;
+        const p = Math.max(1, Number.parseInt(page, 10) || 1);
+        const limit = Math.max(1, Math.min(100, Number.parseInt(perPage, 10) || 10));
+        const offset = (p - 1) * limit;
 
         const [rows] = await pool.query(
-            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.tome AS chapter_tome,
-                    d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.tome AS chapter_tome, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
-             ${clause}
-             ORDER BY ch.order_num ASC, e.id ASC
+             WHERE ${whereSql}
+             ORDER BY e.created_at DESC, e.id DESC
              LIMIT ? OFFSET ?`,
-            params.concat([size, offset])
+            [...params, limit, offset]
         );
 
         return { rows, total };
     },
 
-    /** Statistiques d'en-tete pour une discipline. */
     async stats(disciplineSlug) {
+        await ensureColumnsExist();
         const [rows] = await pool.query(
-            `SELECT COUNT(*) AS series,
-                    COUNT(DISTINCT e.chapter_id) AS chapitres,
-                    SUM(CASE WHEN e.correction_file IS NOT NULL THEN 1 ELSE 0 END) AS corriges,
-                    SUM(CASE WHEN e.enonce_file IS NOT NULL THEN 1 ELSE 0 END)     AS enonces
+            `SELECT COUNT(DISTINCT e.id) AS total_exercises,
+                    COUNT(DISTINCT e.chapter_id) AS chapters_with_exercises,
+                    SUM(CASE WHEN e.niveau = 'l1' THEN 1 ELSE 0 END) AS l1_count,
+                    SUM(CASE WHEN e.niveau = 'l2' THEN 1 ELSE 0 END) AS l2_count,
+                    SUM(CASE WHEN e.niveau = 'l3' THEN 1 ELSE 0 END) AS l3_count,
+                    SUM(CASE WHEN e.niveau = 'master' THEN 1 ELSE 0 END) AS master_count
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
              WHERE d.slug = ?`,
             [disciplineSlug]
         );
-        const r = rows[0] || {};
-        const series = Number(r.series) || 0;
-        const corriges = Number(r.corriges) || 0;
-        return {
-            series,
-            chapitres: Number(r.chapitres) || 0,
-            corriges,
-            enonces: Number(r.enonces) || 0,
-            // Part des series disposant d'un corrige.
-            corrigesPercent: series > 0 ? Math.round((corriges / series) * 100) : 0,
+        return rows[0] || {
+            total_exercises: 0,
+            chapters_with_exercises: 0,
+            l1_count: 0,
+            l2_count: 0,
+            l3_count: 0,
+            master_count: 0,
         };
     },
 
-    /** Exercices d'un chapitre donne (page de detail du chapitre). */
     async findByChapter(chapterId) {
+        await ensureColumnsExist();
         const [rows] = await pool.query(
-            'SELECT * FROM exercises WHERE chapter_id = ? ORDER BY created_at DESC',
+            'SELECT * FROM exercises WHERE chapter_id = ? ORDER BY id ASC',
             [chapterId]
         );
         return rows;
     },
 
     async findBySlug(slug) {
+        await ensureColumnsExist();
         const [rows] = await pool.query(
-            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom
+            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
@@ -144,84 +156,77 @@ const Exercise = {
     },
 
     async findById(id) {
+        await ensureColumnsExist();
         const [rows] = await pool.query('SELECT * FROM exercises WHERE id = ? LIMIT 1', [id]);
         return rows[0] || null;
     },
 
-    /** Exercices d'un cours / partie de cours specifique. */
     async findByCourse(courseId) {
-        const [rows] = await pool.query(
-            'SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC',
-            [courseId]
-        );
-        return rows;
+        await ensureColumnsExist();
+        try {
+            const [rows] = await pool.query(
+                'SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC',
+                [courseId]
+            );
+            return rows;
+        } catch (err) {
+            return [];
+        }
     },
 
-    /** Comme findById, mais avec le chapitre, le cours et la discipline joints. */
     async findByIdDetailed(id) {
-        const [rows] = await pool.query(
-            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.description AS chapter_description,
-                    co.titre AS course_titre,
-                    d.id AS discipline_id, d.nom AS discipline_nom, d.slug AS discipline_slug
-             FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             LEFT JOIN courses co ON e.course_id = co.id
-             JOIN disciplines d ON ch.discipline_id = d.id
-             WHERE e.id = ? LIMIT 1`,
-            [id]
-        );
-        return rows[0] || null;
+        await ensureColumnsExist();
+        try {
+            const [rows] = await pool.query(
+                `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.description AS chapter_description,
+                        co.titre AS course_titre,
+                        d.id AS discipline_id, d.nom AS discipline_nom, d.slug AS discipline_slug
+                 FROM exercises e
+                 JOIN chapters ch ON e.chapter_id = ch.id
+                 LEFT JOIN courses co ON e.course_id = co.id
+                 JOIN disciplines d ON ch.discipline_id = d.id
+                 WHERE e.id = ? LIMIT 1`,
+                [id]
+            );
+            return rows[0] || null;
+        } catch (err) {
+            // Repli en cas de jointure incomplete
+            const [rows] = await pool.query(
+                `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.description AS chapter_description,
+                        d.id AS discipline_id, d.nom AS discipline_nom, d.slug AS discipline_slug
+                 FROM exercises e
+                 JOIN chapters ch ON e.chapter_id = ch.id
+                 JOIN disciplines d ON ch.discipline_id = d.id
+                 WHERE e.id = ? LIMIT 1`,
+                [id]
+            );
+            return rows[0] || null;
+        }
     },
 
-    /**
-     * Exercices proches : d'abord ceux du meme chapitre, puis, s'il en manque,
-     * ceux de la meme discipline. L'exercice courant est toujours exclu.
-     */
     async findRelated(exercise, limit = 4) {
-        const max = Number.parseInt(limit, 10) || 4;
-        const [rows] = await pool.query(
-            `SELECT e.id, e.titre, e.slug, e.description, e.niveau, e.difficulte,
-                    e.enonce_file, e.correction_file,
-                    ch.titre AS chapter_titre,
-                    d.nom AS discipline_nom, d.slug AS discipline_slug,
-                    (ch.id = ?) AS same_chapter
-             FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
-             WHERE e.id <> ? AND d.slug = ?
-             ORDER BY same_chapter DESC, e.created_at DESC
-             LIMIT ?`,
-            [exercise.chapter_id, exercise.id, exercise.discipline_slug, max]
-        );
-        return rows;
-    },
-
-    async create({ chapter_id, titre, slug, description, enonce_file, correction_file, niveau = 'l1', difficulte = 'moyen' }) {
-        const safeSlug = slug || titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const [result] = await pool.query(
-            'INSERT INTO exercises (chapter_id, titre, slug, description, enonce_file, correction_file, niveau, difficulte) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [chapter_id, titre, safeSlug, description || null, enonce_file || null, correction_file || null, niveau, difficulte]
-        );
-        return this.findById(result.insertId);
-    },
-
-    async update(id, { chapter_id, titre, slug, description, enonce_file, correction_file, niveau, difficulte }) {
-        const safeSlug = slug || titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const current = await this.findById(id);
-        const finalEnonce = enonce_file || current.enonce_file;
-        const finalCorrection = correction_file || current.correction_file;
-
-        await pool.query(
-            'UPDATE exercises SET chapter_id = ?, titre = ?, slug = ?, description = ?, enonce_file = ?, correction_file = ?, niveau = ?, difficulte = ? WHERE id = ?',
-            [chapter_id, titre, safeSlug, description || null, finalEnonce, finalCorrection, niveau, difficulte, id]
-        );
-        return this.findById(id);
-    },
-
-    async delete(id) {
-        const [result] = await pool.query('DELETE FROM exercises WHERE id = ?', [id]);
-        return result.affectedRows > 0;
-    },
+        await ensureColumnsExist();
+        try {
+            const max = Number.parseInt(limit, 10) || 4;
+            const [rows] = await pool.query(
+                `SELECT e.id, e.titre, e.slug, e.description, e.niveau, e.difficulte,
+                        e.enonce_file, e.correction_file,
+                        ch.titre AS chapter_titre,
+                        d.nom AS discipline_nom, d.slug AS discipline_slug,
+                        (ch.id = ?) AS same_chapter
+                 FROM exercises e
+                 JOIN chapters ch ON e.chapter_id = ch.id
+                 JOIN disciplines d ON ch.discipline_id = d.id
+                 WHERE d.id = ? AND e.id != ?
+                 ORDER BY same_chapter DESC, e.created_at DESC
+                 LIMIT ?`,
+                [exercise.chapter_id, exercise.discipline_id, exercise.id, max]
+            );
+            return rows;
+        } catch (err) {
+            return [];
+        }
+    }
 };
 
 module.exports = Exercise;

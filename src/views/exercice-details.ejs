@@ -94,45 +94,36 @@
                     <div class="mt-7 flex flex-wrap gap-3">
                         <% if (exercise.enonce_file && exercise.enonce_file === exercise.correction_file) { %>
                             <button type="button"
-                                    data-doc-toggle
-                                    aria-expanded="false"
-                                    aria-controls="doc-enonce"
-                                    data-doc-url="<%= exercise.enonce_file %>"
-                                    data-doc-title="Énoncé & Corrigé — <%= exercise.titre %>"
-                                    data-label-show="Consulter l'énoncé & le corrigé"
-                                    data-label-hide="Masquer le document"
+                                    data-file-modal
+                                    data-file-url="<%= exercise.enonce_file %>"
+                                    data-file-title="<%= exercise.titre %>"
+                                    data-file-label="Énoncé & Corrigé — <%= exercise.discipline_nom %>"
                                     class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                <span data-doc-label>Consulter l'énoncé &amp; le corrigé</span>
+                                <span>Consulter l'énoncé &amp; le corrigé</span>
                             </button>
                         <% } else { %>
                             <% if (exercise.enonce_file) { %>
                                 <button type="button"
-                                        data-doc-toggle
-                                        aria-expanded="false"
-                                        aria-controls="doc-enonce"
-                                        data-doc-url="<%= exercise.enonce_file %>"
-                                        data-doc-title="Énoncé — <%= exercise.titre %>"
-                                        data-label-show="Voir l'énoncé"
-                                        data-label-hide="Masquer l'énoncé"
+                                        data-file-modal
+                                        data-file-url="<%= exercise.enonce_file %>"
+                                        data-file-title="<%= exercise.titre %>"
+                                        data-file-label="Énoncé — <%= exercise.discipline_nom %>"
                                         class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    <span data-doc-label>Voir l'énoncé</span>
+                                    <span>Voir l'énoncé</span>
                                 </button>
                             <% } %>
 
                             <% if (exercise.correction_file) { %>
                                 <button type="button"
-                                        data-doc-toggle
-                                        aria-expanded="false"
-                                        aria-controls="doc-correction"
-                                        data-doc-url="<%= exercise.correction_file %>"
-                                        data-doc-title="Correction — <%= exercise.titre %>"
-                                        data-label-show="Voir la correction"
-                                        data-label-hide="Masquer la correction"
+                                        data-file-modal
+                                        data-file-url="<%= exercise.correction_file %>"
+                                        data-file-title="<%= exercise.titre %>"
+                                        data-file-label="Correction — <%= exercise.discipline_nom %>"
                                         class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                                    <span data-doc-label>Voir la correction</span>
+                                    <span>Voir la correction</span>
                                 </button>
                             <% } %>
                         <% } %>
