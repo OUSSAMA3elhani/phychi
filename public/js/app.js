@@ -462,7 +462,7 @@
             const frame = document.createElement('iframe');
             frame.src = url;
             frame.title = title || 'Aperçu du document PDF';
-            frame.className = 'h-[75vh] min-h-[550px] w-full rounded-2xl border-0 bg-white shadow-soft';
+            frame.className = 'h-full min-h-[500px] w-full rounded-2xl border-0 bg-white shadow-soft';
             return frame;
         }
 
@@ -485,6 +485,7 @@
         const opts = options || {};
         const body = modal.querySelector('#file-modal-body');
         const download = modal.querySelector('#file-modal-download');
+        const newtab = modal.querySelector('#file-modal-newtab');
         const titleEl = modal.querySelector('#file-modal-title');
         const labelEl = modal.querySelector('#file-modal-label');
 
@@ -498,14 +499,21 @@
             body.appendChild(buildPreview(url, opts.title));
             download.href = url;
             download.classList.remove('hidden');
+            if (newtab) {
+                newtab.href = url;
+                newtab.classList.remove('hidden');
+            }
         } else {
             const empty = document.createElement('div');
             empty.className = 'p-10 text-center text-sm text-slate-500 dark:text-slate-400';
             empty.textContent = opts.emptyMessage || "Aucun fichier n'a encore été téléversé pour cette ressource.";
             body.appendChild(empty);
             download.href = '#';
-            // Sans fichier, un bouton de telechargement n'aurait aucun sens.
             download.classList.add('hidden');
+            if (newtab) {
+                newtab.href = '#';
+                newtab.classList.add('hidden');
+            }
         }
 
         modal.classList.remove('hidden');
