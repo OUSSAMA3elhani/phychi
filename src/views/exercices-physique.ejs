@@ -48,7 +48,7 @@
                     </div>
                     <div>
                         <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.chapitres %></dt>
-                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Chapitres couverts</dd>
+                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Thématiques</dd>
                     </div>
                     <div>
                         <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.corrigesPercent %>%</dt>
@@ -80,12 +80,13 @@
                     </div>
 
                     <div>
-                        <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Chapitre</label>
+                        <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Thème / Domaine</label>
                         <select name="chapitre" id="domaine"
                                 class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                            <option value="tous"<%= filters.chapitre === 'tous' ? ' selected' : '' %>>Tous les chapitres</option>
+                            <option value="tous"<%= filters.chapitre === 'tous' ? ' selected' : '' %>>Tous les thèmes</option>
                             <% chapters.forEach(function (ch) { %>
-                                <option value="<%= ch.id %>"<%= String(filters.chapitre) === String(ch.id) ? ' selected' : '' %>><%= ch.titre %></option>
+                                <% var cleanTheme = ch.titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim(); %>
+                                <option value="<%= ch.id %>"<%= String(filters.chapitre) === String(ch.id) ? ' selected' : '' %>><%= cleanTheme %></option>
                             <% }); %>
                         </select>
                     </div>
@@ -167,7 +168,7 @@
                                 </h3>
                             </header>
 
-                            <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500"><%= exo.chapter_titre %></p>
+                            <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500"><%= exo.chapter_titre ? exo.chapter_titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim() : '' %></p>
                             <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400"><%= exo.description %></p>
 
                             <div class="exercise-file-actions relative z-10 mt-6 flex flex-wrap items-center gap-3">

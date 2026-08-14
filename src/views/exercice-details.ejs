@@ -71,8 +71,8 @@
                             </div>
                         <% } %>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Chapitre</dt>
-                            <dd class="mt-1 text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre %></dd>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Thématique</dt>
+                            <dd class="mt-1 text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre ? exercise.chapter_titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim() : '' %></dd>
                         </div>
                         <div>
                             <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Niveau</dt>
