@@ -18,12 +18,12 @@
                 <!-- Table list -->
                 <div class="lg:col-span-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
                     <div class="p-6 border-b border-slate-200 dark:border-slate-800">
-                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Chapitres (<%= chapters.length %>)</h2>
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Cours &amp; Modules (<%= chapters.length %>)</h2>
                     </div>
                     <table class="w-full text-left text-sm">
                         <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-200 dark:bg-slate-950/50 dark:border-slate-800">
                             <tr>
-                                <th class="px-6 py-4">Titre</th>
+                                <th class="px-6 py-4">Titre du Cours / Module</th>
                                 <th class="px-6 py-4">Discipline</th>
                                 <th class="px-6 py-4">Niveau</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
@@ -36,7 +36,7 @@
                                     <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400"><%= ch.discipline_nom %></span></td>
                                     <td class="px-6 py-4 uppercase text-xs font-semibold"><%= ch.niveau %></td>
                                     <td class="px-6 py-4 text-right">
-                                        <form action="/admin/chapters/<%= ch.id %>/delete" method="post" onsubmit="return confirm('Supprimer ce chapitre ?')" class="inline">
+                                        <form action="/admin/chapters/<%= ch.id %>/delete" method="post" onsubmit="return confirm('Supprimer ce cours / module ?')" class="inline">
                                             <button type="submit" class="text-rose-600 hover:text-rose-700 font-semibold text-xs dark:text-rose-400">Supprimer</button>
                                         </form>
                                     </td>
@@ -48,7 +48,7 @@
 
                 <!-- Add Form -->
                 <div class="lg:col-span-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900 self-start">
-                    <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white mb-4">Créer / Éditer un Chapitre</h3>
+                    <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white mb-4">Créer / Éditer un Cours</h3>
                     <form action="/admin/chapters/save" method="post" class="grid gap-4">
                         <input type="hidden" name="id" value="">
                         <div>
@@ -60,7 +60,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Titre du Chapitre</label>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Titre du Cours</label>
                             <input type="text" name="titre" required class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white text-sm">
                         </div>
                         <div>
@@ -82,7 +82,7 @@
                                 <input type="number" name="ordre" value="1" class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white text-sm">
                             </div>
                         </div>
-                        <button type="submit" class="rounded-xl bg-brand-600 text-white font-semibold py-3 hover:bg-brand-700 text-sm transition-all shadow-glow">Enregistrer le Chapitre</button>
+                        <button type="submit" class="rounded-xl bg-brand-600 text-white font-semibold py-3 hover:bg-brand-700 text-sm transition-all shadow-glow">Enregistrer le Cours</button>
                     </form>
                 </div>
             </div>

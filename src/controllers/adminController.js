@@ -155,7 +155,7 @@ const adminController = {
         try {
             const chapters = await Chapter.findAll();
             const disciplines = await Discipline.findAll();
-            res.render('admin/chapters', { title: 'Chapitres', page: 'admin-chapters', chapters, disciplines });
+            res.render('admin/chapters', { title: 'Cours & Modules', page: 'admin-chapters', chapters, disciplines });
         } catch (err) {
             next(err);
         }
@@ -194,7 +194,7 @@ const adminController = {
             const courses = await Course.findAll();
             const chapters = await Chapter.findAll();
             res.render('admin/courses', {
-                title: 'Gestion des Cours',
+                title: 'Chapitres & Fichiers',
                 page: 'admin-courses',
                 courses,
                 chapters,

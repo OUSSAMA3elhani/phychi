@@ -25,16 +25,16 @@
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6 dark:border-slate-800">
                     <div>
-                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Fiches de Cours (<%= courses.length %>)</h2>
+                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Chapitres &amp; Fichiers PDF (<%= courses.length %>)</h2>
                         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">L'ordre d'affichage public suit la colonne « Ordre ».</p>
                     </div>
                     <button type="button"
                             data-modal-open="course-modal"
-                            data-modal-title="Créer une fiche de cours"
+                            data-modal-title="Créer un Chapitre"
                             data-fields='{"id":"","chapter_id":"","titre":"","description":"","contenu":"","niveau":"l1","order_num":"0"}'
                             class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                        Nouvelle fiche
+                        Nouveau Chapitre
                     </button>
                 </div>
 
@@ -43,9 +43,9 @@
                         <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/50">
                             <tr>
                                 <th class="px-6 py-4">Ordre</th>
-                                <th class="px-6 py-4">Titre du Cours</th>
-                                <th class="px-6 py-4">Chapitre &amp; Discipline</th>
-                                <th class="px-6 py-4">Fichier Attaché</th>
+                                <th class="px-6 py-4">Titre du Chapitre</th>
+                                <th class="px-6 py-4">Module &amp; Discipline</th>
+                                <th class="px-6 py-4">Fichier PDF Attaché</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
