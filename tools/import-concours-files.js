@@ -142,12 +142,24 @@ async function runConcoursImport() {
                 continue;
             }
 
+            let effectiveEcole = ecoleName;
+            if (ecoleName.includes('Agrégation') || ecoleName.includes('CAPES')) {
+                const e = parsed.epreuve.toLowerCase();
+                if (e.includes('interne') || e.includes('dossier') || e.includes('theme') || e.includes('thème')) {
+                    effectiveEcole = 'Agrégation Interne';
+                } else if (e.includes('capes') || e.includes('cafep') || e.includes('traitement') || e.includes('documentaire')) {
+                    effectiveEcole = 'CAPES & CAFEP';
+                } else {
+                    effectiveEcole = 'Agrégation Externe';
+                }
+            }
+
             const relativePath = '/assets/downloads/UPS_Concours_Organises/' + path.relative(basePath, fullPdfPath).replace(/\\/g, '/');
-            const groupKey = `${ecoleName}::${parsed.annee}::${parsed.filiere}::${parsed.epreuve}`;
+            const groupKey = `${effectiveEcole}::${parsed.annee}::${parsed.filiere}::${parsed.epreuve}`;
 
             if (!concoursGroups.has(groupKey)) {
                 concoursGroups.set(groupKey, {
-                    ecole: ecoleName,
+                    ecole: effectiveEcole,
                     annee: parsed.annee,
                     filiere: parsed.filiere,
                     epreuve: parsed.epreuve,
