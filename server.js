@@ -170,6 +170,12 @@ app.get('/script.js', (req, res) => {
     res.sendFile(path.join(ROOT, 'public', 'js', 'script.js'));
 });
 
+// Servir ads.txt pour la régie Google AdSense
+app.get('/ads.txt', (req, res) => {
+    res.type('text/plain');
+    res.sendFile(path.join(ROOT, 'public', 'ads.txt'));
+});
+
 // -----------------------------------------------------------------------------
 // Routes applicatives & EJS SSR
 // -----------------------------------------------------------------------------
