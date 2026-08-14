@@ -1,5 +1,5 @@
 /**
- * Ingestion Script: Imports and pairs all 2,900+ concours PDFs from
+ * Ingestion Script: Imports and pairs all 2,500+ concours PDFs from
  * public/assets/downloads/UPS_Concours_Organises into the MySQL database.
  * 
  * Usage: node tools/import-concours-files.js
@@ -33,47 +33,68 @@ function detectMatiere(epreuveStr) {
     return 'Physique';
 }
 
-function parseFilename(filename) {
-    // Expected pattern: [YEAR]_[FILIERE]_[EPREUVE]_[Enonce|Corrige...].pdf
+function parsePdfFile(fullPdfPath, ecoleDir) {
+    const filename = path.basename(fullPdfPath);
     const nameWithoutExt = filename.replace(/\.pdf$/i, '');
-    const match = nameWithoutExt.match(/^(\d{4})_([^_]+)_(.*)_(Enonce|Corrige.*)$/i);
+    
+    // Detect year in full path or filename
+    const yearMatch = fullPdfPath.match(/\b(199[5-9]|20[0-2][0-9])\b/);
+    const annee = yearMatch ? parseInt(yearMatch[1], 10) : 2020;
 
-    if (!match) {
-        // Fallback for non-standard filenames
-        const fallbackYearMatch = nameWithoutExt.match(/^(\d{4})_(.*)$/);
-        if (fallbackYearMatch) {
-            const isCorr = nameWithoutExt.toLowerCase().includes('corrige');
-            const isEnonce = nameWithoutExt.toLowerCase().includes('enonce');
-            return {
-                annee: parseInt(fallbackYearMatch[1], 10),
-                filiere: 'Toutes',
-                epreuve: fallbackYearMatch[2].replace(/_(Enonce|Corrige.*)$/i, '').replace(/_/g, ' '),
-                type: isCorr ? 'corrige' : 'enonce',
-                isPart2Plus: nameWithoutExt.toLowerCase().includes('part2') || nameWithoutExt.toLowerCase().includes('part3')
-            };
-        }
-        return null;
+    // Detect filiere
+    let filiere = 'Toutes';
+    const filiereMatch = nameWithoutExt.match(/\b(MP|PC|PSI|PT|BCPST|TSI|TB|ATS)\b/i);
+    if (filiereMatch) {
+        filiere = filiereMatch[1].toUpperCase();
     }
 
-    const annee = parseInt(match[1], 10);
-    const filiere = match[2].replace(/_/g, ' ');
-    const rawEpreuve = match[3].replace(/_/g, ' ');
-    const docTag = match[4];
+    // Detect doc type (enonce vs corrige)
+    const isCorrige = /corrige/i.test(nameWithoutExt);
 
-    const isCorrige = /^Corrige/i.test(docTag);
-    const isPart2Plus = /Part[2-9]/i.test(docTag);
+    // Clean epreuve title completely
+    let cleanEpreuve = nameWithoutExt
+        .replace(/_(Enonce|Corrige|Sujet).*/i, '')
+        .replace(/\b(Enonce|Corrige|Sujet)\b.*/i, '')
+        .replace(/Part[1-9]/gi, '')
+        .replace(/_/g, ' ')
+        .replace(/\b\d{4}\b/g, '')
+        .replace(/\b(Autres concours|Autres_concours|Concours|Recrutement des enseignants)\b/gi, '')
+        .replace(/\b(Physique|Chimie|Physique Chimie|Physique-Chimie)\b/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (!cleanEpreuve || cleanEpreuve.length < 2) {
+        cleanEpreuve = 'Épreuve de Physique';
+    }
+
+    // Capitalize clean title
+    cleanEpreuve = cleanEpreuve.charAt(0).toUpperCase() + cleanEpreuve.slice(1);
+
+    // Refine ecole category
+    let ecole = cleanCategoryName(ecoleDir);
+    const lowerName = fullPdfPath.toLowerCase();
+    if (ecole.includes('Agrégation') || ecole.includes('CAPES')) {
+        if (lowerName.includes('interne') || lowerName.includes('dossier') || lowerName.includes('theme') || lowerName.includes('thème')) {
+            ecole = 'Agrégation Interne';
+        } else if (lowerName.includes('capes') || lowerName.includes('cafep') || lowerName.includes('traitement')) {
+            ecole = 'CAPES & CAFEP';
+        } else {
+            ecole = 'Agrégation Externe';
+        }
+    }
 
     return {
         annee,
         filiere,
-        epreuve: rawEpreuve,
+        ecole,
+        epreuve: cleanEpreuve,
         type: isCorrige ? 'corrige' : 'enonce',
-        isPart2Plus
+        filename
     };
 }
 
 async function runConcoursImport() {
-    console.log('Starting ingestion of UPS Concours PDF files...');
+    console.log('Démarrage de l importation des 2 500+ sujets de Concours...');
     const basePath = path.join(__dirname, '..', 'public', 'assets', 'downloads', 'UPS_Concours_Organises');
 
     if (!fs.existsSync(basePath)) {
@@ -103,20 +124,18 @@ async function runConcoursImport() {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
+    // Clean existing entries to regenerate clean paired entries
+    await pool.query('DELETE FROM concours');
+
     const concoursGroups = new Map();
 
     const categoryDirs = fs.readdirSync(basePath).filter(name => {
-        const fullPath = path.join(basePath, name);
-        return fs.statSync(fullPath).isDirectory();
+        return fs.statSync(path.join(basePath, name)).isDirectory();
     });
 
-    console.log(`Found ${categoryDirs.length} concours categories.`);
-
     for (const catDirName of categoryDirs) {
-        const ecoleName = cleanCategoryName(catDirName);
         const catFullPath = path.join(basePath, catDirName);
 
-        // Recursively find all PDF files in this category
         function scanFolder(folderPath) {
             let files = [];
             const items = fs.readdirSync(folderPath);
@@ -135,31 +154,14 @@ async function runConcoursImport() {
         const pdfPaths = scanFolder(catFullPath);
 
         for (const fullPdfPath of pdfPaths) {
-            const filename = path.basename(fullPdfPath);
-            const parsed = parseFilename(filename);
-
-            if (!parsed) {
-                continue;
-            }
-
-            let effectiveEcole = ecoleName;
-            if (ecoleName.includes('Agrégation') || ecoleName.includes('CAPES')) {
-                const e = parsed.epreuve.toLowerCase();
-                if (e.includes('interne') || e.includes('dossier') || e.includes('theme') || e.includes('thème')) {
-                    effectiveEcole = 'Agrégation Interne';
-                } else if (e.includes('capes') || e.includes('cafep') || e.includes('traitement') || e.includes('documentaire')) {
-                    effectiveEcole = 'CAPES & CAFEP';
-                } else {
-                    effectiveEcole = 'Agrégation Externe';
-                }
-            }
-
+            const parsed = parsePdfFile(fullPdfPath, catDirName);
             const relativePath = '/assets/downloads/UPS_Concours_Organises/' + path.relative(basePath, fullPdfPath).replace(/\\/g, '/');
-            const groupKey = `${effectiveEcole}::${parsed.annee}::${parsed.filiere}::${parsed.epreuve}`;
+
+            const groupKey = `${parsed.ecole}::${parsed.annee}::${parsed.filiere}::${parsed.epreuve.toLowerCase()}`;
 
             if (!concoursGroups.has(groupKey)) {
                 concoursGroups.set(groupKey, {
-                    ecole: effectiveEcole,
+                    ecole: parsed.ecole,
                     annee: parsed.annee,
                     filiere: parsed.filiere,
                     epreuve: parsed.epreuve,
@@ -172,52 +174,47 @@ async function runConcoursImport() {
             const group = concoursGroups.get(groupKey);
 
             if (parsed.type === 'enonce') {
-                group.enonce_file = relativePath;
+                if (!group.enonce_file || !group.enonce_file.includes('Part2')) {
+                    group.enonce_file = relativePath;
+                }
             } else if (parsed.type === 'corrige') {
-                // If correction_file is not set yet or this is part 1, set it as primary correction file
-                if (!group.correction_file || !parsed.isPart2Plus) {
+                if (!group.correction_file || !group.correction_file.includes('Part2')) {
                     group.correction_file = relativePath;
                 }
             }
         }
     }
 
-    console.log(`Total paired concours exam entries created: ${concoursGroups.size}`);
+    console.log(`Nombre total de sujets de concours uniques appariés : ${concoursGroups.size}`);
 
     let insertedCount = 0;
-    let updatedCount = 0;
+    const usedSlugs = new Set();
 
     for (const group of concoursGroups.values()) {
-        const titre = `${group.ecole} ${group.annee} — ${group.filiere} (${group.epreuve})`;
-        const rawSlug = `${group.ecole}-${group.annee}-${group.filiere}-${group.epreuve}`;
-        const slug = slugify(rawSlug);
+        const titre = group.epreuve;
+        let rawSlug = `${group.ecole}-${group.annee}-${group.filiere}-${group.epreuve}`;
+        let slug = slugify(rawSlug);
 
-        const [existing] = await pool.query('SELECT id FROM concours WHERE slug = ? LIMIT 1', [slug]);
-
-        if (existing.length > 0) {
-            await pool.query(
-                `UPDATE concours SET ecole = ?, annee = ?, filiere = ?, matiere = ?, epreuve = ?, titre = ?, enonce_file = ?, correction_file = ? WHERE id = ?`,
-                [group.ecole, group.annee, group.filiere, group.matiere, group.epreuve, titre, group.enonce_file, group.correction_file, existing[0].id]
-            );
-            updatedCount++;
-        } else {
-            await pool.query(
-                `INSERT INTO concours (ecole, annee, filiere, matiere, epreuve, titre, slug, enonce_file, correction_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [group.ecole, group.annee, group.filiere, group.matiere, group.epreuve, titre, slug, group.enonce_file, group.correction_file]
-            );
-            insertedCount++;
+        let counter = 1;
+        while (usedSlugs.has(slug)) {
+            slug = `${slugify(rawSlug)}-${counter}`;
+            counter++;
         }
+        usedSlugs.add(slug);
+
+        await pool.query(
+            `INSERT INTO concours (ecole, annee, filiere, matiere, epreuve, titre, slug, enonce_file, correction_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [group.ecole, group.annee, group.filiere, group.matiere, group.epreuve, titre, slug, group.enonce_file, group.correction_file]
+        );
+        insertedCount++;
     }
 
-    console.log(`\nUPS Concours import finished successfully!`);
-    console.log(`Inserted entries: ${insertedCount}`);
-    console.log(`Updated entries: ${updatedCount}`);
-    console.log(`Total active concours exams in database: ${insertedCount + updatedCount}`);
-
+    const [totalRows] = await pool.query('SELECT COUNT(*) AS count FROM concours');
+    console.log(`\nImportation réussie ! ${insertedCount} sujets enregistrés en base. Total en base : ${totalRows[0].count}`);
     process.exit(0);
 }
 
 runConcoursImport().catch(err => {
-    console.error('UPS Concours import failed:', err);
+    console.error('Erreur lors de l importation des concours :', err);
     process.exit(1);
 });
