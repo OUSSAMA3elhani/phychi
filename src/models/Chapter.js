@@ -21,6 +21,11 @@ async function ensureTomeColumn() {
 }
 
 const Chapter = {
+    async countAll() {
+        const [rows] = await pool.query('SELECT COUNT(*) AS count FROM chapters');
+        return rows[0].count;
+    },
+
     async findAll() {
         await ensureTomeColumn();
         const [rows] = await pool.query(
