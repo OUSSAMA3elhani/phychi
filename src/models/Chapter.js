@@ -172,6 +172,54 @@ const Chapter = {
             prev: prevRows[0] || null,
             next: nextRows[0] || null
         };
+    },
+
+    async findById(id) {
+        await ensureTomeColumn();
+        const [rows] = await pool.query('SELECT * FROM chapters WHERE id = ?', [id]);
+        return rows[0] || null;
+    },
+
+    async create(data) {
+        await ensureTomeColumn();
+        const { discipline_id, titre, slug, description, tome, niveau, order_num } = data;
+        const autoSlug = slug || titre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('chapter-' + Date.now());
+        const orderVal = order_num !== undefined ? order_num : 1;
+        const [result] = await pool.query(
+            `INSERT INTO chapters (discipline_id, titre, slug, description, tome, niveau, ordre, order_num)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [discipline_id, titre, autoSlug, description || null, tome || null, niveau || 'l1', orderVal, orderVal]
+        );
+        return result.insertId;
+    },
+
+    async update(id, data) {
+        await ensureTomeColumn();
+        const existing = await this.findById(id);
+        if (!existing) return false;
+
+        const discipline_id = data.discipline_id !== undefined ? data.discipline_id : existing.discipline_id;
+        const titre = data.titre !== undefined ? data.titre : existing.titre;
+        const slug = data.slug || existing.slug;
+        const description = data.description !== undefined ? data.description : existing.description;
+        const tome = data.tome !== undefined ? data.tome : existing.tome;
+        const niveau = data.niveau !== undefined ? data.niveau : existing.niveau;
+        const orderVal = data.order_num !== undefined ? data.order_num : existing.order_num;
+
+        await pool.query(
+            `UPDATE chapters
+             SET discipline_id = ?, titre = ?, slug = ?, description = ?, tome = ?, niveau = ?, ordre = ?, order_num = ?
+             WHERE id = ?`,
+            [discipline_id, titre, slug, description, tome, niveau, orderVal, orderVal, id]
+        );
+        return true;
+    },
+
+    async delete(id) {
+        await pool.query('DELETE FROM exercises WHERE chapter_id = ?', [id]);
+        await pool.query('DELETE FROM courses WHERE chapter_id = ?', [id]);
+        const [result] = await pool.query('DELETE FROM chapters WHERE id = ?', [id]);
+        return result.affectedRows > 0;
     }
 };
 

@@ -240,6 +240,61 @@ const Exercise = {
         } catch (err) {
             return [];
         }
+    },
+
+    async findAll() {
+        await ensureColumnsExist();
+        const [rows] = await pool.query(
+            `SELECT e.*, ch.titre AS chapter_titre, d.nom AS discipline_nom
+             FROM exercises e
+             JOIN chapters ch ON e.chapter_id = ch.id
+             JOIN disciplines d ON ch.discipline_id = d.id
+             ORDER BY e.id DESC`
+        );
+        return rows;
+    },
+
+    async create(data) {
+        await ensureColumnsExist();
+        const { chapter_id, course_id, partie_cours, titre, slug, description, enonce_file, correction_file, niveau, difficulte } = data;
+        const autoSlug = slug || titre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('exercise-' + Date.now());
+        const [result] = await pool.query(
+            `INSERT INTO exercises (chapter_id, course_id, partie_cours, titre, slug, description, enonce_file, correction_file, niveau, difficulte)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [chapter_id, course_id || null, partie_cours || null, titre, autoSlug, description || null, enonce_file || null, correction_file || null, niveau || 'l1', difficulte || 'moyen']
+        );
+        return result.insertId;
+    },
+
+    async update(id, data) {
+        await ensureColumnsExist();
+        const existing = await this.findById(id);
+        if (!existing) return false;
+
+        const chapter_id = data.chapter_id !== undefined ? data.chapter_id : existing.chapter_id;
+        const course_id = data.course_id !== undefined ? data.course_id : existing.course_id;
+        const partie_cours = data.partie_cours !== undefined ? data.partie_cours : existing.partie_cours;
+        const titre = data.titre !== undefined ? data.titre : existing.titre;
+        const slug = data.slug || existing.slug;
+        const description = data.description !== undefined ? data.description : existing.description;
+        const enonce_file = data.enonce_file !== undefined ? data.enonce_file : existing.enonce_file;
+        const correction_file = data.correction_file !== undefined ? data.correction_file : existing.correction_file;
+        const niveau = data.niveau !== undefined ? data.niveau : existing.niveau;
+        const difficulte = data.difficulte !== undefined ? data.difficulte : existing.difficulte;
+
+        await pool.query(
+            `UPDATE exercises
+             SET chapter_id = ?, course_id = ?, partie_cours = ?, titre = ?, slug = ?, description = ?, enonce_file = ?, correction_file = ?, niveau = ?, difficulte = ?
+             WHERE id = ?`,
+            [chapter_id, course_id, partie_cours, titre, slug, description, enonce_file, correction_file, niveau, difficulte, id]
+        );
+        return true;
+    },
+
+    async delete(id) {
+        await ensureColumnsExist();
+        const [result] = await pool.query('DELETE FROM exercises WHERE id = ?', [id]);
+        return result.affectedRows > 0;
     }
 };
 
