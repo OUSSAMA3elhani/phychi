@@ -27,6 +27,8 @@ router.get(['/chapitres', '/chapitres.html'], pageController.chapitres);
 // Declaree apres la liste pour qu'un segment litteral ne soit pas pris pour un :id.
 router.get('/chapitres/:id', pageController.chapitreDetails);
 router.get(['/cours', '/cours.html'], pageController.cours);
+router.get(['/cours/physique', '/cours-physique'], (req, res, next) => { req.query.discipline = 'physique'; return pageController.cours(req, res, next); });
+router.get(['/cours/chimie', '/cours-chimie'], (req, res, next) => { req.query.discipline = 'chimie'; return pageController.cours(req, res, next); });
 router.get('/cours/:id', pageController.coursDetails);
 // Section Exercices
 router.get(['/exercices', '/exercices.html'], pageController.exercicesPhysique);

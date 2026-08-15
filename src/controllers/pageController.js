@@ -394,8 +394,9 @@ const pageController = {
      */
     async cours(req, res, next) {
         try {
+            const requestedDiscipline = req.query.discipline || req.params.discipline || 'toutes';
             const filters = {
-                discipline: req.query.discipline || 'toutes',
+                discipline: requestedDiscipline,
                 niveau: req.query.niveau || 'tous',
             };
             const PER_PAGE = 6;
@@ -411,10 +412,16 @@ const pageController = {
                 Discipline.findAll(),
             ]);
 
+            const currentPageKey = filters.discipline === 'physique' ? 'cours-physique' : (filters.discipline === 'chimie' ? 'cours-chimie' : 'cours');
+
             res.render('cours', {
-                title: 'Fiches de Cours & Leçons de Physique et Chimie - CPGE, Licence & Master | PhyChemia',
+                title: filters.discipline === 'physique'
+                    ? 'Cours & Leçons de Physique - CPGE, Licence & Master | PhyChemia'
+                    : (filters.discipline === 'chimie'
+                        ? 'Cours & Leçons de Chimie - CPGE, Licence & Master | PhyChemia'
+                        : 'Fiches de Cours & Leçons de Physique et Chimie - CPGE, Licence & Master | PhyChemia'),
                 metaDescription: 'Consultez et téléchargez nos cours complets et fiches de synthèse de physique et chimie rédigés pour l\'enseignement supérieur.',
-                page: 'cours',
+                page: currentPageKey,
                 chapters: rows,
                 disciplines,
                 stats,
