@@ -150,6 +150,28 @@ const Chapter = {
             [chapter.discipline_id, chapter.id, size]
         );
         return rows;
+    },
+
+    async findPrevAndNext(chapter) {
+        await ensureTomeColumn();
+        const [prevRows] = await pool.query(
+            `SELECT c.id, c.titre, c.slug
+             FROM chapters c
+             WHERE c.discipline_id = ? AND (c.order_num < ? OR (c.order_num = ? AND c.id < ?))
+             ORDER BY c.order_num DESC, c.id DESC LIMIT 1`,
+            [chapter.discipline_id, chapter.order_num || 0, chapter.order_num || 0, chapter.id]
+        );
+        const [nextRows] = await pool.query(
+            `SELECT c.id, c.titre, c.slug
+             FROM chapters c
+             WHERE c.discipline_id = ? AND (c.order_num > ? OR (c.order_num = ? AND c.id > ?))
+             ORDER BY c.order_num ASC, c.id ASC LIMIT 1`,
+            [chapter.discipline_id, chapter.order_num || 0, chapter.order_num || 0, chapter.id]
+        );
+        return {
+            prev: prevRows[0] || null,
+            next: nextRows[0] || null
+        };
     }
 };
 

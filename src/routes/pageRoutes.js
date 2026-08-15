@@ -27,6 +27,7 @@ router.get(['/chapitres', '/chapitres.html'], pageController.chapitres);
 // Declaree apres la liste pour qu'un segment litteral ne soit pas pris pour un :id.
 router.get('/chapitres/:id', pageController.chapitreDetails);
 router.get(['/cours', '/cours.html'], pageController.cours);
+router.get('/cours/:id', pageController.coursDetails);
 // Section Exercices
 router.get(['/exercices', '/exercices.html'], pageController.exercicesPhysique);
 router.get(['/exercices-physique', '/exercices-physique.html'], pageController.exercicesPhysique);

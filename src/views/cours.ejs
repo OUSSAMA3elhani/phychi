@@ -106,15 +106,13 @@
 
         <!-- Modules de Physique -->
         <!-- ==================================================================
-        <!-- ==================================================================
-             CHAPITRES : cartes a plat (l'arborescence en accordeon a ete retiree)
-             ================================================================== -->
+        <!-- Modules et cours disponibles -->
         <section class="courses-section mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-chapitres">
             <div class="flex flex-wrap items-baseline justify-between gap-3">
                 <h2 id="titre-chapitres" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-                    Chapitres disponibles
+                    Les Cours Disponibles
                 </h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400"><%= pagination.total %> chapitre<%= pagination.total > 1 ? 's' : '' %></p>
+                <p class="text-sm text-slate-500 dark:text-slate-400"><%= pagination.total %> module<%= pagination.total > 1 ? 's' : '' %> de cours</p>
             </div>
 
             <div class="courses-grid mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -132,7 +130,7 @@
                         </div>
 
                         <h3 class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                            <a href="/chapitres/<%= ch.id %>" class="transition-colors <%= isChimie ? 'hover:text-flask-600 dark:hover:text-flask-400' : 'hover:text-brand-600 dark:hover:text-brand-400' %>">
+                            <a href="/cours/<%= ch.id %>" class="transition-colors <%= isChimie ? 'hover:text-flask-600 dark:hover:text-flask-400' : 'hover:text-brand-600 dark:hover:text-brand-400' %>">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <%= ch.titre %>
                             </a>
@@ -145,8 +143,8 @@
                         <dl class="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-100 pt-5 text-sm dark:border-slate-800">
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
-                                <dt class="sr-only">Fiches de cours</dt>
-                                <dd class="text-slate-600 dark:text-slate-400"><%= ch.courses_count %> fiche<%= ch.courses_count > 1 ? 's' : '' %></dd>
+                                <dt class="sr-only">Chapitres & Fichiers</dt>
+                                <dd class="text-slate-600 dark:text-slate-400"><%= ch.courses_count %> chapitre<%= ch.courses_count > 1 ? 's' : '' %></dd>
                             </div>
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -155,8 +153,8 @@
                             </div>
                         </dl>
 
-                        <a href="/chapitres/<%= ch.id %>" class="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors <%= isChimie ? 'text-flask-600 hover:text-flask-700 dark:text-flask-400 dark:hover:text-flask-300' : 'text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300' %>">
-                            Consulter le chapitre
+                        <a href="/cours/<%= ch.id %>" class="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors <%= isChimie ? 'text-flask-600 hover:text-flask-700 dark:text-flask-400 dark:hover:text-flask-300' : 'text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300' %>">
+                            Accéder au cours &amp; ses chapitres
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>
                     </article>

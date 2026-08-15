@@ -425,36 +425,50 @@ const pageController = {
         }
     },
 
-    /** Page de detail d'un chapitre : /chapitres/:id */
+    /** Page de detail d'un chapitre / cours : /chapitres/:id ou /cours/:id */
     async chapitreDetails(req, res, next) {
         try {
-            const id = Number.parseInt(req.params.id, 10);
-            if (!Number.isInteger(id) || id <= 0) return pageController.notFound(req, res);
+            const rawId = req.params.id;
+            let chapter = null;
+            
+            if (/^\d+$/.test(rawId)) {
+                const id = Number.parseInt(rawId, 10);
+                chapter = await Chapter.findByIdDetailed(id);
+            } else {
+                chapter = await Chapter.findBySlug(rawId);
+            }
 
-            const chapter = await Chapter.findByIdDetailed(id);
             if (!chapter) return pageController.notFound(req, res);
 
-            const [courses, exercises, siblings, downloadStatus] = await Promise.all([
+            const [courses, exercises, siblings, downloadStatus, prevNext] = await Promise.all([
                 Course.findByChapterWithExercises(chapter.id),
                 Exercise.findByChapter(chapter.id),
                 Chapter.findSiblings(chapter, 6),
                 DownloadRequest.statusMap(req.session.userId, 'course'),
+                Chapter.findPrevAndNext(chapter),
             ]);
 
             res.render('chapitre-details', {
-                title: `${chapter.titre} - Cours & Exercices Corrigés de ${chapter.discipline_nom} | PhyChemia`,
-                metaDescription: `Chapitre ${chapter.titre} (${chapter.discipline_nom} ${chapter.niveau.toUpperCase()}) : cours théoriques complets, fiches de révision et exercices corrigés pas à pas.`,
+                title: `${chapter.titre} - Cours & Chapitres de ${chapter.discipline_nom} | PhyChemia`,
+                metaDescription: `Cours ${chapter.titre} (${chapter.discipline_nom} ${chapter.niveau.toUpperCase()}) : cours théoriques complets, fiches de révision, chapitres et exercices corrigés pas à pas.`,
                 page: 'chapitre-details',
                 chapter,
                 courses,
                 exercises,
                 siblings,
+                prevCourse: prevNext.prev,
+                nextCourse: prevNext.next,
                 downloadStatus,
                 isChimie: chapter.discipline_slug === 'chimie',
             });
         } catch (err) {
             next(err);
         }
+    },
+
+    /** Alias de redirection ou affichage pour /cours/:id */
+    async coursDetails(req, res, next) {
+        return pageController.chapitreDetails(req, res, next);
     },
 
     /** Exercices Physique - filtres + pagination + statistiques reelles */
