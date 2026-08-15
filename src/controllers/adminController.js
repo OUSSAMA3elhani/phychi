@@ -198,11 +198,13 @@ const adminController = {
         try {
             const courses = await Course.findAll();
             const chapters = await Chapter.findAll();
+            const disciplines = await Discipline.findAll();
             res.render('admin/courses', {
-                title: 'Chapitres & Fichiers',
+                title: 'Chapitres & Fichiers PDF',
                 page: 'admin-courses',
                 courses,
                 chapters,
+                disciplines,
                 error: req.query.error || null,
             });
         } catch (err) {

@@ -26,23 +26,39 @@
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6 dark:border-slate-800">
                     <div>
                         <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Chapitres &amp; Fichiers PDF (<%= courses.length %>)</h2>
-                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">L'ordre d'affichage public suit la colonne « Ordre ».</p>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Organisation pédagogique : <strong>Discipline → Cours / Module → Chapitres</strong>.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <div class="relative min-w-[14rem] sm:min-w-[18rem]">
+                        <!-- Filtre par Discipline -->
+                        <select id="admin-filter-discipline" class="rounded-xl border border-slate-200 bg-slate-50/50 py-2 px-3 text-xs font-medium text-slate-900 focus:border-brand-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                            <option value="toutes">Toutes les disciplines</option>
+                            <% (typeof disciplines !== 'undefined' ? disciplines : []).forEach(function(d) { %>
+                                <option value="<%= d.slug %>"><%= d.nom %></option>
+                            <% }); %>
+                        </select>
+
+                        <!-- Filtre par Cours / Module -->
+                        <select id="admin-filter-module" class="rounded-xl border border-slate-200 bg-slate-50/50 py-2 px-3 text-xs font-medium text-slate-900 focus:border-brand-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                            <option value="tous">Tous les cours / modules</option>
+                            <% chapters.forEach(function(ch) { %>
+                                <option value="<%= ch.id %>" data-disc-slug="<%= ch.discipline_slug %>"><%= ch.discipline_nom %> — <%= ch.titre %></option>
+                            <% }); %>
+                        </select>
+
+                        <div class="relative min-w-[12rem] sm:min-w-[15rem]">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
                                 <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                             </div>
                             <input type="search"
                                    data-table-search
-                                   placeholder="Recherche intelligente..."
-                                   class="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 pl-10 pr-16 text-xs font-medium text-slate-900 placeholder-slate-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white dark:focus:border-brand-400 dark:focus:bg-slate-950">
-                            <span data-search-count class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[11px] font-bold text-brand-600 dark:text-brand-400"></span>
+                                   placeholder="Recherche de chapitre..."
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 pl-10 pr-12 text-xs font-medium text-slate-900 placeholder-slate-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white dark:focus:border-brand-400 dark:focus:bg-slate-950">
                         </div>
+
                         <button type="button"
                                 data-modal-open="course-modal"
-                                data-modal-title="Créer un Chapitre"
-                                data-fields='{"id":"","chapter_id":"","titre":"","description":"","contenu":"","niveau":"l1","order_num":"0"}'
+                                data-modal-title="Créer un nouveau Chapitre"
+                                data-fields='{"id":"","chapter_id":"","titre":"","description":"","contenu":"","niveau":"l1","order_num":"1"}'
                                 class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                             Nouveau Chapitre
@@ -51,28 +67,30 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[52rem] text-left text-sm">
+                    <table class="w-full min-w-[54rem] text-left text-sm" id="admin-courses-table">
                         <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/50">
                             <tr>
                                 <th class="px-6 py-4">Ordre</th>
                                 <th class="px-6 py-4">Titre du Chapitre</th>
-                                <th class="px-6 py-4">Module &amp; Discipline</th>
+                                <th class="px-6 py-4">Cours / Module Parent</th>
                                 <th class="px-6 py-4">Fichier PDF Attaché</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                             <% courses.forEach(function(c) { %>
-                                <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                <tr data-discipline-slug="<%= c.discipline_slug %>" data-module-id="<%= c.chapter_id %>" class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
                                     <td class="px-6 py-4">
                                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300"><%= c.order_num %></span>
                                     </td>
                                     <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">
-                                        <%= c.titre %><br><span class="text-xs font-normal text-slate-500"><%= c.description %></span>
+                                        <%= c.titre %><br><span class="text-xs font-normal text-slate-500"><%= c.description || '' %></span>
                                     </td>
                                     <td class="px-6 py-4 text-xs">
                                         <span class="font-semibold text-slate-900 dark:text-white"><%= c.chapter_titre %></span><br>
-                                        <span class="font-medium text-brand-600 dark:text-brand-400"><%= c.discipline_nom %></span>
+                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase <%= c.discipline_slug === 'chimie' ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                                            <%= c.discipline_nom %>
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4 text-xs">
                                         <% if (c.course_file) { %>
@@ -84,24 +102,24 @@
                                                         data-file-label="Fichier de cours"
                                                         class="inline-flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-1.5 font-semibold text-brand-700 transition-colors hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:hover:bg-brand-500/20">
                                                     <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                    Aperçu
+                                                    Liseuse PDF
                                                 </button>
                                                 <a href="<%= c.course_file %>" target="_blank" rel="noopener" class="font-medium text-slate-500 hover:text-brand-600 hover:underline dark:text-slate-400">Ouvrir</a>
                                             </div>
                                         <% } else { %>
-                                            <span class="text-slate-400">Aucun</span>
+                                            <span class="text-slate-400">Aucun fichier</span>
                                         <% } %>
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <div class="flex items-center justify-end gap-3">
                                             <button type="button"
                                                     data-modal-open="course-modal"
-                                                    data-modal-title="Modifier la fiche de cours"
+                                                    data-modal-title="Modifier le chapitre"
                                                     data-fields="<%= JSON.stringify({ id: c.id, chapter_id: c.chapter_id, titre: c.titre, description: c.description || '', contenu: c.contenu || '', niveau: c.niveau, order_num: c.order_num }) %>"
                                                     class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">
                                                 Modifier
                                             </button>
-                                            <form action="/admin/courses/<%= c.id %>/delete" method="post" onsubmit="return confirm('Supprimer ce cours ?')" class="inline">
+                                            <form action="/admin/courses/<%= c.id %>/delete" method="post" onsubmit="return confirm('Supprimer ce chapitre ?')" class="inline">
                                                 <button type="submit" class="text-xs font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-400">Supprimer</button>
                                             </form>
                                         </div>
@@ -110,7 +128,7 @@
                             <% }); %>
 
                             <% if (courses.length === 0) { %>
-                                <tr><td colspan="5" class="px-6 py-12 text-center text-sm text-slate-500 dark:text-slate-400">Aucune fiche de cours pour le moment.</td></tr>
+                                <tr><td colspan="5" class="px-6 py-12 text-center text-sm text-slate-500 dark:text-slate-400">Aucun chapitre enregistré.</td></tr>
                             <% } %>
                         </tbody>
                     </table>
@@ -119,7 +137,7 @@
         </main>
     </div>
 
-    <!-- ====================== MODALE CRÉER / MODIFIER ====================== -->
+    <!-- ====================== MODALE CRÉER / MODIFIER CHAPITRE ====================== -->
     <div id="course-modal" data-admin-modal
          class="fixed inset-0 z-[120] hidden items-center justify-center p-4"
          role="dialog" aria-modal="true" aria-labelledby="course-modal-title">
@@ -128,7 +146,7 @@
 
         <div class="relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lift dark:border-slate-800 dark:bg-slate-900">
             <header class="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5 dark:border-slate-800">
-                <h3 id="course-modal-title" data-modal-title class="font-display text-lg font-bold text-slate-900 dark:text-white">Créer une fiche de cours</h3>
+                <h3 id="course-modal-title" data-modal-title class="font-display text-lg font-bold text-slate-900 dark:text-white">Créer un nouveau chapitre</h3>
                 <button type="button" data-modal-dismiss aria-label="Fermer"
                         class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -138,27 +156,44 @@
             <form action="/admin/courses/save" method="post" enctype="multipart/form-data" class="grid flex-1 gap-4 overflow-auto p-6">
                 <input type="hidden" name="id" value="">
 
+                <!-- Cascade 1: Sélection de la Discipline -->
                 <div>
-                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Chapitre Parent</label>
-                    <select name="chapter_id" required class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                        <% chapters.forEach(function(ch) { %>
-                            <option value="<%= ch.id %>"><%= ch.discipline_nom %> — <%= ch.titre %></option>
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">1. Discipline</label>
+                    <select id="modal-discipline-select" class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                        <option value="">Toutes les disciplines</option>
+                        <% (typeof disciplines !== 'undefined' ? disciplines : []).forEach(function(d) { %>
+                            <option value="<%= d.id %>" data-slug="<%= d.slug %>"><%= d.nom %></option>
                         <% }); %>
                     </select>
                 </div>
 
+                <!-- Cascade 2: Sélection du Cours / Module -->
                 <div>
-                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Titre du Cours</label>
-                    <input type="text" name="titre" required class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">2. Cours / Module Parent *</label>
+                    <select name="chapter_id" id="modal-module-select" required class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                        <% chapters.forEach(function(ch) { %>
+                            <option value="<%= ch.id %>" data-disc-id="<%= ch.discipline_id %>" data-disc-slug="<%= ch.discipline_slug %>">
+                                <%= ch.discipline_nom %> — <%= ch.titre %>
+                            </option>
+                        <% }); %>
+                    </select>
                 </div>
 
+                <!-- Titre du chapitre -->
                 <div>
-                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Description courte</label>
-                    <textarea name="description" rows="2" class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"></textarea>
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">3. Titre du Chapitre *</label>
+                    <input type="text" name="titre" required placeholder="ex. Chapitre 1 - Ondes acoustiques dans un fluide" class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                 </div>
 
+                <!-- Description -->
                 <div>
-                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Fichier de cours (PDF ou Image)</label>
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Description pédagogique</label>
+                    <textarea name="description" rows="2" placeholder="Objectifs et notions clés abordées..." class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"></textarea>
+                </div>
+
+                <!-- Fichier PDF -->
+                <div>
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Fichier PDF du Chapitre</label>
                     <input type="file" name="course_file" accept=".pdf,image/*" class="w-full rounded-xl border border-slate-200 text-sm text-slate-900 file:mr-4 file:rounded-xl file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-brand-700 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:file:bg-brand-500/10 dark:file:text-brand-400">
                     <p class="mt-1.5 text-xs text-slate-400">En modification, laisser vide conserve le document déjà en place.</p>
                 </div>
@@ -174,8 +209,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Ordre d'affichage</label>
-                        <input type="number" name="order_num" value="0" min="0" class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                        <label class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Ordre dans le cours (1, 2, 3...)</label>
+                        <input type="number" name="order_num" value="1" min="1" class="w-full rounded-xl border-slate-200 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                     </div>
                 </div>
 
@@ -188,5 +223,63 @@
     </div>
 
     <%- include('../partials/file-modal') %>
+
+    <!-- Script d'interaction pour le filtrage du tableau et la cascade du formulaire admin -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterDisc = document.getElementById('admin-filter-discipline');
+            const filterMod = document.getElementById('admin-filter-module');
+            const tableRows = document.querySelectorAll('#admin-courses-table tbody tr');
+
+            function applyTableFilters() {
+                const discVal = filterDisc ? filterDisc.value : 'toutes';
+                const modVal = filterMod ? filterMod.value : 'tous';
+
+                tableRows.forEach(row => {
+                    const rowDisc = row.dataset.disciplineSlug;
+                    const rowMod = row.dataset.moduleId;
+
+                    const discMatch = (discVal === 'toutes' || rowDisc === discVal);
+                    const modMatch = (modVal === 'tous' || rowMod === modVal);
+
+                    if (discMatch && modMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            if (filterDisc) filterDisc.addEventListener('change', applyTableFilters);
+            if (filterMod) filterMod.addEventListener('change', applyTableFilters);
+
+            // Cascade Discipline -> Module dans la modale
+            const modalDiscSelect = document.getElementById('modal-discipline-select');
+            const modalModuleSelect = document.getElementById('modal-module-select');
+
+            if (modalDiscSelect && modalModuleSelect) {
+                const allModuleOptions = Array.from(modalModuleSelect.querySelectorAll('option'));
+
+                modalDiscSelect.addEventListener('change', () => {
+                    const selectedDiscId = modalDiscSelect.value;
+                    modalModuleSelect.innerHTML = '';
+
+                    const matchingOptions = allModuleOptions.filter(opt => {
+                        if (!selectedDiscId) return true;
+                        return opt.dataset.discId === selectedDiscId;
+                    });
+
+                    matchingOptions.forEach(opt => modalModuleSelect.appendChild(opt));
+
+                    if (matchingOptions.length === 0) {
+                        const emptyOpt = document.createElement('option');
+                        emptyOpt.value = '';
+                        emptyOpt.textContent = 'Aucun cours/module disponible';
+                        modalModuleSelect.appendChild(emptyOpt);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
