@@ -15,7 +15,7 @@ router.get('/sitemap.xml', sitemapController.getSitemap);
 router.get(['/', '/index.html', '/index'], pageController.home);
 
 // Pages d'authentification (redirection si deja connecte)
-router.get(['/login', '/login.html'], requireGuest, pageController.login);
+router.get(['/login', '/login.html', '/connexion', '/connexion.html'], requireGuest, pageController.login);
 router.get(['/inscription', '/inscription.html'], requireGuest, pageController.inscription);
 
 // Pages protegees (requierent d'etre connecte)
@@ -30,13 +30,16 @@ router.get(['/cours', '/cours.html'], pageController.cours);
 router.get(['/cours/physique', '/cours-physique'], (req, res, next) => { req.query.discipline = 'physique'; return pageController.cours(req, res, next); });
 router.get(['/cours/chimie', '/cours-chimie'], (req, res, next) => { req.query.discipline = 'chimie'; return pageController.cours(req, res, next); });
 router.get('/cours/:id', pageController.coursDetails);
-// Section Exercices
-router.get(['/exercices', '/exercices.html'], pageController.exercicesPhysique);
-router.get(['/exercices-physique', '/exercices-physique.html'], pageController.exercicesPhysique);
-router.get(['/exercices-chimie', '/exercices-chimie.html'], pageController.exercicesChimie);
+
+// Section Exercices & S'entrainer
+router.get(['/exercices', '/exercices.html', '/s-entrainer', '/s-entrainer.html'], pageController.exercicesPhysique);
+router.get(['/s-entrainer/physique', '/exercices/physique', '/exercices-physique', '/exercices-physique.html'], pageController.exercicesPhysique);
+router.get(['/s-entrainer/chimie', '/exercices/chimie', '/exercices-chimie', '/exercices-chimie.html'], pageController.exercicesChimie);
 
 // Section Concours & Annales
 router.get(['/concours', '/concours.html'], pageController.concours);
+router.get(['/concours/physique', '/concours-physique'], (req, res, next) => { req.query.matiere = 'physique'; return pageController.concours(req, res, next); });
+router.get(['/concours/chimie', '/concours-chimie'], (req, res, next) => { req.query.matiere = 'chimie'; return pageController.concours(req, res, next); });
 router.get('/concours/:id', pageController.concoursDetails);
 
 // Section Livres & Manuels CPGE
@@ -47,7 +50,7 @@ router.get('/livres/:id', pageController.livresDetails);
 
 // Fiche detaillee d'un exercice. Declaree apres les listes pour qu'un segment
 // litteral ne soit jamais capture comme un `:id`.
-router.get('/exercices/:id', pageController.exerciceDetails);
+router.get(['/exercices/:id', '/s-entrainer/exercices/:id'], pageController.exerciceDetails);
 router.get(['/contact', '/contact.html'], pageController.contact);
 router.get(['/apropos', '/apropos.html'], pageController.apropos);
 router.get(['/faq', '/faq.html'], pageController.faq);
