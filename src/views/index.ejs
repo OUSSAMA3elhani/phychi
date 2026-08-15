@@ -48,10 +48,18 @@
                             Découvrir les cours
                             <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>
-                        <a href="/inscription"
-                           class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
-                            Créer un compte
-                        </a>
+                        <span data-auth-slot="anonymous" class="contents"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
+                            <a href="/inscription"
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
+                                Créer un compte
+                            </a>
+                        </span>
+                        <span data-auth-slot="authenticated" class="contents"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
+                            <a href="/favoris"
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
+                                Mes Favoris
+                            </a>
+                        </span>
                     </div>
 
                     <!-- Indicateurs de confiance -->
@@ -346,20 +354,36 @@
                     <h2 id="titre-cta" class="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                         Prêt à passer à la pratique&nbsp;?
                     </h2>
-                    <p class="mt-6 text-lg leading-relaxed text-slate-300">
+                    <p class="mt-6 text-lg leading-relaxed text-slate-300" data-auth-slot="anonymous"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
                         Créez un compte gratuit pour enregistrer vos favoris, suivre votre progression
                         et retrouver vos exercices d'une session à l'autre.
                     </p>
+                    <p class="mt-6 text-lg leading-relaxed text-slate-300" data-auth-slot="authenticated"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
+                        Retrouvez l'ensemble de vos cours, chapitres et exercices favoris enregistrés dans votre espace personnel.
+                    </p>
                     <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                        <a href="/inscription"
-                           class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 py-4 text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
-                            Créer un compte gratuit
-                            <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                        </a>
-                        <a href="/login"
-                           class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-7 py-4 text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
-                            J'ai déjà un compte
-                        </a>
+                        <span data-auth-slot="anonymous" class="contents"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
+                            <a href="/inscription"
+                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 py-4 text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
+                                Créer un compte gratuit
+                                <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </a>
+                            <a href="/login"
+                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-7 py-4 text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
+                                J'ai déjà un compte
+                            </a>
+                        </span>
+                        <span data-auth-slot="authenticated" class="contents"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
+                            <a href="/cours"
+                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 py-4 text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
+                                Explorer le catalogue
+                                <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </a>
+                            <a href="/favoris"
+                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-7 py-4 text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
+                                Mes Favoris
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>
