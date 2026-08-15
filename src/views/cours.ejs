@@ -153,10 +153,23 @@
                             </div>
                         </dl>
 
-                        <a href="/cours/<%= ch.id %>" class="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors <%= isChimie ? 'text-flask-600 hover:text-flask-700 dark:text-flask-400 dark:hover:text-flask-300' : 'text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300' %>">
-                            Accéder au cours &amp; ses chapitres
-                            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                        </a>
+                        <div class="relative z-10 mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+                            <a href="/cours/<%= ch.id %>" class="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors <%= isChimie ? 'text-flask-600 hover:text-flask-700 dark:text-flask-400 dark:hover:text-flask-300' : 'text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300' %>">
+                                Accéder au cours &amp; ses chapitres
+                                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </a>
+                            <% var isFavCh = (typeof favoriteChapterIds !== 'undefined' && favoriteChapterIds ? favoriteChapterIds : []).indexOf(ch.id) !== -1; %>
+                            <button type="button"
+                                    data-fav-toggle
+                                    data-item-type="chapter"
+                                    data-item-id="<%= ch.id %>"
+                                    data-favorited="<%= isFavCh ? 'true' : 'false' %>"
+                                    aria-pressed="<%= isFavCh ? 'true' : 'false' %>"
+                                    class="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all <%= isFavCh ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-600 hover:bg-slate-50' %> dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="<%= isFavCh ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span data-fav-label><%= isFavCh ? 'Favori' : 'Favoris' %></span>
+                            </button>
+                        </div>
                     </article>
                 <% }); %>
 

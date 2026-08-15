@@ -72,6 +72,18 @@
                             <span><%= st === 'rejected' ? 'Redemander le téléchargement PDF' : 'Demander le téléchargement PDF' %></span>
                         </button>
                     <% } %>
+
+                    <% var isFavBk = (typeof favoriteBookIds !== 'undefined' && favoriteBookIds ? favoriteBookIds : []).indexOf(book.id) !== -1; %>
+                    <button type="button"
+                            data-fav-toggle
+                            data-item-type="book"
+                            data-item-id="<%= book.id %>"
+                            data-favorited="<%= isFavBk ? 'true' : 'false' %>"
+                            aria-pressed="<%= isFavBk ? 'true' : 'false' %>"
+                            class="inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-xs font-bold transition-all <%= isFavBk ? 'border-rose-300 bg-rose-50 text-rose-600 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-400' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200' %>">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="<%= isFavBk ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        <span data-fav-label><%= isFavBk ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
+                    </button>
                 </div>
             </div>
 

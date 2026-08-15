@@ -346,17 +346,23 @@ const pageController = {
     /** Favorites page (Protected) */
     async favoris(req, res, next) {
         try {
-            const [courses, exercises] = await Promise.all([
+            const [courses, exercises, chapters, books, concours] = await Promise.all([
                 Favorite.listCourses(req.session.userId),
                 Favorite.listExercises(req.session.userId),
+                Favorite.listChapters(req.session.userId),
+                Favorite.listBooks(req.session.userId),
+                Favorite.listConcours(req.session.userId),
             ]);
             res.render('favoris', {
-                title: 'Mes Cours et Exercices Favoris - PhyChemia',
-                metaDescription: 'Accédez rapidement à tous vos cours, chapitres et exercices enregistrés dans vos favoris PhyChemia.',
+                title: 'Mes Ressources Favoris - PhyChemia',
+                metaDescription: 'Accédez rapidement à tous vos cours, chapitres, exercices, livres et concours enregistrés dans vos favoris PhyChemia.',
                 page: 'favoris',
                 favoriteCourses: courses,
                 favoriteExercises: exercises,
-                total: courses.length + exercises.length,
+                favoriteChapters: chapters,
+                favoriteBooks: books,
+                favoriteConcours: concours,
+                total: courses.length + exercises.length + chapters.length + books.length + concours.length,
             });
         } catch (err) {
             next(err);
@@ -366,8 +372,11 @@ const pageController = {
     /** Chapitres (Dynamic from DB grouped by Tome) */
     async chapitres(req, res, next) {
         try {
-            const disciplines = await Discipline.findAll();
-            const chapters = await Chapter.findAll();
+            const [disciplines, chapters, favoriteChapterIds] = await Promise.all([
+                Discipline.findAll(),
+                Chapter.findAll(),
+                Favorite.idsFor(req.session.userId, 'chapter'),
+            ]);
 
             const tomesMap = {};
             chapters.forEach(ch => {
@@ -383,6 +392,7 @@ const pageController = {
                 disciplines,
                 chapters,
                 tomesMap,
+                favoriteChapterIds,
             });
         } catch (err) {
             next(err);
@@ -401,7 +411,7 @@ const pageController = {
             };
             const PER_PAGE = 6;
 
-            const [{ rows, total }, stats, disciplines] = await Promise.all([
+            const [{ rows, total }, stats, disciplines, favoriteChapterIds] = await Promise.all([
                 Chapter.findPage({
                     discipline: filters.discipline,
                     niveau: filters.niveau,
@@ -410,6 +420,7 @@ const pageController = {
                 }),
                 Course.stats(),
                 Discipline.findAll(),
+                Favorite.idsFor(req.session.userId, 'chapter'),
             ]);
 
             const currentPageKey = filters.discipline === 'physique' ? 'cours-physique' : (filters.discipline === 'chimie' ? 'cours-chimie' : 'cours');
@@ -426,6 +437,7 @@ const pageController = {
                 disciplines,
                 stats,
                 filters,
+                favoriteChapterIds,
                 pagination: paginate(total, req.query.page, PER_PAGE, filters),
             });
         } catch (err) {
@@ -448,12 +460,14 @@ const pageController = {
 
             if (!chapter) return pageController.notFound(req, res);
 
-            const [courses, exercises, siblings, downloadStatus, prevNext] = await Promise.all([
+            const [courses, exercises, siblings, downloadStatus, prevNext, favoriteCourseIds, favoriteChapterIds] = await Promise.all([
                 Course.findByChapterWithExercises(chapter.id),
                 Exercise.findByChapter(chapter.id),
                 Chapter.findSiblings(chapter, 6),
                 DownloadRequest.statusMap(req.session.userId, 'course'),
                 Chapter.findPrevAndNext(chapter),
+                Favorite.idsFor(req.session.userId, 'course'),
+                Favorite.idsFor(req.session.userId, 'chapter'),
             ]);
 
             res.render('chapitre-details', {
@@ -467,6 +481,8 @@ const pageController = {
                 prevCourse: prevNext.prev,
                 nextCourse: prevNext.next,
                 downloadStatus,
+                favoriteCourseIds,
+                favoriteChapterIds,
                 isChimie: chapter.discipline_slug === 'chimie',
             });
         } catch (err) {
@@ -628,11 +644,12 @@ const pageController = {
             };
 
             const PER_PAGE = 12;
-            const [{ rows, total }, filterOptions, totalCount, downloadStatus] = await Promise.all([
+            const [{ rows, total }, filterOptions, totalCount, downloadStatus, favoriteConcoursIds] = await Promise.all([
                 Concours.findPage({ ...filters, page: req.query.page, perPage: PER_PAGE }),
                 Concours.findFilters(),
                 Concours.countAll(),
                 DownloadRequest.statusMap(req.session.userId, 'concours'),
+                Favorite.idsFor(req.session.userId, 'concours'),
             ]);
 
             const stats = { total: totalCount };
@@ -646,6 +663,7 @@ const pageController = {
                 stats,
                 filters,
                 downloadStatus,
+                favoriteConcoursIds,
                 pagination: paginate(total, req.query.page, PER_PAGE, filters),
             });
         } catch (err) {
@@ -662,9 +680,10 @@ const pageController = {
             const item = await Concours.findById(id);
             if (!item) return pageController.notFound(req, res);
 
-            const [related, downloadStatus] = await Promise.all([
+            const [related, downloadStatus, favoriteConcoursIds] = await Promise.all([
                 Concours.findRelated(item, 4),
                 DownloadRequest.statusMap(req.session.userId, 'concours'),
+                Favorite.idsFor(req.session.userId, 'concours'),
             ]);
 
             res.render('concours-details', {
@@ -673,6 +692,7 @@ const pageController = {
                 page: 'concours',
                 concours: item,
                 downloadStatus,
+                favoriteConcoursIds,
                 related,
             });
         } catch (err) {
@@ -704,7 +724,7 @@ const pageController = {
             const perPage = 12;
             const currentPage = req.query.page || 1;
 
-            const [result, filterOptions, downloadStatus] = await Promise.all([
+            const [result, filterOptions, downloadStatus, favoriteBookIds] = await Promise.all([
                 Book.findPage({
                     ...filters,
                     page: currentPage,
@@ -712,6 +732,7 @@ const pageController = {
                 }),
                 Book.findFilters(),
                 DownloadRequest.statusMap(req.session.userId, 'book'),
+                Favorite.idsFor(req.session.userId, 'book'),
             ]);
 
             const pagination = paginate(result.total, currentPage, perPage, filters);
@@ -738,6 +759,7 @@ const pageController = {
                 filterOptions,
                 filters,
                 downloadStatus,
+                favoriteBookIds,
                 pagination,
             });
         } catch (err) {
@@ -752,7 +774,10 @@ const pageController = {
             const item = await Book.findById(id);
             if (!item) return pageController.notFound(req, res);
 
-            const downloadStatus = await DownloadRequest.statusMap(req.session.userId, 'book');
+            const [downloadStatus, favoriteBookIds] = await Promise.all([
+                DownloadRequest.statusMap(req.session.userId, 'book'),
+                Favorite.idsFor(req.session.userId, 'book'),
+            ]);
 
             res.render('livres-details', {
                 title: `${item.titre} - Livre CPGE | PhyChemia`,
@@ -760,6 +785,7 @@ const pageController = {
                 page: 'livres',
                 book: item,
                 downloadStatus,
+                favoriteBookIds,
             });
         } catch (err) {
             next(err);

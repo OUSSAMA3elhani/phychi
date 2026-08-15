@@ -11,14 +11,20 @@
 const { pool } = require('../../config/db');
 
 /** Types acceptes, et la table de contenu correspondante. */
+/** Types acceptes, et la table de contenu correspondante. */
 const ITEM_TYPES = {
     course: { table: 'courses', categorie: 'cours' },
     exercise: { table: 'exercises', categorie: 'exercices' },
+    chapter: { table: 'chapters', categorie: 'chapitres' },
+    book: { table: 'books', categorie: 'livres' },
+    concours: { table: 'concours', categorie: 'concours' },
 };
 
 /** Les slugs de discipline ne correspondent pas tous a l'ENUM `matiere`. */
 function toMatiere(disciplineSlug) {
-    if (disciplineSlug === 'physique' || disciplineSlug === 'chimie') return disciplineSlug;
+    if (disciplineSlug === 'physique' || disciplineSlug === 'chimie' || disciplineSlug === 'Physique' || disciplineSlug === 'Chimie') {
+        return String(disciplineSlug).toLowerCase();
+    }
     return 'autre';
 }
 
@@ -33,11 +39,37 @@ const Favorite = {
     /**
      * Charge la ressource ciblee pour verifier qu'elle existe et recuperer les
      * champs denormalises (titre / url / matiere).
-     *
-     * Le nom de table n'est jamais issu de l'entree utilisateur : il provient de
-     * la table blanche ITEM_TYPES, seule source possible d'interpolation ici.
      */
     async loadItem(type, itemId) {
+        if (type.name === 'chapter') {
+            const [rows] = await pool.query(
+                `SELECT ch.id, ch.titre, ch.slug, d.slug AS discipline_slug
+                 FROM chapters ch
+                 JOIN disciplines d ON ch.discipline_id = d.id
+                 WHERE ch.id = ? LIMIT 1`,
+                [itemId]
+            );
+            return rows[0] || null;
+        }
+        if (type.name === 'book') {
+            const [rows] = await pool.query(
+                `SELECT b.id, b.titre, b.discipline AS discipline_slug
+                 FROM books b
+                 WHERE b.id = ? LIMIT 1`,
+                [itemId]
+            );
+            return rows[0] || null;
+        }
+        if (type.name === 'concours') {
+            const [rows] = await pool.query(
+                `SELECT c.id, c.titre, c.matiere AS discipline_slug
+                 FROM concours c
+                 WHERE c.id = ? LIMIT 1`,
+                [itemId]
+            );
+            return rows[0] || null;
+        }
+
         const [rows] = await pool.query(
             `SELECT i.id, i.titre, i.slug, d.slug AS discipline_slug
              FROM \`${type.table}\` i
@@ -79,9 +111,16 @@ const Favorite = {
             return { favorited: false };
         }
 
-        const url = type.name === 'course'
-            ? '/cours'
-            : `/exercices-${toMatiere(item.discipline_slug) === 'chimie' ? 'chimie' : 'physique'}`;
+        let url = `/cours`;
+        if (type.name === 'exercise') {
+            url = `/exercices-${toMatiere(item.discipline_slug) === 'chimie' ? 'chimie' : 'physique'}`;
+        } else if (type.name === 'chapter') {
+            url = `/cours/${item.id}`;
+        } else if (type.name === 'book') {
+            url = `/livres/${item.id}`;
+        } else if (type.name === 'concours') {
+            url = `/concours/${item.id}`;
+        }
 
         await pool.query(
             `INSERT INTO favorites (user_id, item_type, item_id, titre, url, categorie, matiere)
@@ -133,6 +172,50 @@ const Favorite = {
              JOIN chapters ch ON e.chapter_id = ch.id
              JOIN disciplines d ON ch.discipline_id = d.id
              WHERE f.user_id = ? AND f.item_type = 'exercise'
+             ORDER BY f.created_at DESC`,
+            [userId]
+        );
+        return rows;
+    },
+
+    /** Chapitres / Modules mis en favori. */
+    async listChapters(userId) {
+        const [rows] = await pool.query(
+            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
+                    ch.id, ch.titre, ch.slug, ch.description, ch.niveau,
+                    d.nom AS discipline_nom, d.slug AS discipline_slug
+             FROM favorites f
+             JOIN chapters ch ON ch.id = f.item_id
+             JOIN disciplines d ON ch.discipline_id = d.id
+             WHERE f.user_id = ? AND f.item_type = 'chapter'
+             ORDER BY f.created_at DESC`,
+            [userId]
+        );
+        return rows;
+    },
+
+    /** Livres mis en favori. */
+    async listBooks(userId) {
+        const [rows] = await pool.query(
+            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
+                    b.id, b.titre, b.slug, b.description, b.pdf_file, b.auteur, b.collection, b.discipline, b.niveau
+             FROM favorites f
+             JOIN books b ON b.id = f.item_id
+             WHERE f.user_id = ? AND f.item_type = 'book'
+             ORDER BY f.created_at DESC`,
+            [userId]
+        );
+        return rows;
+    },
+
+    /** Concours mis en favori. */
+    async listConcours(userId) {
+        const [rows] = await pool.query(
+            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
+                    c.id, c.titre, c.slug, c.ecole, c.annee, c.epreuve, c.enonce_file, c.correction_file, c.matiere
+             FROM favorites f
+             JOIN concours c ON c.id = f.item_id
+             WHERE f.user_id = ? AND f.item_type = 'concours'
              ORDER BY f.created_at DESC`,
             [userId]
         );
