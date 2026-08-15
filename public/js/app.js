@@ -421,6 +421,12 @@
 
                 panel.hidden = !open;
 
+                if (open) {
+                    setTimeout(() => {
+                        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 120);
+                }
+
                 // Libelles personnalisables : sur la fiche d'un exercice, il
                 // faut distinguer l'enonce de la correction plutot que de
                 // retomber sur un « document » generique.
@@ -485,6 +491,10 @@
                 </button>
                 <button type="button" data-pdf-fit class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 transition-colors hover:bg-slate-700">
                     Ajuster largeur
+                </button>
+                <button type="button" data-pdf-zen class="inline-flex items-center gap-1.5 justify-center rounded-lg bg-brand-600 px-3.5 py-1.5 font-extrabold text-white transition-all hover:bg-brand-500 shadow-md hover:scale-105">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                    <span data-pdf-zen-label>Plein écran</span>
                 </button>
             </div>
         `;
@@ -601,6 +611,43 @@
                 currentScale = containerWidth / unscaledViewport.width;
                 queueRenderPage(currentPage);
             });
+        });
+
+        const zenBtn = toolbar.querySelector('[data-pdf-zen]');
+        const zenLabel = toolbar.querySelector('[data-pdf-zen-label]');
+        let isZen = false;
+
+        function toggleZenMode() {
+            isZen = !isZen;
+            if (isZen) {
+                container.classList.add('fixed', 'inset-0', 'z-[99999]', 'w-screen', 'h-screen', 'rounded-none', 'border-0');
+                if (zenLabel) zenLabel.textContent = 'Quitter plein écran';
+                document.body.classList.add('overflow-hidden');
+            } else {
+                container.classList.remove('fixed', 'inset-0', 'z-[99999]', 'w-screen', 'h-screen', 'rounded-none', 'border-0');
+                if (zenLabel) zenLabel.textContent = 'Plein écran';
+                document.body.classList.remove('overflow-hidden');
+            }
+            if (pdfDoc) {
+                setTimeout(() => {
+                    const containerWidth = scrollArea.clientWidth - 48;
+                    pdfDoc.getPage(currentPage).then((page) => {
+                        const unscaled = page.getViewport({ scale: 1.0 });
+                        currentScale = Math.max(1.0, containerWidth / unscaled.width);
+                        queueRenderPage(currentPage);
+                    });
+                }, 100);
+            }
+        }
+
+        if (zenBtn) {
+            zenBtn.addEventListener('click', toggleZenMode);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isZen) {
+                toggleZenMode();
+            }
         });
 
         function initPdfJsAndLoad() {
