@@ -28,14 +28,26 @@
                         <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Chapitres &amp; Fichiers PDF (<%= courses.length %>)</h2>
                         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">L'ordre d'affichage public suit la colonne « Ordre ».</p>
                     </div>
-                    <button type="button"
-                            data-modal-open="course-modal"
-                            data-modal-title="Créer un Chapitre"
-                            data-fields='{"id":"","chapter_id":"","titre":"","description":"","contenu":"","niveau":"l1","order_num":"0"}'
-                            class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                        Nouveau Chapitre
-                    </button>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative min-w-[14rem] sm:min-w-[18rem]">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                                <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </div>
+                            <input type="search"
+                                   data-table-search
+                                   placeholder="Recherche intelligente..."
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 pl-10 pr-16 text-xs font-medium text-slate-900 placeholder-slate-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white dark:focus:border-brand-400 dark:focus:bg-slate-950">
+                            <span data-search-count class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[11px] font-bold text-brand-600 dark:text-brand-400"></span>
+                        </div>
+                        <button type="button"
+                                data-modal-open="course-modal"
+                                data-modal-title="Créer un Chapitre"
+                                data-fields='{"id":"","chapter_id":"","titre":"","description":"","contenu":"","niveau":"l1","order_num":"0"}'
+                                class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-700">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                            Nouveau Chapitre
+                        </button>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
