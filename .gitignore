@@ -28,20 +28,4 @@ deploy/
 public/uploads/*
 !public/uploads/.gitkeep
 
-# Telechargements volumineux PDF
-public/assets/downloads/garing_decoupe/
-public/assets/downloads/H-prepa_decoupe/
-public/assets/downloads/UPS_Concours_Organises/
-public/assets/downloads/UPS_Concours_Organises_2/
-public/assets/downloads/UPS de chimie/
-public/assets/downloads/UPS de physique/
-public/assets/downloads/garing/
-public/assets/downloads/H-prepa physique/
-public/assets/downloads/Lumbroso/
-public/assets/downloads/Nathan classe prepa/
-public/assets/downloads/Perez/
-public/assets/downloads/H-prepa chimie/
-public/assets/downloads/livres de chimie/
-
-
 
