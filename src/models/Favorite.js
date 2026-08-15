@@ -141,18 +141,25 @@ const Favorite = {
         return rows.map((r) => r.item_id);
     },
 
-    /** Cours mis en favori, enrichis de leur chapitre et discipline. */
+    /** Cours mis en favori (modules et lecons), enrichis de leur chapitre et discipline. */
     async listCourses(userId) {
         const [rows] = await pool.query(
-            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    c.id, c.titre, c.slug, c.description, c.course_file, c.niveau,
-                    ch.titre AS chapter_titre,
-                    d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT f.id AS favorite_id, f.item_type, f.item_id, f.created_at AS favorited_at,
+                    COALESCE(c.id, ch.id) AS id,
+                    COALESCE(c.titre, ch.titre, f.titre) AS titre,
+                    COALESCE(c.slug, ch.slug) AS slug,
+                    COALESCE(c.description, ch.description, '') AS description,
+                    c.course_file,
+                    COALESCE(c.niveau, ch.niveau, 'Tous') AS niveau,
+                    COALESCE(ch.titre, f.titre) AS chapter_titre,
+                    ch.id AS chapter_id,
+                    COALESCE(d.nom, 'Physique & Chimie') AS discipline_nom,
+                    COALESCE(d.slug, f.matiere, 'physique') AS discipline_slug
              FROM favorites f
-             JOIN courses c ON c.id = f.item_id
-             JOIN chapters ch ON c.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
-             WHERE f.user_id = ? AND f.item_type = 'course'
+             LEFT JOIN courses c ON (f.item_type = 'course' AND c.id = f.item_id)
+             LEFT JOIN chapters ch ON ( (f.item_type = 'course' AND c.chapter_id = ch.id) OR (f.item_type = 'chapter' AND ch.id = f.item_id) )
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
+             WHERE f.user_id = ? AND f.item_type IN ('course', 'chapter')
              ORDER BY f.created_at DESC`,
             [userId]
         );
@@ -162,15 +169,21 @@ const Favorite = {
     /** Exercices mis en favori, enrichis de leur chapitre et discipline. */
     async listExercises(userId) {
         const [rows] = await pool.query(
-            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    e.id, e.titre, e.slug, e.description, e.enonce_file, e.correction_file,
-                    e.niveau, e.difficulte,
-                    ch.titre AS chapter_titre,
-                    d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT f.id AS favorite_id, f.item_type, f.item_id, f.created_at AS favorited_at,
+                    e.id,
+                    COALESCE(e.titre, f.titre) AS titre,
+                    e.slug,
+                    COALESCE(e.description, '') AS description,
+                    e.enonce_file, e.correction_file,
+                    COALESCE(e.niveau, 'Tous') AS niveau,
+                    COALESCE(e.difficulte, 'Moyen') AS difficulte,
+                    COALESCE(ch.titre, 'Exercices') AS chapter_titre,
+                    COALESCE(d.nom, 'Physique & Chimie') AS discipline_nom,
+                    COALESCE(d.slug, f.matiere, 'physique') AS discipline_slug
              FROM favorites f
              JOIN exercises e ON e.id = f.item_id
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON e.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE f.user_id = ? AND f.item_type = 'exercise'
              ORDER BY f.created_at DESC`,
             [userId]
@@ -181,12 +194,17 @@ const Favorite = {
     /** Chapitres / Modules mis en favori. */
     async listChapters(userId) {
         const [rows] = await pool.query(
-            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    ch.id, ch.titre, ch.slug, ch.description, ch.niveau,
-                    d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT f.id AS favorite_id, f.item_type, f.item_id, f.created_at AS favorited_at,
+                    ch.id,
+                    COALESCE(ch.titre, f.titre) AS titre,
+                    ch.slug,
+                    COALESCE(ch.description, '') AS description,
+                    COALESCE(ch.niveau, 'Tous') AS niveau,
+                    COALESCE(d.nom, 'Physique & Chimie') AS discipline_nom,
+                    COALESCE(d.slug, f.matiere, 'physique') AS discipline_slug
              FROM favorites f
              JOIN chapters ch ON ch.id = f.item_id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE f.user_id = ? AND f.item_type = 'chapter'
              ORDER BY f.created_at DESC`,
             [userId]
@@ -197,8 +215,12 @@ const Favorite = {
     /** Livres mis en favori. */
     async listBooks(userId) {
         const [rows] = await pool.query(
-            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    b.id, b.titre, b.slug, b.pdf_file, b.auteur, b.collection, b.discipline, b.niveau
+            `SELECT f.id AS favorite_id, f.item_type, f.item_id, f.created_at AS favorited_at,
+                    b.id, COALESCE(b.titre, f.titre) AS titre, b.slug, b.pdf_file,
+                    COALESCE(b.auteur, 'Auteur CPGE') AS auteur,
+                    COALESCE(b.collection, 'Manuel') AS collection,
+                    COALESCE(b.discipline, f.matiere, 'Physique') AS discipline,
+                    COALESCE(b.niveau, 'CPGE') AS niveau
              FROM favorites f
              JOIN books b ON b.id = f.item_id
              WHERE f.user_id = ? AND f.item_type = 'book'
@@ -211,8 +233,13 @@ const Favorite = {
     /** Concours mis en favori. */
     async listConcours(userId) {
         const [rows] = await pool.query(
-            `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    c.id, c.titre, c.slug, c.ecole, c.annee, c.epreuve, c.enonce_file, c.correction_file, c.matiere
+            `SELECT f.id AS favorite_id, f.item_type, f.item_id, f.created_at AS favorited_at,
+                    c.id, COALESCE(c.titre, f.titre) AS titre, c.slug,
+                    COALESCE(c.ecole, 'Concours') AS ecole,
+                    COALESCE(c.annee, '2024') AS annee,
+                    COALESCE(c.epreuve, c.titre) AS epreuve,
+                    c.enonce_file, c.correction_file,
+                    COALESCE(c.matiere, f.matiere, 'Physique') AS matiere
              FROM favorites f
              JOIN concours c ON c.id = f.item_id
              WHERE f.user_id = ? AND f.item_type = 'concours'

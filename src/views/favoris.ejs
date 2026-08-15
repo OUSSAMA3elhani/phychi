@@ -141,13 +141,13 @@
                                             Consulter la fiche
                                         </button>
                                     <% } %>
-                                    <a href="/cours" class="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
-                                        Voir tous les cours
+                                    <a href="/cours/<%= c.chapter_id || c.id %>" class="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                                        Accéder au cours
                                     </a>
                                     <button type="button"
                                             data-fav-toggle
-                                            data-item-type="course"
-                                            data-item-id="<%= c.id %>"
+                                            data-item-type="<%= c.item_type || 'course' %>"
+                                            data-item-id="<%= c.item_id || c.id %>"
                                             data-favorited="true"
                                             aria-pressed="true"
                                             class="inline-flex items-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-100 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-400">
