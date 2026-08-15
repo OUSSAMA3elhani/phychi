@@ -23,8 +23,8 @@ const Exercise = {
         const [rows] = await pool.query(
             `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON e.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              ORDER BY e.created_at DESC`
         );
         return rows;
@@ -41,8 +41,8 @@ const Exercise = {
         const [rows] = await pool.query(
             `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON e.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE d.slug = ?
              ORDER BY ch.order_num ASC, e.created_at DESC`,
             [disciplineSlug]

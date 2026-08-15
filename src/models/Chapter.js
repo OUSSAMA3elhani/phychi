@@ -31,7 +31,7 @@ const Chapter = {
         const [rows] = await pool.query(
             `SELECT c.*, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM chapters c
-             JOIN disciplines d ON c.discipline_id = d.id
+             LEFT JOIN disciplines d ON c.discipline_id = d.id
              ORDER BY d.id ASC, c.order_num ASC, c.ordre ASC`
         );
         return rows;
@@ -55,7 +55,7 @@ const Chapter = {
         const [countRows] = await pool.query(
             `SELECT COUNT(*) AS total
              FROM chapters c
-             JOIN disciplines d ON c.discipline_id = d.id
+             LEFT JOIN disciplines d ON c.discipline_id = d.id
              ${clause}`,
             params
         );

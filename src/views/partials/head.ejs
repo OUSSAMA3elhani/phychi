@@ -8,7 +8,7 @@
     var metaDesc = (typeof metaDescription !== 'undefined' && metaDescription) ? metaDescription : defaultDesc;
     var reqPathStr = (typeof reqPath !== 'undefined' && reqPath) ? reqPath : '';
     var canonical = (typeof canonicalUrl !== 'undefined' && canonicalUrl) ? canonicalUrl : (baseUrl + reqPathStr);
-    var ogImage = (typeof metaImage !== 'undefined' && metaImage) ? metaImage : (baseUrl + '/images/og-image.png');
+    var ogImage = (typeof metaImage !== 'undefined' && metaImage) ? metaImage : (baseUrl + '/images/favicon.png');
 %>
 <head>
     <meta charset="UTF-8">
@@ -70,6 +70,6 @@
     <link rel="stylesheet" href="/assets/ui.css">
 
     <script src="/assets/ui.js" defer></script>
-    <script src="/script.js" defer></script>
+    <script src="/js/script.js" defer></script>
     <script src="/js/app.js" defer></script>
 </head>

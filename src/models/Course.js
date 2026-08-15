@@ -8,8 +8,8 @@ const Course = {
         const [rows] = await pool.query(
             `SELECT co.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM courses co
-             JOIN chapters ch ON co.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON co.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              ORDER BY co.created_at DESC`
         );
         return rows;
@@ -34,7 +34,7 @@ const Course = {
                     COUNT(DISTINCT d.id)    AS disciplines,
                     SUM(CASE WHEN co.course_file IS NOT NULL THEN 1 ELSE 0 END) AS with_file
              FROM chapters ch
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              LEFT JOIN courses co ON co.chapter_id = ch.id
              ${clause}`,
             params
@@ -56,8 +56,8 @@ const Course = {
         const [rows] = await pool.query(
             `SELECT co.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, d.nom AS discipline_nom, d.slug AS discipline_slug
              FROM courses co
-             JOIN chapters ch ON co.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON co.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE d.slug = ?
              ORDER BY co.created_at DESC`,
             [disciplineSlug]
