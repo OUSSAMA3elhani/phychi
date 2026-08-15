@@ -650,10 +650,23 @@
             }
         });
 
+        function showIframeFallback(safeUrl) {
+            scrollArea.innerHTML = '';
+            const iframe = document.createElement('iframe');
+            iframe.src = `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+            iframe.className = 'h-full w-full border-none rounded-xl bg-white';
+            iframe.title = title || 'Document PDF';
+            scrollArea.appendChild(iframe);
+        }
+
         function initPdfJsAndLoad() {
+            const cleanUrl = encodeURI(url);
             if (window.pdfjsLib) {
-                window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.min.js';
-                window.pdfjsLib.getDocument(url).promise.then((pdf) => {
+                try {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.min.js';
+                } catch (e) {}
+
+                window.pdfjsLib.getDocument(cleanUrl).promise.then((pdf) => {
                     pdfDoc = pdf;
                     totalEl.textContent = pdf.numPages;
                     pdf.getPage(1).then((firstPage) => {
@@ -667,8 +680,8 @@
                         renderPage(currentPage);
                     });
                 }).catch((err) => {
-                    console.error('Erreur chargement PDF.js:', err);
-                    loadingMsg.innerHTML = '<span class="text-rose-400">Impossible d afficher ce document dans la liseuse sécurisée.</span>';
+                    console.warn('Erreur chargement PDF.js, basculement vers liseuse intégrée:', err);
+                    showIframeFallback(cleanUrl);
                 });
             } else {
                 const s = document.createElement('script');
@@ -677,7 +690,8 @@
                     initPdfJsAndLoad();
                 };
                 s.onerror = () => {
-                    loadingMsg.innerHTML = '<span class="text-rose-400">Erreur de chargement du moteur de lecture.</span>';
+                    console.warn('Erreur script PDF.js, basculement vers liseuse intégrée');
+                    showIframeFallback(cleanUrl);
                 };
                 document.head.appendChild(s);
             }
