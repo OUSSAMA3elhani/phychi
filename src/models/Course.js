@@ -119,11 +119,23 @@ const Course = {
             `SELECT * FROM courses WHERE chapter_id = ? ORDER BY order_num ASC, id ASC`,
             [chapterId]
         );
-        for (const course of courses) {
-            const [exos] = await pool.query(
-                `SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC`,
-                [course.id]
-            );
+        for (let i = 0; i < courses.length; i++) {
+            const course = courses[i];
+            const isFirst = (i === 0);
+            let exos = [];
+            if (isFirst) {
+                const [r] = await pool.query(
+                    `SELECT * FROM exercises WHERE course_id = ? OR (course_id IS NULL AND chapter_id = ?) ORDER BY id ASC`,
+                    [course.id, chapterId]
+                );
+                exos = r;
+            } else {
+                const [r] = await pool.query(
+                    `SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC`,
+                    [course.id]
+                );
+                exos = r;
+            }
             course.exercises = exos;
         }
         return courses;
