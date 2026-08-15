@@ -198,7 +198,7 @@ const Favorite = {
     async listBooks(userId) {
         const [rows] = await pool.query(
             `SELECT f.id AS favorite_id, f.created_at AS favorited_at,
-                    b.id, b.titre, b.slug, b.description, b.pdf_file, b.auteur, b.collection, b.discipline, b.niveau
+                    b.id, b.titre, b.slug, b.pdf_file, b.auteur, b.collection, b.discipline, b.niveau
              FROM favorites f
              JOIN books b ON b.id = f.item_id
              WHERE f.user_id = ? AND f.item_type = 'book'
