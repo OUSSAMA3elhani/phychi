@@ -391,7 +391,7 @@
             const img = document.createElement('img');
             img.src = url;
             img.alt = title || 'Document';
-            img.className = 'mx-auto max-h-[75vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
+            img.className = 'mx-auto max-h-[88vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
         }
         if (PDF_RE.test(url)) {
@@ -400,7 +400,7 @@
         const frame = document.createElement('iframe');
         frame.src = url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH');
         frame.title = title || 'Document';
-        frame.className = 'h-[75vh] w-full rounded-xl border-0 bg-white';
+        frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
         return frame;
     }
 
@@ -454,7 +454,7 @@
     /** Liseuse PDF Canvas securisee sans barre de telechargement ni impression. */
     function buildPdfCanvasViewer(url, title) {
         const container = document.createElement('div');
-        container.className = 'flex h-[75vh] min-h-[550px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
+        container.className = 'flex h-[88vh] min-h-[700px] lg:min-h-[850px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
 
         // Barre d'outils de la liseuse PDF
         const toolbar = document.createElement('div');
@@ -609,7 +609,16 @@
                 window.pdfjsLib.getDocument(url).promise.then((pdf) => {
                     pdfDoc = pdf;
                     totalEl.textContent = pdf.numPages;
-                    renderPage(currentPage);
+                    pdf.getPage(1).then((firstPage) => {
+                        const containerWidth = scrollArea.clientWidth > 0 ? (scrollArea.clientWidth - 48) : 800;
+                        const unscaled = firstPage.getViewport({ scale: 1.0 });
+                        if (containerWidth > 0 && unscaled.width > 0) {
+                            currentScale = Math.max(1.1, containerWidth / unscaled.width);
+                        }
+                        renderPage(currentPage);
+                    }).catch(() => {
+                        renderPage(currentPage);
+                    });
                 }).catch((err) => {
                     console.error('Erreur chargement PDF.js:', err);
                     loadingMsg.innerHTML = '<span class="text-rose-400">Impossible d afficher ce document dans la liseuse sécurisée.</span>';
