@@ -130,29 +130,35 @@ const Course = {
     },
 
     async create({ chapter_id, titre, slug, description, contenu, course_file, niveau = 'l1', order_num = 0 }) {
-        const safeSlug = slug || titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const safeTitle = titre || 'fiche-cours';
+        const safeSlug = slug || (safeTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now());
         const [result] = await pool.query(
             'INSERT INTO courses (chapter_id, titre, slug, description, contenu, course_file, niveau, order_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [chapter_id, titre, safeSlug, description || null, contenu || null, course_file || null, niveau, Number.parseInt(order_num, 10) || 0]
+            [chapter_id || 1, safeTitle, safeSlug, description || null, contenu || null, course_file || null, niveau, Number.parseInt(order_num, 10) || 0]
         );
         return this.findById(result.insertId);
     },
 
     async update(id, { chapter_id, titre, slug, description, contenu, course_file, niveau, order_num }) {
-        const safeSlug = slug || titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const rank = Number.parseInt(order_num, 10) || 0;
-        // `course_file` n'est ecrase que si un nouveau fichier a ete televerse :
-        // enregistrer une fiche sans rechoisir de document ne doit pas
-        // supprimer celui deja en place.
+        const existing = await this.findById(id);
+        if (!existing) return null;
+        const safeTitle = titre !== undefined ? titre : existing.titre;
+        const safeSlug = slug || safeTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || existing.slug;
+        const rank = Number.parseInt(order_num !== undefined ? order_num : existing.order_num, 10) || 0;
+        const chapId = chapter_id !== undefined ? chapter_id : existing.chapter_id;
+        const safeDesc = description !== undefined ? description : existing.description;
+        const safeCont = contenu !== undefined ? contenu : existing.contenu;
+        const safeNiv = niveau !== undefined ? niveau : existing.niveau;
+
         if (course_file) {
             await pool.query(
                 'UPDATE courses SET chapter_id = ?, titre = ?, slug = ?, description = ?, contenu = ?, course_file = ?, niveau = ?, order_num = ? WHERE id = ?',
-                [chapter_id, titre, safeSlug, description || null, contenu || null, course_file, niveau, rank, id]
+                [chapId, safeTitle, safeSlug, safeDesc, safeCont, course_file, safeNiv, rank, id]
             );
         } else {
             await pool.query(
                 'UPDATE courses SET chapter_id = ?, titre = ?, slug = ?, description = ?, contenu = ?, niveau = ?, order_num = ? WHERE id = ?',
-                [chapter_id, titre, safeSlug, description || null, contenu || null, niveau, rank, id]
+                [chapId, safeTitle, safeSlug, safeDesc, safeCont, safeNiv, rank, id]
             );
         }
         return this.findById(id);

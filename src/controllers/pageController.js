@@ -330,7 +330,8 @@ const pageController = {
     /** Profile page (Protected) */
     async profil(req, res, next) {
         try {
-            const user = res.locals.user || await User.findById(req.session.userId);
+            const userId = req.session ? req.session.userId : null;
+            const user = (res.locals && res.locals.user) || (userId ? await User.findById(userId) : null);
             res.render('profil', {
                 title: 'Mon Profil - Espace Utilisateur | PhyChemia',
                 metaDescription: 'Consultez et gérez vos informations personnelles sur votre profil PhyChemia.',
@@ -867,7 +868,8 @@ const pageController = {
 
     /** 404 - Page non trouvee */
     notFound(req, res) {
-        if (req.originalUrl.startsWith('/api/')) {
+        const url = req ? (req.originalUrl || req.url || '') : '';
+        if (url.startsWith('/api/')) {
             return res.status(404).json({
                 success: false,
                 message: 'Ressource introuvable.',
@@ -878,21 +880,23 @@ const pageController = {
 
     /** 500 - Erreur serveur */
     serverError(err, req, res, next) {
+        const url = req ? (req.originalUrl || req.url || '') : '';
         console.error('server.error', {
-            method: req.method,
-            url: req.originalUrl,
-            message: err.message,
-            stack: err.stack,
+            method: req ? req.method : 'UNKNOWN',
+            url,
+            message: err ? err.message : 'Unknown error',
+            stack: err ? err.stack : '',
         });
 
-        if (res.headersSent) return next(err);
+        if (res && res.headersSent) return next(err);
 
-        const dbDown = ['ECONNREFUSED', 'PROTOCOL_CONNECTION_LOST', 'ER_ACCESS_DENIED_ERROR'].includes(err.code);
+        const errCode = err ? err.code : '';
+        const dbDown = ['ECONNREFUSED', 'PROTOCOL_CONNECTION_LOST', 'ER_ACCESS_DENIED_ERROR'].includes(errCode);
         const message = dbDown
             ? 'Le service est momentanement indisponible. Merci de reessayer dans quelques instants.'
             : 'Une erreur inattendue est survenue.';
 
-        if (req.originalUrl.startsWith('/api/')) {
+        if (url.startsWith('/api/')) {
             return res.status(dbDown ? 503 : 500).json({ success: false, message });
         }
         return res.status(dbDown ? 503 : 500).render('500', { title: 'Erreur Serveur - 500', message, page: '500' });

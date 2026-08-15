@@ -164,14 +164,19 @@ const adminController = {
     async saveChapter(req, res, next) {
         try {
             const { id, discipline_id, titre, slug, description, niveau } = req.body;
+            let discId = discipline_id;
+            if (!discId) {
+                const firstDisc = (await Discipline.findAll())[0];
+                discId = firstDisc ? firstDisc.id : 1;
+            }
             // `ordre` reste accepte en repli : les anciens formulaires en cache
             // continuent de fonctionner apres le passage a `order_num`.
             const order_num = req.body.order_num !== undefined ? req.body.order_num : req.body.ordre;
 
             if (id) {
-                await Chapter.update(id, { discipline_id, titre, slug, description, niveau, order_num });
+                await Chapter.update(id, { discipline_id: discId, titre, slug, description, niveau, order_num });
             } else {
-                await Chapter.create({ discipline_id, titre, slug, description, niveau, order_num });
+                await Chapter.create({ discipline_id: discId, titre, slug, description, niveau, order_num });
             }
             res.redirect('/admin/chapters');
         } catch (err) {
@@ -208,15 +213,20 @@ const adminController = {
     async saveCourse(req, res, next) {
         try {
             const { id, chapter_id, titre, slug, description, contenu, niveau, order_num } = req.body;
+            let chapId = chapter_id;
+            if (!chapId) {
+                const firstChap = (await Chapter.findAll())[0];
+                chapId = firstChap ? firstChap.id : 1;
+            }
             let course_file = null;
             if (req.file) {
                 course_file = '/uploads/' + req.file.filename;
             }
 
             if (id) {
-                await Course.update(id, { chapter_id, titre, slug, description, contenu, course_file, niveau, order_num });
+                await Course.update(id, { chapter_id: chapId, titre, slug, description, contenu, course_file, niveau, order_num });
             } else {
-                await Course.create({ chapter_id, titre, slug, description, contenu, course_file, niveau, order_num });
+                await Course.create({ chapter_id: chapId, titre, slug, description, contenu, course_file, niveau, order_num });
             }
             res.redirect('/admin/courses');
         } catch (err) {
@@ -253,6 +263,11 @@ const adminController = {
     async saveExercise(req, res, next) {
         try {
             const { id, chapter_id, titre, slug, description, niveau, difficulte } = req.body;
+            let chapId = chapter_id;
+            if (!chapId) {
+                const firstChap = (await Chapter.findAll())[0];
+                chapId = firstChap ? firstChap.id : 1;
+            }
             let enonce_file = null;
             let correction_file = null;
 
@@ -266,9 +281,9 @@ const adminController = {
             }
 
             if (id) {
-                await Exercise.update(id, { chapter_id, titre, slug, description, enonce_file, correction_file, niveau, difficulte });
+                await Exercise.update(id, { chapter_id: chapId, titre, slug, description, enonce_file, correction_file, niveau, difficulte });
             } else {
-                await Exercise.create({ chapter_id, titre, slug, description, enonce_file, correction_file, niveau, difficulte });
+                await Exercise.create({ chapter_id: chapId, titre, slug, description, enonce_file, correction_file, niveau, difficulte });
             }
             res.redirect('/admin/exercises');
         } catch (err) {
@@ -354,15 +369,16 @@ const adminController = {
     async saveBook(req, res, next) {
         try {
             const { id, titre, collection, auteur, discipline, niveau } = req.body;
+            const safeTitle = titre || 'Livre CPGE';
             const pdfFile = req.file ? `/uploads/${req.file.filename}` : null;
-            const slug = titre.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `livre-${Date.now()}`;
+            const slug = safeTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
 
             if (id) {
                 const existing = await Book.findById(id);
                 if (!existing) return res.redirect('/admin/books');
                 await Book.update(id, {
-                    titre,
-                    collection,
+                    titre: safeTitle,
+                    collection: collection || 'Collection CPGE',
                     auteur: auteur || null,
                     discipline: discipline || 'Physique',
                     niveau: niveau || 'CPGE',
@@ -371,8 +387,8 @@ const adminController = {
                 });
             } else {
                 await Book.create({
-                    titre,
-                    collection,
+                    titre: safeTitle,
+                    collection: collection || 'Collection CPGE',
                     auteur: auteur || null,
                     discipline: discipline || 'Physique',
                     niveau: niveau || 'CPGE',
@@ -416,19 +432,24 @@ const adminController = {
     async saveConcours(req, res, next) {
         try {
             const { id, titre, ecole, annee, filiere, epreuve, matiere } = req.body;
+            const safeEcole = ecole || 'Concours Général';
+            const safeEpreuve = epreuve || 'Épreuve';
+            const safeAnnee = Number.parseInt(annee, 10) || new Date().getFullYear();
+            const safeTitle = titre || `${safeEcole} ${safeAnnee} ${safeEpreuve}`;
+
             const enonceFile = req.files && req.files.enonce_file ? `/uploads/${req.files.enonce_file[0].filename}` : null;
             const correctionFile = req.files && req.files.correction_file ? `/uploads/${req.files.correction_file[0].filename}` : null;
-            const slug = (titre || `${ecole}-${annee}-${epreuve}`).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `concours-${Date.now()}`;
+            const slug = safeTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
 
             if (id) {
                 const existing = await Concours.findById(id);
                 if (!existing) return res.redirect('/admin/concours');
                 await Concours.update(id, {
-                    titre: titre || `${ecole} ${annee} ${epreuve}`,
-                    ecole,
-                    annee: parseInt(annee, 10) || 2024,
+                    titre: safeTitle,
+                    ecole: safeEcole,
+                    annee: safeAnnee,
                     filiere: filiere || 'MP',
-                    epreuve: epreuve || 'Épreuve U',
+                    epreuve: safeEpreuve,
                     matiere: matiere || 'Physique',
                     enonce_file: enonceFile || existing.enonce_file,
                     correction_file: correctionFile || existing.correction_file,
@@ -436,11 +457,11 @@ const adminController = {
                 });
             } else {
                 await Concours.create({
-                    titre: titre || `${ecole} ${annee} ${epreuve}`,
-                    ecole,
-                    annee: parseInt(annee, 10) || 2024,
+                    titre: safeTitle,
+                    ecole: safeEcole,
+                    annee: safeAnnee,
                     filiere: filiere || 'MP',
-                    epreuve: epreuve || 'Épreuve U',
+                    epreuve: safeEpreuve,
                     matiere: matiere || 'Physique',
                     enonce_file: enonceFile || null,
                     correction_file: correctionFile || null,

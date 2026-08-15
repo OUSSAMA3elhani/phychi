@@ -183,12 +183,13 @@ const Chapter = {
     async create(data) {
         await ensureTomeColumn();
         const { discipline_id, titre, slug, description, tome, niveau, order_num } = data;
-        const autoSlug = slug || titre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('chapter-' + Date.now());
+        const safeTitle = titre || 'chapitre';
+        const autoSlug = slug || (safeTitle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now());
         const orderVal = order_num !== undefined ? order_num : 1;
         const [result] = await pool.query(
             `INSERT INTO chapters (discipline_id, titre, slug, description, tome, niveau, ordre, order_num)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [discipline_id, titre, autoSlug, description || null, tome || null, niveau || 'l1', orderVal, orderVal]
+            [discipline_id || 1, safeTitle, autoSlug, description || null, tome || null, niveau || 'l1', orderVal, orderVal]
         );
         return result.insertId;
     },

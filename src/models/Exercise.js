@@ -257,11 +257,12 @@ const Exercise = {
     async create(data) {
         await ensureColumnsExist();
         const { chapter_id, course_id, partie_cours, titre, slug, description, enonce_file, correction_file, niveau, difficulte } = data;
-        const autoSlug = slug || titre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('exercise-' + Date.now());
+        const safeTitle = titre || 'exercice';
+        const autoSlug = slug || (safeTitle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now());
         const [result] = await pool.query(
             `INSERT INTO exercises (chapter_id, course_id, partie_cours, titre, slug, description, enonce_file, correction_file, niveau, difficulte)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [chapter_id, course_id || null, partie_cours || null, titre, autoSlug, description || null, enonce_file || null, correction_file || null, niveau || 'l1', difficulte || 'moyen']
+            [chapter_id || 1, course_id || null, partie_cours || null, safeTitle, autoSlug, description || null, enonce_file || null, correction_file || null, niveau || 'l1', difficulte || 'moyen']
         );
         return result.insertId;
     },

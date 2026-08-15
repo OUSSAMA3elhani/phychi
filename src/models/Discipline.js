@@ -25,19 +25,23 @@ const Discipline = {
     },
 
     async create({ nom, slug, description }) {
-        const safeSlug = slug || nom.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const safeName = nom || 'discipline';
+        const safeSlug = slug || (safeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now());
         const [result] = await pool.query(
             'INSERT INTO disciplines (nom, slug, description) VALUES (?, ?, ?)',
-            [nom, safeSlug, description || null]
+            [safeName, safeSlug, description || null]
         );
         return this.findById(result.insertId);
     },
 
     async update(id, { nom, slug, description }) {
-        const safeSlug = slug || nom.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const existing = await this.findById(id);
+        if (!existing) return null;
+        const safeName = nom !== undefined ? nom : existing.nom;
+        const safeSlug = slug || safeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || existing.slug;
         await pool.query(
             'UPDATE disciplines SET nom = ?, slug = ?, description = ? WHERE id = ?',
-            [nom, safeSlug, description || null, id]
+            [safeName, safeSlug, description !== undefined ? description : existing.description, id]
         );
         return this.findById(id);
     },
