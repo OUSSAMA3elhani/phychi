@@ -391,13 +391,16 @@
             const img = document.createElement('img');
             img.src = url;
             img.alt = title || 'Document';
-            img.className = 'mx-auto max-h-[70vh] w-auto max-w-full rounded-xl bg-white object-contain';
+            img.className = 'mx-auto max-h-[75vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
         }
+        if (PDF_RE.test(url)) {
+            return buildPdfCanvasViewer(url, title);
+        }
         const frame = document.createElement('iframe');
-        frame.src = url;
+        frame.src = url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH');
         frame.title = title || 'Document';
-        frame.className = 'h-[70vh] w-full rounded-xl border-0 bg-white';
+        frame.className = 'h-[75vh] w-full rounded-xl border-0 bg-white';
         return frame;
     }
 
@@ -451,7 +454,7 @@
     /** Liseuse PDF Canvas securisee sans barre de telechargement ni impression. */
     function buildPdfCanvasViewer(url, title) {
         const container = document.createElement('div');
-        container.className = 'flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
+        container.className = 'flex h-[75vh] min-h-[550px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
 
         // Barre d'outils de la liseuse PDF
         const toolbar = document.createElement('div');
@@ -467,6 +470,10 @@
                     <span>Suivant</span>
                     <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
+            </div>
+            <div class="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-1 rounded-md">
+                <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Lecture seule (Téléchargement sur demande)</span>
             </div>
             <div class="flex items-center gap-2">
                 <button type="button" data-pdf-zoom-out aria-label="Zoom arrière" class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-2.5 py-1.5 font-bold text-white transition-colors hover:bg-slate-700">
