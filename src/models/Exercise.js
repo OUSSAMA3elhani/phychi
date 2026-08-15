@@ -95,12 +95,13 @@ const Exercise = {
         const offset = (p - 1) * limit;
 
         const [rows] = await pool.query(
-            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.tome AS chapter_tome, d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT e.*, ch.titre AS chapter_titre, ch.slug AS chapter_slug, ch.tome AS chapter_tome, d.nom AS discipline_nom, d.slug AS discipline_slug,
+                    (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = e.chapter_id) AS chapter_ex_count
              FROM exercises e
-             JOIN chapters ch ON e.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON e.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE ${whereSql}
-             ORDER BY e.created_at DESC, e.id DESC
+             ORDER BY chapter_ex_count DESC, e.id ASC
              LIMIT ? OFFSET ?`,
             [...params, limit, offset]
         );

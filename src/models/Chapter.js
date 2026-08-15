@@ -29,10 +29,12 @@ const Chapter = {
     async findAll() {
         await ensureTomeColumn();
         const [rows] = await pool.query(
-            `SELECT c.*, d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT c.*, d.nom AS discipline_nom, d.slug AS discipline_slug,
+                    (SELECT COUNT(*) FROM courses co WHERE co.chapter_id = c.id) AS courses_count,
+                    (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = c.id) AS exercises_count
              FROM chapters c
              LEFT JOIN disciplines d ON c.discipline_id = d.id
-             ORDER BY d.id ASC, c.order_num ASC, c.ordre ASC`
+             ORDER BY ((SELECT COUNT(*) FROM courses co WHERE co.chapter_id = c.id) + (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = c.id)) DESC, c.id ASC`
         );
         return rows;
     },
@@ -72,9 +74,9 @@ const Chapter = {
                     (SELECT COUNT(*) FROM courses co WHERE co.chapter_id = c.id) AS courses_count,
                     (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = c.id) AS exercises_count
              FROM chapters c
-             JOIN disciplines d ON c.discipline_id = d.id
+             LEFT JOIN disciplines d ON c.discipline_id = d.id
              ${clause}
-             ORDER BY c.order_num ASC, c.ordre ASC
+             ORDER BY (courses_count + exercises_count) DESC, courses_count DESC, c.id ASC
              LIMIT ? OFFSET ?`,
             [...params, size, offset]
         );
@@ -85,11 +87,13 @@ const Chapter = {
     async findByDisciplineSlug(disciplineSlug) {
         await ensureTomeColumn();
         const [rows] = await pool.query(
-            `SELECT c.*, d.nom AS discipline_nom, d.slug AS discipline_slug
+            `SELECT c.*, d.nom AS discipline_nom, d.slug AS discipline_slug,
+                    (SELECT COUNT(*) FROM courses co WHERE co.chapter_id = c.id) AS courses_count,
+                    (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = c.id) AS exercises_count
              FROM chapters c
-             JOIN disciplines d ON c.discipline_id = d.id
+             LEFT JOIN disciplines d ON c.discipline_id = d.id
              WHERE d.slug = ?
-             ORDER BY c.order_num ASC, c.ordre ASC`,
+             ORDER BY ((SELECT COUNT(*) FROM courses co WHERE co.chapter_id = c.id) + (SELECT COUNT(*) FROM exercises ex WHERE ex.chapter_id = c.id)) DESC, c.id ASC`,
             [disciplineSlug]
         );
         return rows;
