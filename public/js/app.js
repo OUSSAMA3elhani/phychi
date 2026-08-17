@@ -400,7 +400,8 @@
             frame.src = driveUrl;
             frame.title = title || 'Document Google Drive';
             frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white shadow-sm';
-            frame.allow = 'autoplay';
+            frame.setAttribute('allow', 'autoplay');
+            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
             return frame;
         }
 
@@ -672,12 +673,13 @@
             const iframe = document.createElement('iframe');
             if (safeUrl.includes('drive.google.com') || safeUrl.includes('docs.google.com')) {
                 iframe.src = safeUrl;
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
             } else {
                 iframe.src = safeUrl.includes('#') ? safeUrl : `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
             }
             iframe.className = 'h-full w-full border-none rounded-xl bg-white';
             iframe.title = title || 'Document PDF';
-            iframe.allow = 'autoplay';
+            iframe.setAttribute('allow', 'autoplay');
             scrollArea.appendChild(iframe);
         }
 
@@ -739,7 +741,8 @@
             frame.src = driveUrl;
             frame.title = title || 'Document Google Drive';
             frame.className = 'h-[75vh] w-full rounded-xl border-0 bg-white shadow-sm';
-            frame.allow = 'autoplay';
+            frame.setAttribute('allow', 'autoplay');
+            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
             return frame;
         }
 
