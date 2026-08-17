@@ -386,12 +386,17 @@
      * construit au premier clic. Un PDF integre par page couterait une requete
      * reseau et un rendu inutiles a chaque visite.
      */
-    function isDriveUrl(url) {
-        return Boolean(url && (url.includes('drive.google.com') || url.includes('docs.google.com')));
+    function parseDriveIdClient(url) {
+        if (!url || typeof url !== 'string') return null;
+        if (/^[a-zA-Z0-9_-]{25,}$/.test(url.trim())) return url.trim();
+        const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        return m ? m[1] : null;
     }
 
     function getProxyUrl(url) {
         if (isDriveUrl(url)) {
+            const driveId = parseDriveIdClient(url);
+            if (driveId) return `/api/pdf-proxy?id=${driveId}`;
             return `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
         }
         return url;

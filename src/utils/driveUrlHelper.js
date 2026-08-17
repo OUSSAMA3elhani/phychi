@@ -31,11 +31,13 @@ function resolveAssetUrl(rawUrl) {
     const driveId = parseDriveId(trimmed);
 
     if (driveId || trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) {
+        const id = driveId || parseDriveId(trimmed);
+        const proxyPath = id ? `/api/pdf-proxy?id=${id}` : getPreviewUrl(trimmed);
         return {
             raw: trimmed,
             isDrive: true,
             isExternal: true,
-            iframeUrl: getPreviewUrl(trimmed),
+            iframeUrl: proxyPath,
             downloadUrl: getDownloadUrl(trimmed)
         };
     }
