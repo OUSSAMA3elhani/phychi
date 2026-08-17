@@ -390,16 +390,18 @@
         return Boolean(url && (url.includes('drive.google.com') || url.includes('docs.google.com')));
     }
 
+    function getProxyUrl(url) {
+        if (isDriveUrl(url)) {
+            return `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
+        }
+        return url;
+    }
+
     function buildViewer(url, title) {
         if (!url) return document.createElement('div');
 
-        if (isDriveUrl(url)) {
-            const frame = document.createElement('iframe');
-            frame.src = url;
-            frame.title = title || 'Document Google Drive';
-            frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
-            frame.setAttribute('allow', 'autoplay');
-            return frame;
+        if (isDriveUrl(url) || PDF_RE.test(url)) {
+            return buildPdfCanvasViewer(getProxyUrl(url), title);
         }
 
         if (IMAGE_RE.test(url)) {
@@ -409,11 +411,9 @@
             img.className = 'mx-auto max-h-[88vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
         }
-        if (PDF_RE.test(url)) {
-            return buildPdfCanvasViewer(url, title);
-        }
+
         const frame = document.createElement('iframe');
-        frame.src = url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH');
+        frame.src = getProxyUrl(url);
         frame.title = title || 'Document';
         frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
         return frame;
@@ -721,13 +721,8 @@
     function buildPreview(url, title) {
         if (!url) return document.createElement('div');
 
-        if (isDriveUrl(url)) {
-            const frame = document.createElement('iframe');
-            frame.src = url;
-            frame.title = title || 'Document Google Drive';
-            frame.className = 'h-[85vh] min-h-[650px] w-full rounded-2xl border-0 bg-white shadow-soft';
-            frame.setAttribute('allow', 'autoplay');
-            return frame;
+        if (isDriveUrl(url) || PDF_RE.test(url)) {
+            return buildPdfCanvasViewer(getProxyUrl(url), title);
         }
 
         if (IMAGE_RE.test(url)) {
@@ -738,12 +733,8 @@
             return img;
         }
 
-        if (PDF_RE.test(url)) {
-            return buildPdfCanvasViewer(url, title);
-        }
-
         const frame = document.createElement('iframe');
-        frame.src = url;
+        frame.src = getProxyUrl(url);
         frame.title = title || 'Document';
         frame.className = 'h-[85vh] min-h-[650px] w-full rounded-2xl border-0 bg-white shadow-soft';
         return frame;
