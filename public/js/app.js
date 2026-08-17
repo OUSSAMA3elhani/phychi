@@ -386,7 +386,22 @@
      * construit au premier clic. Un PDF integre par page couterait une requete
      * reseau et un rendu inutiles a chaque visite.
      */
+    function isDriveUrl(url) {
+        return Boolean(url && (url.includes('drive.google.com') || url.includes('docs.google.com')));
+    }
+
     function buildViewer(url, title) {
+        if (!url) return document.createElement('div');
+
+        if (isDriveUrl(url)) {
+            const frame = document.createElement('iframe');
+            frame.src = url;
+            frame.title = title || 'Document Google Drive';
+            frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
+            frame.setAttribute('allow', 'autoplay');
+            return frame;
+        }
+
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
             img.src = url;
@@ -704,6 +719,17 @@
 
     /** Construit le corps de la modale selon le type de fichier. */
     function buildPreview(url, title) {
+        if (!url) return document.createElement('div');
+
+        if (isDriveUrl(url)) {
+            const frame = document.createElement('iframe');
+            frame.src = url;
+            frame.title = title || 'Document Google Drive';
+            frame.className = 'h-[85vh] min-h-[650px] w-full rounded-2xl border-0 bg-white shadow-soft';
+            frame.setAttribute('allow', 'autoplay');
+            return frame;
+        }
+
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
             img.src = url;
@@ -716,12 +742,11 @@
             return buildPdfCanvasViewer(url, title);
         }
 
-        // Format non previsualisable : on invite au telechargement.
-        const div = document.createElement('div');
-        div.className = 'p-10 text-center text-sm text-slate-500 dark:text-slate-400';
-        div.textContent =
-            "Ce format ne peut pas être prévisualisé dans le navigateur. Utilisez le bouton de téléchargement ci-dessous.";
-        return div;
+        const frame = document.createElement('iframe');
+        frame.src = url;
+        frame.title = title || 'Document';
+        frame.className = 'h-[85vh] min-h-[650px] w-full rounded-2xl border-0 bg-white shadow-soft';
+        return frame;
     }
 
     /**
