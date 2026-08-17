@@ -34,8 +34,9 @@ router.get('/api/health', (req, res) => {
 router.get('/api/pdf-proxy', (req, res) => {
     const https = require('https');
     const { parseDriveId } = require('../services/googleDriveService');
-    const rawId = req.query.id || req.query.url;
-    const fileId = parseDriveId(rawId);
+    const rawId = req.query.id || req.query.url || '';
+    const cleanRaw = typeof rawId === 'string' ? rawId.split('#')[0] : '';
+    const fileId = parseDriveId(cleanRaw);
 
     if (!fileId) {
         return res.status(400).send('File ID required');
