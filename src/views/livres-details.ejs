@@ -89,7 +89,7 @@
 
             <!-- Visionneur PDF Intégré -->
             <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950/5 dark:border-slate-800 dark:bg-slate-950">
-                <iframe src="<%= book.pdf_file %>" class="h-[600px] w-full border-none" title="<%= book.titre %>"></iframe>
+                <iframe src="<%= book.pdf_file %>" class="h-[600px] w-full border-none" title="<%= book.titre %>" allow="autoplay" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
             </div>
         </article>
     </div>

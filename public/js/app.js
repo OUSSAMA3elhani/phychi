@@ -398,9 +398,11 @@
             return buildPdfCanvasViewer(url, title);
         }
         const frame = document.createElement('iframe');
-        frame.src = url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH');
+        frame.src = url.includes('drive.google.com') ? url : (url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH'));
         frame.title = title || 'Document';
         frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
+        frame.setAttribute('allow', 'autoplay');
+        frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
         return frame;
     }
 
@@ -653,14 +655,20 @@
         function showIframeFallback(safeUrl) {
             scrollArea.innerHTML = '';
             const iframe = document.createElement('iframe');
-            iframe.src = `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+            iframe.src = safeUrl.includes('drive.google.com') ? safeUrl : `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
             iframe.className = 'h-full w-full border-none rounded-xl bg-white';
+            iframe.setAttribute('allow', 'autoplay');
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
             iframe.title = title || 'Document PDF';
             scrollArea.appendChild(iframe);
         }
 
         function initPdfJsAndLoad() {
             const cleanUrl = encodeURI(url);
+            if (url.includes('drive.google.com')) {
+                showIframeFallback(url);
+                return;
+            }
             if (window.pdfjsLib) {
                 try {
                     window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.min.js';
@@ -710,6 +718,16 @@
             img.alt = title || 'Aperçu du document';
             img.className = 'mx-auto max-h-[70vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
+        }
+
+        if (url.includes('drive.google.com')) {
+            const frame = document.createElement('iframe');
+            frame.src = url;
+            frame.className = 'h-[85vh] min-h-[700px] w-full rounded-xl border-0 bg-white';
+            frame.setAttribute('allow', 'autoplay');
+            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
+            frame.title = title || 'Document';
+            return frame;
         }
 
         if (PDF_RE.test(url)) {
