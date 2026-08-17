@@ -386,27 +386,22 @@
      * construit au premier clic. Un PDF integre par page couterait une requete
      * reseau et un rendu inutiles a chaque visite.
      */
-    function parseDriveIdClient(url) {
-        if (!url || typeof url !== 'string') return null;
-        if (/^[a-zA-Z0-9_-]{25,}$/.test(url.trim())) return url.trim();
-        const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-        return m ? m[1] : null;
-    }
-
-    function getProxyUrl(url) {
-        if (isDriveUrl(url)) {
-            const driveId = parseDriveIdClient(url);
-            if (driveId) return `/api/pdf-proxy?id=${driveId}`;
-            return `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
-        }
-        return url;
-    }
-
     function buildViewer(url, title) {
         if (!url) return document.createElement('div');
 
-        if (isDriveUrl(url) || PDF_RE.test(url)) {
-            return buildPdfCanvasViewer(getProxyUrl(url), title);
+        if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
+            const frame = document.createElement('iframe');
+            let driveUrl = url;
+            if (driveUrl.includes('/view')) {
+                driveUrl = driveUrl.replace(/\/view.*$/, '/preview');
+            } else if (!driveUrl.includes('/preview') && driveUrl.includes('/file/d/')) {
+                driveUrl = driveUrl.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
+            }
+            frame.src = driveUrl;
+            frame.title = title || 'Document Google Drive';
+            frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white shadow-sm';
+            frame.allow = 'autoplay';
+            return frame;
         }
 
         if (IMAGE_RE.test(url)) {
@@ -416,9 +411,11 @@
             img.className = 'mx-auto max-h-[88vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
         }
-
+        if (PDF_RE.test(url)) {
+            return buildPdfCanvasViewer(url, title);
+        }
         const frame = document.createElement('iframe');
-        frame.src = getProxyUrl(url);
+        frame.src = url.includes('#') ? url : (url + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH');
         frame.title = title || 'Document';
         frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white';
         return frame;
@@ -673,9 +670,14 @@
         function showIframeFallback(safeUrl) {
             scrollArea.innerHTML = '';
             const iframe = document.createElement('iframe');
-            iframe.src = `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+            if (safeUrl.includes('drive.google.com') || safeUrl.includes('docs.google.com')) {
+                iframe.src = safeUrl;
+            } else {
+                iframe.src = safeUrl.includes('#') ? safeUrl : `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+            }
             iframe.className = 'h-full w-full border-none rounded-xl bg-white';
             iframe.title = title || 'Document PDF';
+            iframe.allow = 'autoplay';
             scrollArea.appendChild(iframe);
         }
 
@@ -726,8 +728,19 @@
     function buildPreview(url, title) {
         if (!url) return document.createElement('div');
 
-        if (isDriveUrl(url) || PDF_RE.test(url)) {
-            return buildPdfCanvasViewer(getProxyUrl(url), title);
+        if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
+            const frame = document.createElement('iframe');
+            let driveUrl = url;
+            if (driveUrl.includes('/view')) {
+                driveUrl = driveUrl.replace(/\/view.*$/, '/preview');
+            } else if (!driveUrl.includes('/preview') && driveUrl.includes('/file/d/')) {
+                driveUrl = driveUrl.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
+            }
+            frame.src = driveUrl;
+            frame.title = title || 'Document Google Drive';
+            frame.className = 'h-[75vh] w-full rounded-xl border-0 bg-white shadow-sm';
+            frame.allow = 'autoplay';
+            return frame;
         }
 
         if (IMAGE_RE.test(url)) {
@@ -738,11 +751,16 @@
             return img;
         }
 
-        const frame = document.createElement('iframe');
-        frame.src = getProxyUrl(url);
-        frame.title = title || 'Document';
-        frame.className = 'h-[85vh] min-h-[650px] w-full rounded-2xl border-0 bg-white shadow-soft';
-        return frame;
+        if (PDF_RE.test(url)) {
+            return buildPdfCanvasViewer(url, title);
+        }
+
+        // Format non previsualisable : on invite au telechargement.
+        const div = document.createElement('div');
+        div.className = 'p-10 text-center text-sm text-slate-500 dark:text-slate-400';
+        div.textContent =
+            "Ce format ne peut pas être prévisualisé dans le navigateur. Utilisez le bouton de téléchargement ci-dessous.";
+        return div;
     }
 
     /**
