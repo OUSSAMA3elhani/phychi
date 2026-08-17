@@ -43,9 +43,9 @@ const Favorite = {
     async loadItem(type, itemId) {
         if (type.name === 'chapter') {
             const [rows] = await pool.query(
-                `SELECT ch.id, ch.titre, ch.slug, d.slug AS discipline_slug
+                `SELECT ch.id, ch.titre, ch.slug, COALESCE(d.slug, 'physique') AS discipline_slug
                  FROM chapters ch
-                 JOIN disciplines d ON ch.discipline_id = d.id
+                 LEFT JOIN disciplines d ON ch.discipline_id = d.id
                  WHERE ch.id = ? LIMIT 1`,
                 [itemId]
             );
@@ -71,10 +71,10 @@ const Favorite = {
         }
 
         const [rows] = await pool.query(
-            `SELECT i.id, i.titre, i.slug, d.slug AS discipline_slug
+            `SELECT i.id, i.titre, i.slug, COALESCE(d.slug, 'physique') AS discipline_slug
              FROM \`${type.table}\` i
-             JOIN chapters ch ON i.chapter_id = ch.id
-             JOIN disciplines d ON ch.discipline_id = d.id
+             LEFT JOIN chapters ch ON i.chapter_id = ch.id
+             LEFT JOIN disciplines d ON ch.discipline_id = d.id
              WHERE i.id = ? LIMIT 1`,
             [itemId]
         );
@@ -92,15 +92,13 @@ const Favorite = {
 
     /**
      * Ajoute le favori s'il est absent, le retire s'il est present.
-     * @returns {Promise<{favorited: boolean}|null>} null si la ressource est introuvable.
+     * @returns {Promise<{favorited: boolean}|null>}
      */
     async toggle(userId, itemType, itemId) {
         const type = this.resolveType(itemType);
         if (!type) return null;
 
-        const item = await this.loadItem(type, itemId);
-        if (!item) return null;
-
+        // 1. Check if the favorite already exists. If so, remove it immediately!
         const [existing] = await pool.query(
             'SELECT id FROM favorites WHERE user_id = ? AND item_type = ? AND item_id = ? LIMIT 1',
             [userId, type.name, itemId]
@@ -111,22 +109,28 @@ const Favorite = {
             return { favorited: false };
         }
 
+        // 2. Only if creating a new favorite, load item details:
+        const item = await this.loadItem(type, itemId);
+
         let url = `/cours`;
+        let titre = item ? item.titre : 'Ressource';
+        let disciplineSlug = item ? item.discipline_slug : 'physique';
+
         if (type.name === 'exercise') {
-            url = `/exercices-${toMatiere(item.discipline_slug) === 'chimie' ? 'chimie' : 'physique'}`;
+            url = `/exercices-${toMatiere(disciplineSlug) === 'chimie' ? 'chimie' : 'physique'}`;
         } else if (type.name === 'chapter') {
-            url = `/cours/${item.id}`;
+            url = `/cours/${itemId}`;
         } else if (type.name === 'book') {
-            url = `/livres/${item.id}`;
+            url = `/livres/${itemId}`;
         } else if (type.name === 'concours') {
-            url = `/concours/${item.id}`;
+            url = `/concours/${itemId}`;
         }
 
         await pool.query(
             `INSERT INTO favorites (user_id, item_type, item_id, titre, url, categorie, matiere)
              VALUES (?, ?, ?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE titre = VALUES(titre), url = VALUES(url)`,
-            [userId, type.name, itemId, item.titre, url, type.categorie, toMatiere(item.discipline_slug)]
+            [userId, type.name, itemId, titre, url, type.categorie, toMatiere(disciplineSlug)]
         );
         return { favorited: true };
     },
