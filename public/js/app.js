@@ -381,6 +381,9 @@
     // Affichage differe des documents (PDF / image)
     // -------------------------------------------------------------------------
 
+    const IMAGE_RE = /\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i;
+    const PDF_RE = /\.pdf(\?|#|$)/i;
+
     /**
      * Les visionneuses ne sont pas rendues au chargement : leur `<iframe>` est
      * construit au premier clic. Un PDF integre par page couterait une requete
@@ -429,9 +432,6 @@
                     }, 120);
                 }
 
-                // Libelles personnalisables : sur la fiche d'un exercice, il
-                // faut distinguer l'enonce de la correction plutot que de
-                // retomber sur un « document » generique.
                 const label = btn.querySelector('[data-doc-label]');
                 if (label) {
                     const show = btn.dataset.labelShow || 'Voir le document';
@@ -448,9 +448,6 @@
     // -------------------------------------------------------------------------
     // Modale d'apercu de fichier (PDF / image)
     // -------------------------------------------------------------------------
-
-    const IMAGE_RE = /\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i;
-    const PDF_RE = /\.pdf(\?|#|$)/i;
 
     /** Element ayant le focus avant l'ouverture, pour le restaurer a la fermeture. */
     let modalOpener = null;
@@ -710,8 +707,14 @@
         return container;
     }
 
-    /** Construit le corps de la modale selon le type de fichier. */
     function buildPreview(url, title) {
+        if (!url) {
+            const div = document.createElement('div');
+            div.className = 'p-10 text-center text-sm text-slate-500 dark:text-slate-400';
+            div.textContent = "Aucun fichier n'a encore été téléversé pour cette ressource.";
+            return div;
+        }
+
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
             img.src = url;
@@ -730,16 +733,7 @@
             return frame;
         }
 
-        if (PDF_RE.test(url)) {
-            return buildPdfCanvasViewer(url, title);
-        }
-
-        // Format non previsualisable : on invite au telechargement.
-        const div = document.createElement('div');
-        div.className = 'p-10 text-center text-sm text-slate-500 dark:text-slate-400';
-        div.textContent =
-            "Ce format ne peut pas être prévisualisé dans le navigateur. Utilisez le bouton de téléchargement ci-dessous.";
-        return div;
+        return buildPdfCanvasViewer(url, title);
     }
 
     /**
