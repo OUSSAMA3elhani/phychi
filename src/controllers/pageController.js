@@ -346,13 +346,46 @@ const pageController = {
     /** Favorites page (Protected) */
     async favoris(req, res, next) {
         try {
-            const [courses, exercises, chapters, books, concours] = await Promise.all([
+            const selectedCategorie = req.query.categorie || 'toutes';
+            const selectedMatiere = req.query.matiere || 'toutes';
+
+            let [courses, exercises, chapters, books, concours] = await Promise.all([
                 Favorite.listCourses(req.session.userId),
                 Favorite.listExercises(req.session.userId),
                 Favorite.listChapters(req.session.userId),
                 Favorite.listBooks(req.session.userId),
                 Favorite.listConcours(req.session.userId),
             ]);
+
+            // 1. Filter by Matière (physique / chimie)
+            if (selectedMatiere !== 'toutes') {
+                const targetMatiere = selectedMatiere.toLowerCase();
+                courses = courses.filter(c => (c.discipline_slug || '').toLowerCase().includes(targetMatiere));
+                exercises = exercises.filter(e => (e.discipline_slug || '').toLowerCase().includes(targetMatiere));
+                chapters = chapters.filter(ch => (ch.discipline_slug || '').toLowerCase().includes(targetMatiere));
+                books = books.filter(b => (b.discipline || '').toLowerCase().includes(targetMatiere));
+                concours = concours.filter(cc => (cc.matiere || '').toLowerCase().includes(targetMatiere));
+            }
+
+            // 2. Filter by Catégorie
+            if (selectedCategorie === 'cours') {
+                exercises = []; books = []; concours = [];
+            } else if (selectedCategorie === 'exercices' || selectedCategorie === 'solutions') {
+                courses = []; chapters = []; books = []; concours = [];
+            } else if (selectedCategorie === 'livres') {
+                courses = []; exercises = []; chapters = []; concours = [];
+            } else if (selectedCategorie === 'concours') {
+                courses = []; exercises = []; chapters = []; books = [];
+            } else if (selectedCategorie === 'telechargements') {
+                courses = courses.filter(c => c.course_file);
+                exercises = exercises.filter(e => e.enonce_file || e.correction_file);
+                chapters = [];
+                books = books.filter(b => b.pdf_file);
+                concours = concours.filter(cc => cc.enonce_file || cc.correction_file);
+            }
+
+            const total = courses.length + exercises.length + chapters.length + books.length + concours.length;
+
             res.render('favoris', {
                 title: 'Mes Ressources Favoris - PhyChemia',
                 metaDescription: 'Accédez rapidement à tous vos cours, chapitres, exercices, livres et concours enregistrés dans vos favoris PhyChemia.',
@@ -362,7 +395,9 @@ const pageController = {
                 favoriteChapters: chapters,
                 favoriteBooks: books,
                 favoriteConcours: concours,
-                total: courses.length + exercises.length + chapters.length + books.length + concours.length,
+                total,
+                selectedCategorie,
+                selectedMatiere,
             });
         } catch (err) {
             next(err);

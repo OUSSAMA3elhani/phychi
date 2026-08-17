@@ -51,11 +51,12 @@
                         <label for="categorie" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Catégorie</label>
                         <select name="categorie" id="categorie"
                                 class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                            <option value="toutes">Toutes les catégories</option>
-                            <option value="cours">Cours</option>
-                            <option value="exercices">Exercices</option>
-                            <option value="solutions">Solutions / Corrigés</option>
-                            <option value="telechargements">Fichiers PDF</option>
+                            <option value="toutes" <%= (typeof selectedCategorie === 'undefined' || selectedCategorie === 'toutes') ? 'selected' : '' %>>Toutes les catégories</option>
+                            <option value="cours" <%= (typeof selectedCategorie !== 'undefined' && selectedCategorie === 'cours') ? 'selected' : '' %>>Cours</option>
+                            <option value="exercices" <%= (typeof selectedCategorie !== 'undefined' && selectedCategorie === 'exercices') ? 'selected' : '' %>>Exercices</option>
+                            <option value="livres" <%= (typeof selectedCategorie !== 'undefined' && selectedCategorie === 'livres') ? 'selected' : '' %>>Livres &amp; Manuels</option>
+                            <option value="concours" <%= (typeof selectedCategorie !== 'undefined' && selectedCategorie === 'concours') ? 'selected' : '' %>>Concours &amp; Annales</option>
+                            <option value="telechargements" <%= (typeof selectedCategorie !== 'undefined' && selectedCategorie === 'telechargements') ? 'selected' : '' %>>Fichiers PDF</option>
                         </select>
                     </div>
 
@@ -63,9 +64,9 @@
                         <label for="matiere" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Matière</label>
                         <select name="matiere" id="matiere"
                                 class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                            <option value="toutes">Toutes les matières</option>
-                            <option value="physique">Physique</option>
-                            <option value="chimie">Chimie</option>
+                            <option value="toutes" <%= (typeof selectedMatiere === 'undefined' || selectedMatiere === 'toutes') ? 'selected' : '' %>>Toutes les matières</option>
+                            <option value="physique" <%= (typeof selectedMatiere !== 'undefined' && selectedMatiere === 'physique') ? 'selected' : '' %>>Physique</option>
+                            <option value="chimie" <%= (typeof selectedMatiere !== 'undefined' && selectedMatiere === 'chimie') ? 'selected' : '' %>>Chimie</option>
                         </select>
                     </div>
 
@@ -298,14 +299,16 @@
                 <% } %>
         </section>
 
-        <!-- Pagination -->
-        <nav aria-label="Pagination des favoris" class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-            <ul class="flex items-center justify-center gap-2">
-                <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
-                <li><a href="#" aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</a></li>
-                <li><a href="#" class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">Suivant</a></li>
-            </ul>
-        </nav>
+        <% if (total > 12) { %>
+            <!-- Pagination -->
+            <nav aria-label="Pagination des favoris" class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+                <ul class="flex items-center justify-center gap-2">
+                    <li><span class="inline-flex cursor-not-allowed items-center rounded-xl px-4 py-2.5 text-sm font-medium text-slate-300 dark:text-slate-600">Précédent</span></li>
+                    <li><span aria-current="page" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-glow">1</span></li>
+                    <li><span class="inline-flex cursor-not-allowed items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-500">Suivant</span></li>
+                </ul>
+            </nav>
+        <% } %>
     </main>
 
     <!-- ==================================================================
