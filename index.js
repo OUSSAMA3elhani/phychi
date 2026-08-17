@@ -1,4 +1,2 @@
-/**
- * Index Entry Point for Cloud Hosting Platforms (GoDaddy, Hostinger, Render, Heroku, cPanel)
- */
+// GoDaddy Node.js entry point alias
 require('./server.js');

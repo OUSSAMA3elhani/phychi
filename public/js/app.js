@@ -387,24 +387,6 @@
      * reseau et un rendu inutiles a chaque visite.
      */
     function buildViewer(url, title) {
-        if (!url) return document.createElement('div');
-
-        if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
-            const frame = document.createElement('iframe');
-            let driveUrl = url;
-            if (driveUrl.includes('/view')) {
-                driveUrl = driveUrl.replace(/\/view.*$/, '/preview');
-            } else if (!driveUrl.includes('/preview') && driveUrl.includes('/file/d/')) {
-                driveUrl = driveUrl.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
-            }
-            frame.src = driveUrl;
-            frame.title = title || 'Document Google Drive';
-            frame.className = 'h-[88vh] min-h-[700px] lg:min-h-[850px] w-full rounded-xl border-0 bg-white shadow-sm';
-            frame.setAttribute('allow', 'autoplay');
-            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
-            return frame;
-        }
-
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
             img.src = url;
@@ -671,15 +653,9 @@
         function showIframeFallback(safeUrl) {
             scrollArea.innerHTML = '';
             const iframe = document.createElement('iframe');
-            if (safeUrl.includes('drive.google.com') || safeUrl.includes('docs.google.com')) {
-                iframe.src = safeUrl;
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
-            } else {
-                iframe.src = safeUrl.includes('#') ? safeUrl : `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
-            }
+            iframe.src = `${safeUrl}#toolbar=0&navpanes=0&scrollbar=1`;
             iframe.className = 'h-full w-full border-none rounded-xl bg-white';
             iframe.title = title || 'Document PDF';
-            iframe.setAttribute('allow', 'autoplay');
             scrollArea.appendChild(iframe);
         }
 
@@ -728,24 +704,6 @@
 
     /** Construit le corps de la modale selon le type de fichier. */
     function buildPreview(url, title) {
-        if (!url) return document.createElement('div');
-
-        if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
-            const frame = document.createElement('iframe');
-            let driveUrl = url;
-            if (driveUrl.includes('/view')) {
-                driveUrl = driveUrl.replace(/\/view.*$/, '/preview');
-            } else if (!driveUrl.includes('/preview') && driveUrl.includes('/file/d/')) {
-                driveUrl = driveUrl.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
-            }
-            frame.src = driveUrl;
-            frame.title = title || 'Document Google Drive';
-            frame.className = 'h-[75vh] w-full rounded-xl border-0 bg-white shadow-sm';
-            frame.setAttribute('allow', 'autoplay');
-            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
-            return frame;
-        }
-
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
             img.src = url;
