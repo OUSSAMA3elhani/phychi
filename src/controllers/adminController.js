@@ -484,6 +484,17 @@ const adminController = {
             next(err);
         }
     },
+
+    async syncGoogleDrive(req, res, next) {
+        try {
+            const { listAllFilesRecursive, syncDriveFilesToDb, DEFAULT_FOLDER_ID } = require('../services/googleDriveService');
+            const files = await listAllFilesRecursive(DEFAULT_FOLDER_ID);
+            const count = await syncDriveFilesToDb(files);
+            res.json({ success: true, message: `Synchronisé ${count} fichiers avec Google Drive!`, count, totalDriveFiles: files.length });
+        } catch (err) {
+            res.status(500).json({ success: false, error: err.message });
+        }
+    },
 };
 
 module.exports = adminController;

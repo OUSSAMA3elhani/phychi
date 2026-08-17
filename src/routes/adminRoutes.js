@@ -88,4 +88,7 @@ router.post(
 );
 router.post('/concours/:id/delete', adminController.deleteConcours);
 
+// Google Drive Sync API
+router.post('/drive-sync', adminController.syncGoogleDrive);
+
 module.exports = router;
