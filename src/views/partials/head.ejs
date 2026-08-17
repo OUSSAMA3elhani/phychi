@@ -46,14 +46,15 @@
     <meta name="twitter:description" content="<%= metaDesc %>">
     <meta name="twitter:image" content="<%= ogImage %>">
 
-    <!-- Application du thème (évite le flash blanc) -->
+    <!-- Application du thème (Thème clair par défaut) -->
     <script>
         (function () {
             try {
                 var saved = localStorage.getItem('psychi_theme');
-                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (saved === 'dark' || (!saved && prefersDark)) {
+                if (saved === 'dark') {
                     document.documentElement.classList.add('dark-theme');
+                } else {
+                    document.documentElement.classList.remove('dark-theme');
                 }
             } catch (e) { /* localStorage indisponible */ }
         })();

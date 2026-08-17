@@ -25,10 +25,7 @@ function initThemeToggle() {
     themeBtn.id = 'theme-toggle-btn';
     themeBtn.style.cssText = 'background:none; border:none; cursor:pointer; font-size:0.825rem; font-weight:600; color:var(--color-text-light); padding:0;';
 
-    const savedTheme = localStorage.getItem('psychi_theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark-theme');
         themeBtn.textContent = 'Mode Clair';
     } else {
