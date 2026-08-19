@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "db:init": "node database/init.js",
-    "deploy:package": "node tools/package-deploy.mjs"
+    "deploy:package": "node tools/package-deploy.mjs",
+    "split-large-files": "node tools/split-large-files.js"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -40,3 +40,6 @@ public/assets/downloads/Nathan classe prepa/
 public/assets/downloads/Perez/
 public/assets/downloads/H-prepa chimie/
 public/assets/downloads/livres de chimie/
+
+# Fichiers volumineux (>= 50 Mo) destines au stockage Cloudflare R2
+public/assets/large_files/
