@@ -661,7 +661,7 @@
         }
 
         function initPdfJsAndLoad() {
-            const cleanUrl = encodeURI(url);
+            const cleanUrl = url;
             if (url.includes('drive.google.com')) {
                 showIframeFallback(url);
                 return;
@@ -707,6 +707,25 @@
         return container;
     }
 
+    function resolveStreamUrl(url) {
+        if (!url) return '';
+        if (url.startsWith('/api/documents/stream') || url.startsWith('/api/pdf-proxy')) {
+            return url;
+        }
+        // Extraction ID Google Drive direct depuis URL drive.google.com
+        const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (driveMatch && driveMatch[1]) {
+            return `/api/documents/stream/${driveMatch[1]}`;
+        }
+        // Si c'est un lien externe complet non-Drive, le conserver
+        if (/^https?:\/\//i.test(url)) {
+            return url;
+        }
+        // Fichier relatif local ou chemin de base de donnees
+        const cleanPath = url.startsWith('/') ? url : `/${url}`;
+        return `/api/documents/stream?path=${encodeURIComponent(url)}`;
+    }
+
     function buildPreview(url, title) {
         if (!url) {
             const div = document.createElement('div');
@@ -715,25 +734,17 @@
             return div;
         }
 
+        const streamUrl = resolveStreamUrl(url);
+
         if (IMAGE_RE.test(url)) {
             const img = document.createElement('img');
-            img.src = url;
+            img.src = streamUrl;
             img.alt = title || 'Aperçu du document';
             img.className = 'mx-auto max-h-[70vh] w-auto max-w-full rounded-xl bg-white object-contain shadow-soft';
             return img;
         }
 
-        if (url.includes('drive.google.com')) {
-            const frame = document.createElement('iframe');
-            frame.src = url;
-            frame.className = 'h-[85vh] min-h-[700px] w-full rounded-xl border-0 bg-white';
-            frame.setAttribute('allow', 'autoplay');
-            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
-            frame.title = title || 'Document';
-            return frame;
-        }
-
-        return buildPdfCanvasViewer(url, title);
+        return buildPdfCanvasViewer(streamUrl, title);
     }
 
     /**

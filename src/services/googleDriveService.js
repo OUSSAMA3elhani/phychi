@@ -1,99 +1,232 @@
 /**
- * Google Drive API & URL Resolver Service for PhyChemia
- * Shared Folder ID: 1QSccuPuyRnzXO5s55bgp6g8O_U0f4ytD
+ * Google Drive API Service & Streaming Proxy for PhyChemia
+ * Shared Folder ID: 1QSccuPuyRnzXO5s55bgp6g8O_U0fYtD
  */
 
+const fs = require('node:fs');
+const path = require('node:path');
 const { google } = require('googleapis');
 const { pool } = require('../../config/db');
 
-const DEFAULT_FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID || '1QSccuPuyRnzXO5s55bgp6g8O_U0f4ytD';
+const DEFAULT_FOLDER_ID = process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID || process.env.GOOGLE_DRIVE_FOLDER_ID || '1QSccuPuyRnzXO5s55bgp6g8O_U0f4ytD';
+const MAPPING_FILE_PATH = path.join(__dirname, '..', '..', 'config', 'driveMapping.json');
+
+// Cache pour la cartographie
+let driveMappingCache = null;
 
 /**
- * Extracts a Google Drive File/Folder ID from various URL formats.
+ * Charge la cartographie depuis config/driveMapping.json.
+ */
+function loadDriveMapping() {
+    if (driveMappingCache) return driveMappingCache;
+    try {
+        if (fs.existsSync(MAPPING_FILE_PATH)) {
+            const raw = fs.readFileSync(MAPPING_FILE_PATH, 'utf8');
+            driveMappingCache = JSON.parse(raw);
+            return driveMappingCache;
+        }
+    } catch (err) {
+        console.warn('[GoogleDriveService] Avertissement: Impossible de lire driveMapping.json :', err.message);
+    }
+    return { byPath: {}, byFilename: {}, byFileId: {} };
+}
+
+/**
+ * Initialise l'authentification Google (Service Account ou Cle API).
+ */
+function getAuthClient() {
+    // 1. Service Account via variables d'environnement (GoDaddy / Prod)
+    if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+        const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+        return new google.auth.JWT({
+            email: process.env.GOOGLE_CLIENT_EMAIL,
+            key: privateKey,
+            scopes: ['https://www.googleapis.com/auth/drive.readonly']
+        });
+    }
+
+    // 2. Service Account via fichier JSON
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH && fs.existsSync(process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH)) {
+        return new google.auth.GoogleAuth({
+            keyFile: process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
+            scopes: ['https://www.googleapis.com/auth/drive.readonly']
+        });
+    }
+
+    // 3. Fallback Cle API
+    if (process.env.GOOGLE_DRIVE_API_KEY) {
+        return process.env.GOOGLE_DRIVE_API_KEY;
+    }
+
+    return null;
+}
+
+/**
+ * Obtient l'instance du client Drive API v3.
+ */
+function getDriveInstance() {
+    const auth = getAuthClient();
+    const driveOptions = { version: 'v3' };
+    if (auth) driveOptions.auth = auth;
+    return google.drive(driveOptions);
+}
+
+/**
+ * Extrait un ID de fichier/dossier Google Drive a partir de divers formats d'URL.
  * @param {string} url 
  * @returns {string|null}
  */
 function parseDriveId(url) {
     if (!url || typeof url !== 'string') return null;
-    if (/^[a-zA-Z0-9_-]{25,}$/.test(url.trim())) return url.trim();
+    const trimmed = url.trim();
+    if (/^[a-zA-Z0-9_-]{25,}$/.test(trimmed)) return trimmed;
 
-    const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     if (fileMatch) return fileMatch[1];
 
-    const idParamMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if (idParamMatch) return idParamMatch[1];
 
-    const folderMatch = url.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+    const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
     if (folderMatch) return folderMatch[1];
 
     return null;
 }
 
 /**
- * Generates an embedded iframe preview URL for Google Drive files.
+ * Résout un ID de fichier Google Drive à partir d'un chemin, nom de fichier ou URL.
+ * @param {string} fileKeyOrPath 
+ * @returns {string|null}
+ */
+function resolveFileId(fileKeyOrPath) {
+    if (!fileKeyOrPath || typeof fileKeyOrPath !== 'string') return null;
+
+    // 1. Déjà un ID Google Drive direct
+    const directId = parseDriveId(fileKeyOrPath);
+    if (directId && directId.length >= 25 && !fileKeyOrPath.includes('/')) return directId;
+
+    // 2. Recherche dans driveMapping.json
+    const mapping = loadDriveMapping();
+    const cleanKey = fileKeyOrPath.trim();
+    const lowerKey = cleanKey.toLowerCase();
+    const baseName = path.basename(cleanKey).toLowerCase();
+
+    if (mapping.byPath && mapping.byPath[cleanKey]) {
+        return mapping.byPath[cleanKey].id;
+    }
+    if (mapping.byPath && mapping.byPath[lowerKey]) {
+        return mapping.byPath[lowerKey].id;
+    }
+    if (mapping.byFilename && mapping.byFilename[baseName]) {
+        return mapping.byFilename[baseName].id;
+    }
+
+    // 3. Fallback extraction directe depuis l'URL
+    return directId;
+}
+
+/**
+ * Récupère les métadonnées d'un fichier Google Drive (nom, taille, mimeType).
+ * @param {string} fileId 
+ * @returns {Promise<{id: string, name: string, mimeType: string, size: number}>}
+ */
+async function getFileMetadata(fileId) {
+    const drive = getDriveInstance();
+    try {
+        const res = await drive.files.get({
+            fileId,
+            fields: 'id, name, mimeType, size',
+            supportsAllDrives: true
+        });
+        return {
+            id: res.data.id,
+            name: res.data.name,
+            mimeType: res.data.mimeType || 'application/pdf',
+            size: res.data.size ? parseInt(res.data.size, 10) : null
+        };
+    } catch (err) {
+        console.error(`[GoogleDriveService] Erreur lors de la lecture des métadonnées du fichier ${fileId}:`, err.message);
+        throw err;
+    }
+}
+
+/**
+ * Ouvre un flux de lecture (ReadStream) pour un fichier Google Drive.
+ * @param {string} fileId 
+ * @param {object} [options]
+ * @returns {Promise<import('stream').Readable>}
+ */
+async function getFileStream(fileId, options = {}) {
+    const drive = getDriveInstance();
+    const reqOptions = { responseType: 'stream' };
+
+    if (options.headers) {
+        reqOptions.headers = options.headers;
+    }
+
+    try {
+        const res = await drive.files.get({
+            fileId,
+            alt: 'media',
+            supportsAllDrives: true
+        }, reqOptions);
+
+        return res.data;
+    } catch (err) {
+        console.error(`[GoogleDriveService] Erreur de création du flux pour le fichier ${fileId}:`, err.message);
+        throw err;
+    }
+}
+
+/**
+ * Genere une URL d'apercu iframe pour Google Drive.
  * @param {string} fileIdOrUrl 
  * @returns {string}
  */
 function getPreviewUrl(fileIdOrUrl) {
     const id = parseDriveId(fileIdOrUrl);
     if (id) {
-        return `https://drive.google.com/file/d/${id}/preview`;
+        return `/api/documents/stream/${id}`;
     }
     return fileIdOrUrl;
 }
 
 /**
- * Generates a direct stream/download URL for Google Drive files.
+ * Genere une URL de telechargement direct pour Google Drive.
  * @param {string} fileIdOrUrl 
  * @returns {string}
  */
 function getDownloadUrl(fileIdOrUrl) {
     const id = parseDriveId(fileIdOrUrl);
     if (id) {
-        return `https://drive.google.com/uc?export=download&id=${id}`;
+        return `/api/documents/stream/${id}?download=1`;
     }
     return fileIdOrUrl;
 }
 
 /**
- * Lists all files inside a public or shared Google Drive folder using Google Drive API v3.
- * @param {string} folderId 
- * @param {string} [apiKey] 
- * @returns {Promise<Array<{id: string, name: string, mimeType: string, webViewLink: string, webContentLink: string}>>}
+ * Liste les fichiers d'un dossier Google Drive.
  */
 async function listFolderFiles(folderId = DEFAULT_FOLDER_ID, apiKey = process.env.GOOGLE_DRIVE_API_KEY) {
-    const key = apiKey || process.env.GOOGLE_DRIVE_API_KEY;
-    
-    if (!key) {
-        console.warn('[GoogleDriveService] Warning: GOOGLE_DRIVE_API_KEY is not set in .env. Attempting public fetch fallback.');
-    }
-
-    const drive = google.drive({ version: 'v3', auth: key });
-    
+    const drive = getDriveInstance();
     try {
         const res = await drive.files.list({
             q: `'${folderId}' in parents and trashed = false`,
             fields: 'files(id, name, mimeType, webViewLink, webContentLink, parents)',
             pageSize: 1000
         });
-
         return res.data.files || [];
     } catch (err) {
-        console.error('[GoogleDriveService] Error listing Google Drive folder files:', err.message);
+        console.error('[GoogleDriveService] Erreur de listage du dossier :', err.message);
         throw err;
     }
 }
 
 /**
- * Recursively fetches all files and subfolders from Google Drive.
- * @param {string} parentFolderId 
- * @param {string} currentPath 
- * @param {string} apiKey 
- * @returns {Promise<Array<{id: string, name: string, path: string, webViewLink: string, previewUrl: string, downloadUrl: string}>>}
+ * Liste récursivement les fichiers d'un dossier Google Drive.
  */
-async function listAllFilesRecursive(parentFolderId = DEFAULT_FOLDER_ID, currentPath = '', apiKey = process.env.GOOGLE_DRIVE_API_KEY) {
-    const key = apiKey || process.env.GOOGLE_DRIVE_API_KEY;
-    const drive = google.drive({ version: 'v3', auth: key });
+async function listAllFilesRecursive(parentFolderId = DEFAULT_FOLDER_ID, currentPath = '') {
+    const drive = getDriveInstance();
     let allFiles = [];
 
     async function walk(folderId, pathPrefix) {
@@ -103,7 +236,7 @@ async function listAllFilesRecursive(parentFolderId = DEFAULT_FOLDER_ID, current
         do {
             const res = await drive.files.list({
                 q: `'${folderId}' in parents and trashed = false`,
-                fields: 'nextPageToken, files(id, name, mimeType, webViewLink, webContentLink)',
+                fields: 'nextPageToken, files(id, name, mimeType, size, webViewLink, webContentLink)',
                 pageSize: 1000,
                 pageToken: nextPageToken || undefined
             });
@@ -127,9 +260,9 @@ async function listAllFilesRecursive(parentFolderId = DEFAULT_FOLDER_ID, current
                     name: item.name,
                     path: itemPath,
                     mimeType: item.mimeType,
-                    webViewLink: item.webViewLink,
-                    previewUrl: getPreviewUrl(item.id),
-                    downloadUrl: getDownloadUrl(item.id)
+                    size: item.size ? parseInt(item.size, 10) : null,
+                    previewUrl: `/api/documents/stream/${item.id}`,
+                    downloadUrl: `/api/documents/stream/${item.id}?download=1`
                 });
             }
         }
@@ -144,38 +277,33 @@ async function listAllFilesRecursive(parentFolderId = DEFAULT_FOLDER_ID, current
 }
 
 /**
- * Automatically syncs Google Drive file URLs into MySQL database tables (courses, exercises, books, concours).
- * Matches files by name or relative path.
- * @param {Array<{id: string, name: string, previewUrl: string, downloadUrl: string}>} driveFiles 
+ * Synchronise les URL Google Drive dans la base de données.
  */
 async function syncDriveFilesToDb(driveFiles) {
     let syncedCount = 0;
 
-    console.log('Loading database records into memory...');
-    const [courses] = await pool.query('SELECT id, course_file, titre FROM courses');
-    const [exercises] = await pool.query('SELECT id, enonce_file, correction_file, titre FROM exercises');
-    const [books] = await pool.query('SELECT id, pdf_file, titre FROM books');
-    const [concours] = await pool.query('SELECT id, enonce_file, correction_file, titre FROM concours');
+    const [courses] = await pool.query('SELECT id, course_file FROM courses');
+    const [exercises] = await pool.query('SELECT id, enonce_file, correction_file FROM exercises');
+    const [books] = await pool.query('SELECT id, pdf_file FROM books');
+    const [concours] = await pool.query('SELECT id, enonce_file, correction_file FROM concours');
 
     const fileMap = new Map();
     for (const f of driveFiles) {
         if (!f.name) continue;
         const normName = f.name.trim().toLowerCase();
-        fileMap.set(normName, f.previewUrl);
+        fileMap.set(normName, `/api/documents/stream/${f.id}`);
     }
 
-    // 1. Update Courses
     for (const c of courses) {
         if (!c.course_file) continue;
         const baseName = c.course_file.split('/').pop().trim().toLowerCase();
-        const driveUrl = fileMap.get(baseName);
-        if (driveUrl && c.course_file !== driveUrl) {
-            await pool.query('UPDATE courses SET course_file = ? WHERE id = ?', [driveUrl, c.id]);
+        const streamUrl = fileMap.get(baseName);
+        if (streamUrl && c.course_file !== streamUrl) {
+            await pool.query('UPDATE courses SET course_file = ? WHERE id = ?', [streamUrl, c.id]);
             syncedCount++;
         }
     }
 
-    // 2. Update Exercises
     for (const e of exercises) {
         let newEnonce = e.enonce_file;
         let newCorr = e.correction_file;
@@ -183,17 +311,17 @@ async function syncDriveFilesToDb(driveFiles) {
 
         if (e.enonce_file) {
             const base = e.enonce_file.split('/').pop().trim().toLowerCase();
-            const driveUrl = fileMap.get(base);
-            if (driveUrl && e.enonce_file !== driveUrl) {
-                newEnonce = driveUrl;
+            const streamUrl = fileMap.get(base);
+            if (streamUrl && e.enonce_file !== streamUrl) {
+                newEnonce = streamUrl;
                 updated = true;
             }
         }
         if (e.correction_file) {
             const base = e.correction_file.split('/').pop().trim().toLowerCase();
-            const driveUrl = fileMap.get(base);
-            if (driveUrl && e.correction_file !== driveUrl) {
-                newCorr = driveUrl;
+            const streamUrl = fileMap.get(base);
+            if (streamUrl && e.correction_file !== streamUrl) {
+                newCorr = streamUrl;
                 updated = true;
             }
         }
@@ -203,18 +331,16 @@ async function syncDriveFilesToDb(driveFiles) {
         }
     }
 
-    // 3. Update Books
     for (const b of books) {
         if (!b.pdf_file) continue;
         const baseName = b.pdf_file.split('/').pop().trim().toLowerCase();
-        const driveUrl = fileMap.get(baseName);
-        if (driveUrl && b.pdf_file !== driveUrl) {
-            await pool.query('UPDATE books SET pdf_file = ? WHERE id = ?', [driveUrl, b.id]);
+        const streamUrl = fileMap.get(baseName);
+        if (streamUrl && b.pdf_file !== streamUrl) {
+            await pool.query('UPDATE books SET pdf_file = ? WHERE id = ?', [streamUrl, b.id]);
             syncedCount++;
         }
     }
 
-    // 4. Update Concours
     for (const cc of concours) {
         let newEnonce = cc.enonce_file;
         let newCorr = cc.correction_file;
@@ -222,17 +348,17 @@ async function syncDriveFilesToDb(driveFiles) {
 
         if (cc.enonce_file) {
             const base = cc.enonce_file.split('/').pop().trim().toLowerCase();
-            const driveUrl = fileMap.get(base);
-            if (driveUrl && cc.enonce_file !== driveUrl) {
-                newEnonce = driveUrl;
+            const streamUrl = fileMap.get(base);
+            if (streamUrl && cc.enonce_file !== streamUrl) {
+                newEnonce = streamUrl;
                 updated = true;
             }
         }
         if (cc.correction_file) {
             const base = cc.correction_file.split('/').pop().trim().toLowerCase();
-            const driveUrl = fileMap.get(base);
-            if (driveUrl && cc.correction_file !== driveUrl) {
-                newCorr = driveUrl;
+            const streamUrl = fileMap.get(base);
+            if (streamUrl && cc.correction_file !== streamUrl) {
+                newCorr = streamUrl;
                 updated = true;
             }
         }
@@ -248,6 +374,9 @@ async function syncDriveFilesToDb(driveFiles) {
 module.exports = {
     DEFAULT_FOLDER_ID,
     parseDriveId,
+    resolveFileId,
+    getFileMetadata,
+    getFileStream,
     getPreviewUrl,
     getDownloadUrl,
     listFolderFiles,

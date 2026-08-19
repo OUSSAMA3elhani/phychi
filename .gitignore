@@ -1,10 +1,14 @@
 # Dependances - ne jamais televerser sur l'hebergement (C10 / W004)
 node_modules/
 
-# Variables d'environnement - jamais dans le depot ni dans le zip (C8 / W001)
+# Variables d'environnement & identifiants - jamais dans le depot ni dans le zip (C8 / W001)
 .env
 .env.local
 .env.*.local
+config/google-service-account.json
+
+# Ne pas ignorer la cartographie
+!config/driveMapping.json
 
 # Journaux
 logs/
@@ -21,15 +25,12 @@ Thumbs.db
 
 # Artefacts de deploiement
 *.zip
-
 deploy/
+
+# Dossiers d'actifs lourds locaux
+public/assets/downloads/
+public/assets/large_files/
 
 # Uploads dynamiques - ne pas suivre les fichiers televerses par les utilisateurs
 public/uploads/*
 !public/uploads/.gitkeep
-
-# Fichiers lourds (>= 10 Mo) deportes sur Cloudflare R2
-public/assets/large_files/
-
-
-
