@@ -55,22 +55,29 @@ function Push-WithRetry {
         [int]$MaxAttempts = 4
     )
 
-    for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
-        Write-Host "  Push vers origin/$TargetBranch (Tentative $attempt/$MaxAttempts)..."
-        
-        $pushOutput = & git push origin $TargetBranch 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "  Push reussi sur origin/$TargetBranch !"
-            return $true
-        } else {
-            Write-Host "  Avertissement: Echec du push (Tentative $attempt): $pushOutput"
-            if ($attempt -lt $MaxAttempts) {
-                Write-Host "  Pause de 3 secondes avant la tentative suivante..."
-                Start-Sleep -Seconds 3
+    $oldEap = $global:ErrorActionPreference
+    $global:ErrorActionPreference = 'Continue'
+
+    try {
+        for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+            Write-Host "  Push vers origin/$TargetBranch (Tentative $attempt/$MaxAttempts)..."
+            
+            $pushOutput = & git push origin $TargetBranch 2>&1 | Out-String
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  Push reussi sur origin/$TargetBranch !"
+                return $true
+            } else {
+                Write-Host "  Avertissement: Echec du push (Tentative $attempt): $pushOutput"
+                if ($attempt -lt $MaxAttempts) {
+                    Write-Host "  Pause de 3 secondes avant la tentative suivante..."
+                    Start-Sleep -Seconds 3
+                }
             }
         }
+        return $false
+    } finally {
+        $global:ErrorActionPreference = $oldEap
     }
-    return $false
 }
 
 # 2. Base Commit (Fichiers du projet hors public/assets/downloads)
