@@ -79,15 +79,18 @@ function getDriveInstance() {
 function parseDriveId(url) {
     if (!url || typeof url !== 'string') return null;
     const trimmed = url.trim();
-    if (/^[a-zA-Z0-9_-]{25,}$/.test(trimmed)) return trimmed;
+    if (/^[a-zA-Z0-9_-]{25,}$/.test(trimmed) && !trimmed.includes('/')) return trimmed;
 
-    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    const streamMatch = trimmed.match(/\/api\/(?:documents\/stream|pdf-proxy)\/([a-zA-Z0-9_-]+)/i);
+    if (streamMatch) return streamMatch[1];
+
+    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/i);
     if (fileMatch) return fileMatch[1];
 
-    const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    const idParamMatch = trimmed.match(/[?&](?:id|fileId)=([a-zA-Z0-9_-]+)/i);
     if (idParamMatch) return idParamMatch[1];
 
-    const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+    const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/i);
     if (folderMatch) return folderMatch[1];
 
     return null;
@@ -101,28 +104,65 @@ function parseDriveId(url) {
 function resolveFileId(fileKeyOrPath) {
     if (!fileKeyOrPath || typeof fileKeyOrPath !== 'string') return null;
 
-    // 1. Déjà un ID Google Drive direct
-    const directId = parseDriveId(fileKeyOrPath);
-    if (directId && directId.length >= 25 && !fileKeyOrPath.includes('/')) return directId;
+    const cleanKey = fileKeyOrPath.trim();
+
+    // 1. Déjà un ID Google Drive direct ou URL de stream
+    const directId = parseDriveId(cleanKey);
+    if (directId) return directId;
 
     // 2. Recherche dans driveMapping.json
     const mapping = loadDriveMapping();
-    const cleanKey = fileKeyOrPath.trim();
-    const lowerKey = cleanKey.toLowerCase();
+
+    // Normaliser les préfixes de chemin
+    let relPath = cleanKey.startsWith('/') ? cleanKey.slice(1) : cleanKey;
+    if (relPath.startsWith('assets/downloads/')) relPath = relPath.replace(/^assets\/downloads\//, '');
+    if (relPath.startsWith('public/assets/downloads/')) relPath = relPath.replace(/^public\/assets\/downloads\//, '');
+    if (relPath.startsWith('public/')) relPath = relPath.replace(/^public\//, '');
+
+    const lowerRelPath = relPath.toLowerCase();
     const baseName = path.basename(cleanKey).toLowerCase();
 
-    if (mapping.byPath && mapping.byPath[cleanKey]) {
-        return mapping.byPath[cleanKey].id;
+    if (mapping.byPath) {
+        if (mapping.byPath[cleanKey]) return mapping.byPath[cleanKey].id;
+        if (mapping.byPath[relPath]) return mapping.byPath[relPath].id;
+        if (mapping.byPath[lowerRelPath]) return mapping.byPath[lowerRelPath].id;
     }
-    if (mapping.byPath && mapping.byPath[lowerKey]) {
-        return mapping.byPath[lowerKey].id;
-    }
+
     if (mapping.byFilename && mapping.byFilename[baseName]) {
         return mapping.byFilename[baseName].id;
     }
 
-    // 3. Fallback extraction directe depuis l'URL
-    return directId;
+    return null;
+}
+
+/**
+ * Recherche en direct sur l'API Google Drive par nom de fichier (si absent du mapping local).
+ * @param {string} fileKeyOrPath
+ * @returns {Promise<string|null>}
+ */
+async function searchDriveFileByName(fileKeyOrPath) {
+    if (!fileKeyOrPath || typeof fileKeyOrPath !== 'string') return null;
+    const baseName = path.basename(fileKeyOrPath.trim());
+    if (!baseName || baseName === '.' || baseName === '/') return null;
+
+    try {
+        const drive = getDriveInstance();
+        const escaped = baseName.replace(/'/g, "\\'");
+        const res = await drive.files.list({
+            q: `name = '${escaped}' and trashed = false`,
+            supportsAllDrives: true,
+            includeItemsFromAllDrives: true,
+            fields: 'files(id, name, mimeType)'
+        });
+
+        if (res.data.files && res.data.files.length > 0) {
+            return res.data.files[0].id;
+        }
+    } catch (err) {
+        console.warn(`[GoogleDriveService] Recherche en direct Google Drive pour "${baseName}" :`, err.message);
+    }
+
+    return null;
 }
 
 /**
@@ -375,6 +415,7 @@ module.exports = {
     DEFAULT_FOLDER_ID,
     parseDriveId,
     resolveFileId,
+    searchDriveFileByName,
     getFileMetadata,
     getFileStream,
     getPreviewUrl,

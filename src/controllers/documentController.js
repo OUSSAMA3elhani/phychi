@@ -35,7 +35,10 @@ const documentController = {
             const cleanKey = decodeURIComponent(rawKey).trim();
 
             // 1. Tenter la résolution Google Drive API en PREMIER (Drive-first strategy)
-            const fileId = googleDriveService.resolveFileId(cleanKey);
+            let fileId = googleDriveService.resolveFileId(cleanKey);
+            if (!fileId) {
+                fileId = await googleDriveService.searchDriveFileByName(cleanKey);
+            }
 
             if (fileId) {
                 try {
