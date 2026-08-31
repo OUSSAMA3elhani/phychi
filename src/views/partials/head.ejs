@@ -23,8 +23,25 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PhyChemia">
     <meta name="msapplication-navbutton-color" content="#0f172a">
-    <meta name="msapplication-TileColor" content="#0f172a">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="<%= canonical %>">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "<%= siteName %>",
+        "url": "<%= baseUrl %>",
+        "description": "<%= defaultDesc %>",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "<%= baseUrl %>/recherche?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
 
     <!-- Favicon Integration (public/images/favicon.png) -->
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=3">

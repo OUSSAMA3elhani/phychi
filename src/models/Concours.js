@@ -45,6 +45,17 @@ const Concours = {
         }
     },
 
+    async findAll() {
+        await ensureTableExists();
+        try {
+            const [rows] = await pool.query('SELECT * FROM concours ORDER BY id ASC');
+            return rows;
+        } catch (err) {
+            console.error('Erreur Concours.findAll:', err.message);
+            return [];
+        }
+    },
+
     async findFilters() {
         await ensureTableExists();
         try {

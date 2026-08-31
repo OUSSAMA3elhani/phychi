@@ -42,6 +42,17 @@ const Book = {
         }
     },
 
+    async findAll() {
+        await ensureTableExists();
+        try {
+            const [rows] = await pool.query('SELECT * FROM books ORDER BY id ASC');
+            return rows;
+        } catch (err) {
+            console.error('Erreur Book.findAll:', err.message);
+            return [];
+        }
+    },
+
     async findFilters() {
         await ensureTableExists();
         try {
