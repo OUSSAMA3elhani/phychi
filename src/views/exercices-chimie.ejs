@@ -20,57 +20,57 @@
         <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <%- include('partials/hero-decor', { heroAccent: 'flask' }) %>
 
-            <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
-                <nav aria-label="Fil d'Ariane" class="mb-8">
-                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-20 lg:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-6 sm:mb-8">
+                    <ol class="flex items-center gap-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                         <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                         <li class="font-medium text-slate-900 dark:text-white">Exercices de Chimie</li>
                     </ol>
                 </nav>
 
-                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-flask-600 dark:text-flask-400">Banque d'exercices</p>
-                <h1 class="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-flask-600 dark:text-flask-400">Banque d'exercices</p>
+                <h1 class="mt-3 sm:mt-4 max-w-3xl font-display text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white">
                     Exercices de Chimie
                 </h1>
-                <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                <p class="mt-4 sm:mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                     Problèmes, travaux dirigés et sujets d'entraînement classés par domaine, par niveau et par difficulté.
                 </p>
 
-                <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-4 dark:border-slate-800">
+                <dl class="mt-8 sm:mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:gap-6 border-t border-slate-200 pt-6 sm:pt-8 sm:grid-cols-4 dark:border-slate-800">
                     <div>
-                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.series %></dt>
-                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Séries publiées</dd>
+                        <dt class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.series %></dt>
+                        <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Séries publiées</dd>
                     </div>
                     <div>
-                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.enonces %></dt>
-                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Énoncés disponibles</dd>
+                        <dt class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.enonces %></dt>
+                        <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Énoncés disponibles</dd>
                     </div>
                     <div>
-                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.chapitres %></dt>
-                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Thématiques</dd>
+                        <dt class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.chapitres %></dt>
+                        <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Thématiques</dd>
                     </div>
                     <div>
-                        <dt class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.corrigesPercent %>%</dt>
-                        <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Corrigés</dd>
+                        <dt class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white"><%= stats.corrigesPercent %>%</dt>
+                        <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Corrigés</dd>
                     </div>
                 </dl>
             </div>
         </section>
 
         <!-- Filtres -->
-        <section class="filter-section mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-labelledby="titre-filtres">
-            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-                <h2 id="titre-filtres" class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+        <section class="filter-section mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 lg:px-8" aria-labelledby="titre-filtres">
+            <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <h2 id="titre-filtres" class="font-display text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">
                     Filtrer les exercices
                 </h2>
 
-                <form action="/exercices-chimie" method="get" class="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+                <form action="/exercices-chimie" method="get" class="mt-5 sm:mt-6 grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
                     <div>
-                        <label for="domaine" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Thème / Domaine</label>
+                        <label for="domaine" class="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">Thème / Domaine</label>
                         <%# Les thèmes proviennent de la base -%>
                         <select name="chapitre" id="domaine"
-                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                class="mt-1.5 sm:mt-2 w-full rounded-xl border-slate-200 bg-white py-2.5 sm:py-3 pl-3 sm:pl-4 pr-10 text-xs sm:text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                             <option value="tous"<%= filters.chapitre === 'tous' ? ' selected' : '' %>>Tous les thèmes</option>
                             <% chapters.forEach(function (ch) { %>
                                 <% var cleanTheme = ch.titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim(); %>
@@ -80,9 +80,9 @@
                     </div>
 
                     <div>
-                        <label for="niveau" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Niveau</label>
+                        <label for="niveau" class="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">Niveau</label>
                         <select name="niveau" id="niveau"
-                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                class="mt-1.5 sm:mt-2 w-full rounded-xl border-slate-200 bg-white py-2.5 sm:py-3 pl-3 sm:pl-4 pr-10 text-xs sm:text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                             <% var NIVEAUX = [['tous','Tous les niveaux'],['l1','L1 / CPGE 1ère année'],['l2','L2 / CPGE 2ème année'],['l3','L3'],['master','Master']]; %>
                             <% NIVEAUX.forEach(function (n) { %>
                                 <option value="<%= n[0] %>"<%= filters.niveau === n[0] ? ' selected' : '' %>><%= n[1] %></option>
@@ -91,9 +91,9 @@
                     </div>
 
                     <div>
-                        <label for="difficulte" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Difficulté</label>
+                        <label for="difficulte" class="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">Difficulté</label>
                         <select name="difficulte" id="difficulte"
-                                class="mt-2 w-full rounded-xl border-slate-200 bg-white py-3 pl-4 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
+                                class="mt-1.5 sm:mt-2 w-full rounded-xl border-slate-200 bg-white py-2.5 sm:py-3 pl-3 sm:pl-4 pr-10 text-xs sm:text-sm text-slate-900 shadow-sm transition-colors focus:border-flask-500 focus:ring-4 focus:ring-flask-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                             <% var DIFFS = [['toutes','Toutes'],['facile','Débutant (*)'],['moyen','Intermédiaire (**)'],['difficile','Difficile (***)'],['avance','Avancé (***)']]; %>
                             <% DIFFS.forEach(function (d) { %>
                                 <option value="<%= d[0] %>"<%= filters.difficulte === d[0] ? ' selected' : '' %>><%= d[1] %></option>
@@ -103,12 +103,12 @@
 
                     <div class="flex gap-2">
                         <button type="submit"
-                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-flask-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-flask-700">
+                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-flask-600 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-flask-700">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
                             Filtrer
                         </button>
                         <% if (filters.chapitre !== 'tous' || filters.niveau !== 'tous' || filters.difficulte !== 'toutes') { %>
-                            <a href="/exercices-chimie" class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <a href="/exercices-chimie" class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
                                 Réinitialiser
                             </a>
                         <% } %>
@@ -118,27 +118,27 @@
         </section>
 
         <!-- Liste des séries -->
-        <section class="exercises-list mx-auto max-w-7xl px-6 pb-4 lg:px-8" aria-labelledby="titre-series">
-            <h2 id="titre-series" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        <section class="exercises-list mx-auto max-w-7xl px-4 sm:px-6 pb-4 lg:px-8" aria-labelledby="titre-series">
+            <h2 id="titre-series" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Séries d'exercices disponibles
             </h2>
 
-            <div class="mt-8 grid gap-6">
+            <div class="mt-6 sm:mt-8 grid gap-6">
                 <% var favIds = (typeof favoriteIds !== 'undefined' && favoriteIds) ? favoriteIds : []; %>
                 <% if (typeof exercises !== 'undefined' && exercises && exercises.length > 0) { %>
                     <% exercises.forEach(function (exo) { %>
                         <% var isFav = favIds.indexOf(exo.id) !== -1; %>
-                        <article class="exercise-card group relative flex flex-col rounded-3xl border border-flask-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                        <article class="exercise-card group relative flex flex-col rounded-2xl sm:rounded-3xl border border-flask-200 bg-white p-5 sm:p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-flask-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
                             <header>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="badge badge-chimie inline-flex items-center rounded-full bg-flask-50 px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">
+                                    <span class="badge badge-chimie inline-flex items-center rounded-full bg-flask-50 px-2.5 sm:px-3 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">
                                         Chimie — <%= exo.niveau.toUpperCase() %>
                                     </span>
-                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold capitalize text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 sm:px-3 py-1 text-xs font-semibold capitalize text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                                         Difficulté : <%= exo.difficulte %>
                                     </span>
                                 </div>
-<h3 class="mt-4 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                                <h3 class="mt-4 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                                     <a href="/exercices/<%= exo.id %>" class="transition-colors hover:text-flask-600 dark:hover:text-flask-400">
                                         <!-- Rend toute la carte cliquable ; le bouton favori repasse au-dessus via z-10 -->
                                         <span class="absolute inset-0" aria-hidden="true"></span>
@@ -148,11 +148,11 @@
                             </header>
 
                             <p class="mt-2 text-xs font-medium text-slate-400 dark:text-slate-500"><%= exo.chapter_titre ? exo.chapter_titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim() : '' %></p>
-                            <p class="mt-4 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400"><%= exo.description %></p>
+                            <p class="mt-3 sm:mt-4 flex-1 text-xs sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400"><%= exo.description %></p>
 
-                            <div class="exercise-file-actions relative z-10 mt-6 flex flex-wrap items-center gap-3">
+                            <div class="exercise-file-actions relative z-10 mt-5 sm:mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
                                 <a href="/exercices/<%= exo.id %>"
-                                   class="inline-flex items-center gap-2 rounded-xl bg-flask-600 px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-flask-700">
+                                   class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-flask-600 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-flask-700">
                                     Voir l'exercice
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                                 </a>
@@ -160,13 +160,13 @@
                                 <div data-download-slot class="inline-flex items-center">
                                     <% var st = (typeof downloadStatus !== 'undefined' && downloadStatus) ? downloadStatus.get(exo.id) : null; %>
                                     <% if (st === 'approved') { %>
-                                        <a href="<%= exo.enonce_file || exo.correction_file %>" download class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700">
+                                        <a href="<%= exo.enonce_file || exo.correction_file %>" download class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-600 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
                                             Télécharger PDF
                                         </a>
                                     <% } else if (st === 'pending') { %>
-                                        <span class="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
-                                            <svg class="h-4 w-4 animate-spin text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
+                                        <span class="inline-flex items-center gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400">
+                                            <svg class="h-3.5 w-3.5 animate-spin text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
                                             <span>En attente...</span>
                                         </span>
                                     <% } else { %>
@@ -174,9 +174,9 @@
                                                 data-download-request
                                                 data-item-type="exercise"
                                                 data-item-id="<%= exo.id %>"
-                                                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                                                class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
-                                            <span><%= st === 'rejected' ? 'Redemander PDF' : 'Demander le téléchargement' %></span>
+                                            <span><%= st === 'rejected' ? 'Redemander PDF' : 'Demander PDF' %></span>
                                         </button>
                                     <% } %>
                                 </div>
@@ -187,18 +187,18 @@
                                         data-item-id="<%= exo.id %>"
                                         data-favorited="<%= isFav ? 'true' : 'false' %>"
                                         aria-pressed="<%= isFav ? 'true' : 'false' %>"
-                                        class="inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
+                                        class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                                    <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
+                                    <span data-fav-label><%= isFav ? 'Retirer' : 'Favoris' %></span>
                                 </button>
 
                                 <!-- Disponibilite des documents -->
-                                <span class="ml-auto flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
+                                <span class="ml-auto flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold">
                                     <% if (exo.enonce_file && exo.enonce_file === exo.correction_file) { %>
-                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Énoncé &amp; Corrigé inclus (PDF)</span>
+                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Énoncé &amp; Corrigé inclus (PDF)</span>
                                     <% } else { %>
-                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.enonce_file ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
-                                        <span class="inline-flex items-center rounded-full px-2.5 py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
+                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 <%= exo.enonce_file ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Énoncé</span>
+                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 <%= exo.correction_file ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500' %>">Corrigé</span>
                                     <% } %>
                                 </span>
                             </div>

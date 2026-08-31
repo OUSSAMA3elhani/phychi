@@ -16,9 +16,9 @@
         <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <%- include('partials/hero-decor', { heroAccent: isChimie ? 'flask' : 'brand' }) %>
 
-            <div class="relative mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
-                <nav aria-label="Fil d'Ariane" class="mb-8">
-                    <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-20 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-6 sm:mb-8">
+                    <ol class="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                         <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                         <li><a href="<%= backUrl %>" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Exercices de <%= exercise.discipline_nom %></a></li>
@@ -28,77 +28,77 @@
                 </nav>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold <%= isChimie ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
+                    <span class="inline-flex items-center rounded-full px-2.5 sm:px-3 py-1 text-xs font-semibold <%= isChimie ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
                         <%= exercise.discipline_nom %>
                     </span>
-                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 sm:px-3 py-1 text-xs font-semibold uppercase text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                         <%= exercise.niveau %>
                     </span>
-                    <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold capitalize text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 sm:px-3 py-1 text-xs font-semibold capitalize text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
                         <%= exercise.difficulte %>
                     </span>
                 </div>
 
-                <h1 class="mt-5 max-w-4xl font-display text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+                <h1 class="mt-4 sm:mt-5 max-w-4xl font-display text-2xl sm:text-4xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white">
                     <%= exercise.titre %>
                 </h1>
-                <p class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                <p class="mt-3 sm:mt-4 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                     <%= exercise.description %>
                 </p>
             </div>
         </section>
 
         <!-- Grille 3 colonnes : contenu (2) + colonne latérale (1) -->
-        <div class="mx-auto grid max-w-7xl gap-8 px-6 py-14 lg:grid-cols-3 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-6 sm:gap-8 px-4 sm:px-6 py-8 sm:py-14 lg:grid-cols-3 lg:px-8">
 
             <!-- ================= COLONNE PRINCIPALE ================= -->
             <div class="min-w-0 lg:col-span-2">
-                <section class="rounded-3xl border border-slate-200 bg-white p-7 shadow-soft sm:p-8 dark:border-slate-800 dark:bg-slate-900"
+                <section class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 md:p-8 shadow-soft dark:border-slate-800 dark:bg-slate-900"
                          aria-labelledby="titre-documents">
-                    <h2 id="titre-documents" class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    <h2 id="titre-documents" class="font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                         Documents de l'exercice
                     </h2>
-                    <p class="mt-2 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p class="mt-1.5 sm:mt-2 text-xs sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                         Les documents ne se chargent qu'à la demande : utilisez les boutons ci-dessous.
                     </p>
 
                     <!-- Métadonnées -->
-                    <dl class="mt-7 grid grid-cols-2 gap-5 border-y border-slate-200 py-6 sm:grid-cols-4 dark:border-slate-800">
+                    <dl class="mt-5 sm:mt-7 grid grid-cols-2 gap-3 sm:gap-5 border-y border-slate-200 py-4 sm:py-6 sm:grid-cols-4 dark:border-slate-800">
                         <% if (exercise.course_titre || exercise.partie_cours) { %>
-                            <div class="col-span-2 sm:col-span-4 rounded-xl bg-brand-50/70 p-3.5 border border-brand-200 dark:bg-brand-500/10 dark:border-brand-500/20">
-                                <dt class="text-xs font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400">Partie exacte du cours associée</dt>
-                                <dd class="mt-1 text-sm font-extrabold text-slate-900 dark:text-white"><%= exercise.course_titre || exercise.partie_cours %></dd>
+                            <div class="col-span-2 sm:col-span-4 rounded-xl bg-brand-50/70 p-3 sm:p-3.5 border border-brand-200 dark:bg-brand-500/10 dark:border-brand-500/20">
+                                <dt class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400">Partie exacte du cours associée</dt>
+                                <dd class="mt-1 text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white"><%= exercise.course_titre || exercise.partie_cours %></dd>
                             </div>
                         <% } %>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Thématique</dt>
-                            <dd class="mt-1 text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre ? exercise.chapter_titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim() : '' %></dd>
+                            <dt class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Thématique</dt>
+                            <dd class="mt-1 text-xs sm:text-sm font-semibold text-slate-900 dark:text-white"><%= exercise.chapter_titre ? exercise.chapter_titre.replace(/^Chapitre\s*\d*[\s\:\-\.]*/i, '').replace(/^\d+[\s\:\-\.]*/, '').trim() : '' %></dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Niveau</dt>
-                            <dd class="mt-1 text-sm font-semibold uppercase text-slate-900 dark:text-white"><%= exercise.niveau %></dd>
+                            <dt class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Niveau</dt>
+                            <dd class="mt-1 text-xs sm:text-sm font-semibold uppercase text-slate-900 dark:text-white"><%= exercise.niveau %></dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Difficulté</dt>
-                            <dd class="mt-1 text-sm font-semibold capitalize text-slate-900 dark:text-white"><%= exercise.difficulte %></dd>
+                            <dt class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Difficulté</dt>
+                            <dd class="mt-1 text-xs sm:text-sm font-semibold capitalize text-slate-900 dark:text-white"><%= exercise.difficulte %></dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Correction</dt>
-                            <dd class="mt-1 text-sm font-semibold <%= exercise.correction_file ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' %>">
+                            <dt class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Correction</dt>
+                            <dd class="mt-1 text-xs sm:text-sm font-semibold <%= exercise.correction_file ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' %>">
                                 <%= exercise.correction_file ? 'Disponible' : 'À venir' %>
                             </dd>
                         </div>
                     </dl>
 
                     <!-- Actions principales -->
-                    <div class="mt-7 flex flex-wrap gap-3">
+                    <div class="mt-6 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
                         <% if (exercise.enonce_file && exercise.enonce_file === exercise.correction_file) { %>
                             <button type="button"
                                     data-file-modal
                                     data-file-url="<%= exercise.enonce_file %>"
                                     data-file-title="<%= exercise.titre %>"
                                     data-file-label="Énoncé & Corrigé — <%= exercise.discipline_nom %>"
-                                    class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
+                                    class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                 <span>Consulter l'énoncé &amp; le corrigé</span>
                             </button>
@@ -109,7 +109,7 @@
                                         data-file-url="<%= exercise.enonce_file %>"
                                         data-file-title="<%= exercise.titre %>"
                                         data-file-label="Énoncé — <%= exercise.discipline_nom %>"
-                                        class="inline-flex items-center gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
+                                        class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl <%= isChimie ? 'bg-flask-600 hover:bg-flask-700' : 'bg-brand-600 hover:bg-brand-700' %> px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                     <span>Voir l'énoncé</span>
                                 </button>
@@ -121,7 +121,7 @@
                                         data-file-url="<%= exercise.correction_file %>"
                                         data-file-title="<%= exercise.titre %>"
                                         data-file-label="Correction — <%= exercise.discipline_nom %>"
-                                        class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
+                                        class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-600 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-emerald-700">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
                                     <span>Voir la correction</span>
                                 </button>
@@ -135,7 +135,7 @@
                                 data-item-id="<%= exercise.id %>"
                                 data-favorited="<%= isFav ? 'true' : 'false' %>"
                                 aria-pressed="<%= isFav ? 'true' : 'false' %>"
-                                class="inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
+                                class="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl border px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 <%= isFav ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-slate-200 text-slate-700' %> dark:border-slate-700 dark:text-slate-200">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                             <span data-fav-label><%= isFav ? 'Retirer des favoris' : 'Ajouter aux favoris' %></span>
                         </button>
@@ -169,7 +169,7 @@
                     <% } %>
                 </section>
 
-                <a href="<%= backUrl %>" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">
+                <a href="<%= backUrl %>" class="mt-6 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-600 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
                     Retour aux exercices de <%= exercise.discipline_nom %>
                 </a>

@@ -20,40 +20,40 @@
         <section class="relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <%- include('partials/hero-decor') %>
 
-            <div class="relative mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-20 lg:px-8">
                 <nav aria-label="Fil d'Ariane" class="mb-6">
-                    <ol class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                    <ol class="flex items-center gap-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                         <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                         <li class="font-medium text-slate-900 dark:text-white">Chapitres</li>
                     </ol>
                 </nav>
 
-                <div class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50/50 px-4 py-1.5 text-xs font-semibold text-brand-700 backdrop-blur-md dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-400">
+                <div class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50/50 px-3 sm:px-4 py-1.5 text-xs font-semibold text-brand-700 backdrop-blur-md dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-400">
                     <svg class="h-4 w-4 text-brand-600 dark:text-brand-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                     Programme Complet de Physique &amp; Chimie
                 </div>
 
-                <h1 class="mt-4 max-w-4xl font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                <h1 class="mt-4 max-w-4xl font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                     Sommaire des Chapitres par Tome
                 </h1>
-                <p class="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                <p class="mt-3 sm:mt-4 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                     Explorez le cours complet découpé en 3 Tomes de physique (Ondes Mécaniques, Électromagnétisme, Diélectriques) ainsi que les cours de chimie pour l'enseignement supérieur.
                 </p>
             </div>
         </section>
 
         <!-- Accès rapide par Tome -->
-        <section class="quick-nav mx-auto max-w-7xl px-6 py-10 lg:px-8">
-            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <section class="quick-nav mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10 lg:px-8">
+            <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
                 <h2 class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">
                     Accès rapide par Tome et discipline
                 </h2>
 
-                <div class="mt-4 flex flex-wrap gap-3">
+                <div class="mt-4 flex flex-wrap gap-2 sm:gap-3">
                     <% if (typeof tomesMap !== 'undefined' && tomesMap) { %>
                         <% Object.keys(tomesMap).forEach(function(tomeKey, idx) { %>
-                            <a href="#tome-<%= idx %>" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:bg-white hover:text-brand-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:bg-slate-900 dark:hover:text-brand-400">
+                            <a href="#tome-<%= idx %>" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:bg-white hover:text-brand-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:bg-slate-900 dark:hover:text-brand-400">
                                 <span class="h-2 w-2 rounded-full bg-brand-500"></span>
                                 <%= tomeKey %>
                                 <span class="rounded-md bg-slate-200/80 px-2 py-0.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-400"><%= tomesMap[tomeKey].length %></span>
@@ -65,23 +65,23 @@
         </section>
 
         <!-- Liste des Chapitres Groupés par Tome -->
-        <section class="mx-auto max-w-7xl px-6 pb-20 lg:px-8">
-            <div class="space-y-16">
+        <section class="mx-auto max-w-7xl px-4 sm:px-6 pb-16 sm:pb-20 lg:px-8">
+            <div class="space-y-12 sm:space-y-16">
                 <% if (typeof tomesMap !== 'undefined' && tomesMap && Object.keys(tomesMap).length > 0) { %>
                     <% Object.keys(tomesMap).forEach(function(tomeKey, tIdx) { %>
                         <% var chapList = tomesMap[tomeKey]; %>
                         <div id="tome-<%= tIdx %>" class="scroll-mt-28">
                             <!-- Header de Tome -->
-                            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5 dark:border-slate-800">
+                            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 sm:pb-5 dark:border-slate-800">
                                 <div class="flex items-center gap-3">
-                                    <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-50 text-brand-600 shadow-sm dark:bg-brand-500/10 dark:text-brand-400">
+                                    <span class="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-2xl bg-brand-50 text-brand-600 shadow-sm dark:bg-brand-500/10 dark:text-brand-400">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                                     </span>
                                     <div>
-                                        <h2 class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                                        <h2 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                                             <%= tomeKey %>
                                         </h2>
-                                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                                        <p class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
                                             <%= chapList.length %> chapitre<%= chapList.length > 1 ? 's' : '' %> disponible<%= chapList.length > 1 ? 's' : '' %>
                                         </p>
                                     </div>
@@ -89,32 +89,32 @@
                             </div>
 
                             <!-- Grille des Chapitres du Tome -->
-                            <div class="mt-8 grid gap-6 md:grid-cols-2">
+                            <div class="mt-6 sm:mt-8 grid gap-6 md:grid-cols-2">
                                 <% chapList.forEach(function(ch) { %>
-                                    <article class="group relative flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700">
+                                    <article class="group relative flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700">
                                         <div>
-                                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4 dark:border-slate-800/80">
-                                                <span class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 sm:pb-4 dark:border-slate-800/80">
+                                                <span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 sm:px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
                                                     <%= ch.discipline_nom || 'Physique' %>
                                                 </span>
-                                                <span class="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                                <span class="rounded-md bg-slate-100 px-2 sm:px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
                                                     Niveau : <%= (ch.niveau || 'L2').toUpperCase() %>
                                                 </span>
                                             </div>
 
-                                            <h3 class="mt-4 font-display text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
+                                            <h3 class="mt-4 font-display text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
                                                 <a href="/chapitres/<%= ch.id %>">
                                                     <%= ch.titre %>
                                                 </a>
                                             </h3>
 
-                                            <p class="mt-3 text-sm leading-relaxed text-slate-600 line-clamp-3 dark:text-slate-400">
+                                            <p class="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-3 dark:text-slate-400">
                                                 <%= ch.description || 'Découvrez le cours complet, les leçons théoriques et les exercices corrigés pas à pas.' %>
                                             </p>
                                         </div>
 
-                                        <div class="mt-6 border-t border-slate-100 pt-4 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
-                                            <a href="/chapitres/<%= ch.id %>" class="inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                                        <div class="mt-5 sm:mt-6 border-t border-slate-100 pt-4 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                                            <a href="/chapitres/<%= ch.id %>" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                                                 Voir le chapitre complet
                                                 <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                                             </a>
@@ -128,8 +128,8 @@
                         </div>
                     <% }); %>
                 <% } else { %>
-                    <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
-                        <p class="text-slate-500 dark:text-slate-400">Aucun chapitre disponible pour le moment.</p>
+                    <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-8 sm:p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Aucun chapitre disponible pour le moment.</p>
                     </div>
                 <% } %>
             </div>

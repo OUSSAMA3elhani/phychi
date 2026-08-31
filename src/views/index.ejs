@@ -22,59 +22,59 @@
         <section class="relative isolate overflow-hidden bg-white dark:bg-slate-950">
             <%- include('partials/hero-decor', { heroCompact: true }) %>
 
-            <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pt-8 pb-16 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:pt-12 lg:pb-24">
+            <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-4 sm:gap-12 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8 pt-6 sm:pt-8 pb-14 sm:pb-24">
 
                 <!-- Colonne texte -->
                 <div class="animate-fade-up lg:col-span-6">
-                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 py-1.5 pl-1.5 pr-4 text-xs font-medium text-slate-600 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300">
-                        <span class="rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Nouveau</span>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 py-1.5 pl-1.5 pr-3 sm:pr-4 text-xs font-medium text-slate-600 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300">
+                        <span class="rounded-full bg-brand-600 px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-wide text-white">Nouveau</span>
                         Corrigés détaillés &amp; fiches de synthèse
                     </span>
 
-                    <h1 class="mt-8 font-display text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-6xl lg:text-[4rem] dark:text-white">
+                    <h1 class="mt-6 sm:mt-8 font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white">
                         Maîtrisez la
                         <span class="bg-gradient-to-r from-brand-600 to-flask-600 bg-clip-text text-transparent dark:from-brand-400 dark:to-flask-400">physique&nbsp;&amp;&nbsp;la chimie</span>
                         du supérieur.
                     </h1>
 
-                    <p class="mt-7 max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    <p class="mt-5 sm:mt-7 max-w-xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                         PhyChemia réunit des cours structurés, des exercices classés par niveau et des solutions
                         pas à pas — pensés pour l'enseignement supérieur, accessibles à tout moment.
                     </p>
 
-                    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div class="mt-8 sm:mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                         <a href="/cours"
-                           class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-7 py-4 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
+                           class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700">
                             Découvrir les cours
-                            <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            <svg class="h-4.5 w-4.5 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>
                         <span data-auth-slot="anonymous" class="contents"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
                             <a href="/inscription"
-                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
                                 Créer un compte
                             </a>
                         </span>
                         <span data-auth-slot="authenticated" class="contents"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
                             <a href="/favoris"
-                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:border-slate-700">
                                 Mes Favoris
                             </a>
                         </span>
                     </div>
 
                     <!-- Indicateurs de confiance -->
-                    <dl class="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-slate-200 pt-8 dark:border-slate-800">
+                    <dl class="mt-10 sm:mt-14 grid max-w-lg grid-cols-3 gap-2 sm:gap-6 border-t border-slate-200 pt-6 sm:pt-8 dark:border-slate-800">
                         <div>
-                            <dt class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white" id="stat-courses-chapters"><%= stats && stats.coursesAndChapters ? stats.coursesAndChapters : 120 %>+</dt>
-                            <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Cours &amp; chapitres</dd>
+                            <dt class="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white" id="stat-courses-chapters"><%= stats && stats.coursesAndChapters ? stats.coursesAndChapters : 120 %>+</dt>
+                            <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Cours &amp; chapitres</dd>
                         </div>
                         <div>
-                            <dt class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white" id="stat-exercises"><%= stats && stats.exercises ? stats.exercises : 450 %>+</dt>
-                            <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Exercices corrigés</dd>
+                            <dt class="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white" id="stat-exercises"><%= stats && stats.exercises ? stats.exercises : 450 %>+</dt>
+                            <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Exercices corrigés</dd>
                         </div>
                         <div>
-                            <dt class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">100%</dt>
-                            <dd class="mt-1 text-sm text-slate-500 dark:text-slate-400">Accès gratuit</dd>
+                            <dt class="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">100%</dt>
+                            <dd class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Accès gratuit</dd>
                         </div>
                     </dl>
                 </div>
@@ -101,28 +101,28 @@
                         }; %>
 
                         <!-- Carte principale -->
-                        <article id="hero-main-card" class="relative z-10 rounded-3xl border border-slate-200 bg-white p-7 shadow-lift transition-opacity duration-300 dark:border-slate-800 dark:bg-slate-900">
+                        <article id="hero-main-card" class="relative z-10 rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 shadow-lift transition-opacity duration-300 dark:border-slate-800 dark:bg-slate-900">
                             <div class="flex items-center justify-between">
                                 <span id="hero-discipline-badge" class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold <%= eq.disciplineSlug === 'chimie' ? 'bg-flask-50 text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' %>">
                                     <%= eq.discipline %>
                                 </span>
                             </div>
 
-                            <h2 id="hero-card-title" class="mt-5 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                            <h2 id="hero-card-title" class="mt-4 sm:mt-5 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                                 <%= eq.title %>
                             </h2>
-                            <p id="hero-card-desc" class="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            <p id="hero-card-desc" class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                                 <%= eq.description %>
                             </p>
 
-                            <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-6 text-center dark:border-slate-800 dark:bg-slate-950/60">
-                                <p id="hero-card-formula" class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                            <div class="mt-5 sm:mt-6 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-5 sm:px-5 sm:py-6 text-center dark:border-slate-800 dark:bg-slate-950/60">
+                                <p id="hero-card-formula" class="font-display text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white formula-scroll">
                                     <%- eq.formulaHtml %>
                                 </p>
-                                <p id="hero-card-formula-name" class="mt-2 text-xs uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500"><%= eq.formulaName %></p>
+                                <p id="hero-card-formula-name" class="mt-2 text-[11px] sm:text-xs uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500"><%= eq.formulaName %></p>
                             </div>
 
-                            <div class="mt-6">
+                            <div class="mt-5 sm:mt-6">
                                 <div class="flex items-center justify-between text-xs font-medium">
                                     <span class="text-slate-500 dark:text-slate-400">Progression</span>
                                     <span id="hero-card-progression-text" class="text-slate-900 dark:text-white"><%= eq.progression %>&nbsp;%</span>
@@ -134,7 +134,7 @@
                         </article>
 
                         <!-- Carte flottante : chimie / physique -->
-                        <article id="hero-floating-card" class="absolute -bottom-10 -left-6 z-20 w-60 animate-float rounded-2xl border border-slate-200 bg-white p-5 shadow-lift transition-opacity duration-300 sm:-left-12 dark:border-slate-800 dark:bg-slate-900">
+                        <article id="hero-floating-card" class="mt-4 sm:mt-0 sm:absolute sm:-bottom-10 sm:-left-6 lg:sm:-left-12 z-20 w-full sm:w-60 animate-float rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-lift transition-opacity duration-300 dark:border-slate-800 dark:bg-slate-900">
                             <div class="flex items-center gap-3">
                                 <span id="hero-floating-icon-wrap" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-flask-50 text-flask-600 dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
@@ -144,7 +144,7 @@
                                     <p id="hero-floating-subtitle" class="truncate text-xs text-slate-500 dark:text-slate-400"><%= eq.floating.subtitle %></p>
                                 </div>
                             </div>
-                            <p id="hero-floating-formula" class="mt-4 rounded-lg bg-slate-50 py-2 text-center text-sm font-medium text-slate-700 dark:bg-slate-950/60 dark:text-slate-300">
+                            <p id="hero-floating-formula" class="mt-4 rounded-lg bg-slate-50 py-2 text-center text-sm font-medium text-slate-700 dark:bg-slate-950/60 dark:text-slate-300 formula-scroll">
                                 <%- eq.floating.formulaHtml %>
                             </p>
                         </article>
@@ -161,37 +161,34 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- ---------------------------------------------------------
+           <!-- ---------------------------------------------------------
              RESSOURCES
              --------------------------------------------------------- -->
-        <section aria-labelledby="titre-ressources" class="border-t border-slate-200 bg-slate-50 py-24 sm:py-32 dark:border-slate-800 dark:bg-slate-950">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <section aria-labelledby="titre-ressources" class="border-t border-slate-200 bg-slate-50 py-16 sm:py-24 lg:py-32 dark:border-slate-800 dark:bg-slate-950">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 <header class="mx-auto max-w-2xl text-center">
-                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Ressources</p>
-                    <h2 id="titre-ressources" class="mt-4 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                    <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">Ressources</p>
+                    <h2 id="titre-ressources" class="mt-3 sm:mt-4 font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                         Tout ce qu'il vous faut pour progresser
                     </h2>
-                    <p class="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    <p class="mt-3 sm:mt-5 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                         Six espaces complémentaires, du cours théorique à la correction détaillée.
                     </p>
                 </header>
 
-                <div class="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="mt-12 sm:mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
                     <!-- Cours & Chapitres -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Cours &amp; Chapitres</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Cours &amp; Chapitres</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Consultez des leçons structurées couvrant l'ensemble des programmes de physique et de chimie du supérieur.
                         </p>
-                        <a href="/cours" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                        <a href="/cours" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Accéder aux cours
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -199,15 +196,15 @@
                     </article>
 
                     <!-- Exercices de Physique -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Exercices de Physique</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Exercices de Physique</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Entraînez-vous avec des problèmes et travaux dirigés classés par niveau et par domaine&nbsp;: mécanique, thermodynamique, électromagnétisme, optique.
                         </p>
-                        <a href="/exercices-physique" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                        <a href="/exercices-physique" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Voir les exercices
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -215,15 +212,15 @@
                     </article>
 
                     <!-- Exercices de Chimie -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-flask-50 text-flask-600 transition-colors duration-300 group-hover:bg-flask-600 group-hover:text-white dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-flask-50 text-flask-600 transition-colors duration-300 group-hover:bg-flask-600 group-hover:text-white dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Exercices de Chimie</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Exercices de Chimie</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Renforcez vos connaissances en chimie organique, cinétique chimique, thermochimie et chimie des solutions.
                         </p>
-                        <a href="/exercices-chimie" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-flask-600 transition-colors hover:text-flask-700 dark:text-flask-400">
+                        <a href="/exercices-chimie" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-flask-600 transition-colors hover:text-flask-700 dark:text-flask-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Voir les exercices
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -231,15 +228,15 @@
                     </article>
 
                     <!-- Solutions détaillées -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-flask-50 text-flask-600 transition-colors duration-300 group-hover:bg-flask-600 group-hover:text-white dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-flask-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-flask-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-flask-50 text-flask-600 transition-colors duration-300 group-hover:bg-flask-600 group-hover:text-white dark:bg-flask-500/10 dark:text-flask-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Solutions Détaillées</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Solutions Détaillées</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Accédez aux corrigés étape par étape pour vérifier vos résultats et approfondir la méthodologie.
                         </p>
-                        <a href="/exercices-physique" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-flask-600 transition-colors hover:text-flask-700 dark:text-flask-400">
+                        <a href="/exercices-physique" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-flask-600 transition-colors hover:text-flask-700 dark:text-flask-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Consulter les solutions
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -247,44 +244,31 @@
                     </article>
 
                     <!-- Annales & Concours -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-amber-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-amber-50 text-amber-600 transition-colors duration-300 group-hover:bg-amber-600 group-hover:text-white dark:bg-amber-500/10 dark:text-amber-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-amber-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-amber-50 text-amber-600 transition-colors duration-300 group-hover:bg-amber-600 group-hover:text-white dark:bg-amber-500/10 dark:text-amber-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Concours &amp; Annales Corrigées</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Concours &amp; Annales Corrigées</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Plus de 1 400 sujets officiels et corrigés d'écoles d'ingénieurs (Polytechnique X, Centrale, Mines-Ponts, CCINP, ENS).
                         </p>
-                        <a href="/concours" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400">
+                        <a href="/concours" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Explorer les concours
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>
                     </article>
 
-                    <!-- Téléchargements -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
-                        </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Espace Téléchargements</h3>
-                        <a href="/recherche" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
-                            <span class="absolute inset-0" aria-hidden="true"></span>
-                            Accéder aux fichiers
-                            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                        </a>
-                    </article>
-
                     <!-- Recherche -->
-                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
-                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
+                    <article class="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-900">
+                        <span class="grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400" aria-hidden="true">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                         </span>
-                        <h3 class="mt-7 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Recherche de Contenus</h3>
-                        <p class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        <h3 class="mt-5 sm:mt-7 font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Recherche de Contenus</h3>
+                        <p class="mt-2.5 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
                             Recherchez directement un sujet, une formule, une réaction chimique ou un exercice spécifique.
                         </p>
-                        <a href="/recherche" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
+                        <a href="/recherche" class="mt-5 sm:mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             Lancer une recherche
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -297,43 +281,43 @@
         <!-- ---------------------------------------------------------
              MÉTHODE EN 3 ÉTAPES
              --------------------------------------------------------- -->
-        <section aria-labelledby="titre-methode" class="border-t border-slate-200 bg-white py-24 sm:py-32 dark:border-slate-800 dark:bg-slate-900/40">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="grid gap-16 lg:grid-cols-12 lg:gap-20">
+        <section aria-labelledby="titre-methode" class="border-t border-slate-200 bg-white py-16 sm:py-24 lg:py-32 dark:border-slate-800 dark:bg-slate-900/40">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="grid gap-10 sm:gap-16 lg:grid-cols-12 lg:gap-20">
 
                     <header class="lg:col-span-4">
-                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-flask-600 dark:text-flask-400">Méthode</p>
-                        <h2 id="titre-methode" class="mt-4 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-[2.75rem] dark:text-white">
+                        <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-flask-600 dark:text-flask-400">Méthode</p>
+                        <h2 id="titre-methode" class="mt-3 sm:mt-4 font-display text-2xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight text-slate-900 dark:text-white">
                             Une progression en trois temps
                         </h2>
-                        <p class="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                        <p class="mt-3 sm:mt-5 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                             Comprendre, appliquer, valider&nbsp;: un parcours pensé pour installer durablement les notions.
                         </p>
-                        <a href="/chapitres" class="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+                        <a href="/chapitres" class="group mt-6 sm:mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
                             Explorer les chapitres
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>
                     </header>
 
-                    <ol class="grid gap-6 lg:col-span-8 sm:grid-cols-3">
-                        <li class="rounded-3xl border border-slate-200 bg-slate-50 p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
+                    <ol class="grid gap-4 sm:gap-6 lg:col-span-8 sm:grid-cols-3">
+                        <li class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-slate-50 p-5 sm:p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
                             <span class="inline-grid h-10 w-10 place-items-center rounded-xl bg-slate-900 font-display text-sm font-bold text-white dark:bg-white dark:text-slate-900">01</span>
-                            <h3 class="mt-6 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Étudier le cours</h3>
-                            <p class="mt-2.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            <h3 class="mt-4 sm:mt-6 font-display text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">Étudier le cours</h3>
+                            <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                                 Des chapitres clairs, illustrés et découpés en notions clés.
                             </p>
                         </li>
-                        <li class="rounded-3xl border border-slate-200 bg-slate-50 p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
+                        <li class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-slate-50 p-5 sm:p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
                             <span class="inline-grid h-10 w-10 place-items-center rounded-xl bg-slate-900 font-display text-sm font-bold text-white dark:bg-white dark:text-slate-900">02</span>
-                            <h3 class="mt-6 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">S'entraîner</h3>
-                            <p class="mt-2.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            <h3 class="mt-4 sm:mt-6 font-display text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">S'entraîner</h3>
+                            <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                                 Des exercices filtrés par domaine, niveau et difficulté.
                             </p>
                         </li>
-                        <li class="rounded-3xl border border-slate-200 bg-slate-50 p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
+                        <li class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-slate-50 p-5 sm:p-7 transition-colors duration-300 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-slate-700">
                             <span class="inline-grid h-10 w-10 place-items-center rounded-xl bg-slate-900 font-display text-sm font-bold text-white dark:bg-white dark:text-slate-900">03</span>
-                            <h3 class="mt-6 font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">Vérifier</h3>
-                            <p class="mt-2.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            <h3 class="mt-4 sm:mt-6 font-display text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">Vérifier</h3>
+                            <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                                 Des corrigés détaillés qui expliquent chaque étape du raisonnement.
                             </p>
                         </li>
@@ -345,42 +329,42 @@
         <!-- ---------------------------------------------------------
              APPEL À L'ACTION
              --------------------------------------------------------- -->
-        <section aria-labelledby="titre-cta" class="px-6 pb-24 pt-4 lg:px-8 dark:bg-slate-950">
-            <div class="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-slate-900 px-8 py-20 text-center shadow-lift sm:px-16 dark:bg-slate-900">
+        <section aria-labelledby="titre-cta" class="px-4 sm:px-6 pb-16 sm:pb-24 pt-4 lg:px-8 dark:bg-slate-950">
+            <div class="relative mx-auto max-w-7xl overflow-hidden rounded-2xl sm:rounded-[2rem] bg-slate-900 px-6 py-12 sm:px-16 sm:py-20 text-center shadow-lift dark:bg-slate-900">
                 <div class="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-brand-600/30 blur-3xl" aria-hidden="true"></div>
                 <div class="pointer-events-none absolute -bottom-28 -right-16 h-80 w-80 rounded-full bg-flask-500/25 blur-3xl" aria-hidden="true"></div>
 
                 <div class="relative mx-auto max-w-2xl">
-                    <h2 id="titre-cta" class="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+                    <h2 id="titre-cta" class="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
                         Prêt à passer à la pratique&nbsp;?
                     </h2>
-                    <p class="mt-6 text-lg leading-relaxed text-slate-300" data-auth-slot="anonymous"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
+                    <p class="mt-4 sm:mt-6 text-sm sm:text-lg leading-relaxed text-slate-300" data-auth-slot="anonymous"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
                         Créez un compte gratuit pour enregistrer vos favoris, suivre votre progression
                         et retrouver vos exercices d'une session à l'autre.
                     </p>
-                    <p class="mt-6 text-lg leading-relaxed text-slate-300" data-auth-slot="authenticated"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
+                    <p class="mt-4 sm:mt-6 text-sm sm:text-lg leading-relaxed text-slate-300" data-auth-slot="authenticated"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
                         Retrouvez l'ensemble de vos cours, chapitres et exercices favoris enregistrés dans votre espace personnel.
                     </p>
-                    <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                    <div class="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
                         <span data-auth-slot="anonymous" class="contents"<%- (typeof user !== 'undefined' && user) ? ' hidden' : '' %>>
                             <a href="/inscription"
-                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 py-4 text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
+                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
                                 Créer un compte gratuit
-                                <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                <svg class="h-4.5 w-4.5 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </a>
                             <a href="/login"
-                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-7 py-4 text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
+                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
                                 J'ai déjà un compte
                             </a>
                         </span>
                         <span data-auth-slot="authenticated" class="contents"<%- (typeof user === 'undefined' || !user) ? ' hidden' : '' %>>
                             <a href="/cours"
-                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 py-4 text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
+                               class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:w-auto">
                                 Explorer le catalogue
-                                <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                <svg class="h-4.5 w-4.5 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </a>
                             <a href="/favoris"
-                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-7 py-4 text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
+                               class="inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:w-auto">
                                 Mes Favoris
                             </a>
                         </span>

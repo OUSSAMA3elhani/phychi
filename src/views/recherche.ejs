@@ -15,37 +15,38 @@
     <%- include('partials/header') %>
 
     <main id="contenu">
-
-        <!-- En-tête + moteur de recherche -->
+        <!-- En-tête + moteur de recherche -->
         <section class="search-form-section relative isolate overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950" aria-labelledby="titre-recherche">
             <%- include('partials/hero-decor') %>
 
-            <div class="relative mx-auto max-w-4xl px-6 py-20 text-center sm:py-24 lg:px-8">
-                <nav aria-label="Fil d'Ariane" class="mb-8">
-                    <ol class="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <div class="relative mx-auto max-w-4xl px-4 sm:px-6 py-12 text-center sm:py-20 lg:py-24 lg:px-8">
+                <nav aria-label="Fil d'Ariane" class="mb-6 sm:mb-8">
+                    <ol class="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         <li><a href="/" class="transition-colors hover:text-brand-600 dark:hover:text-brand-400">Accueil</a></li>
                         <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
                         <li class="font-medium text-slate-900 dark:text-white">Recherche</li>
                     </ol>
                 </nav>
 
-                <h1 id="titre-recherche" class="font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+                <h1 id="titre-recherche" class="font-display text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white">
                     Recherche de contenus
                 </h1>
-                <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                <p class="mx-auto mt-4 sm:mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                     Trouvez rapidement des leçons, des formules, des exercices corrigés ou des documents à télécharger.
                 </p>
 
-                <form action="/recherche" method="get" class="mx-auto mt-10 max-w-3xl text-left">
-                    <div class="relative">
+                <form action="/recherche" method="get" class="mx-auto mt-8 sm:mt-10 max-w-3xl text-left">
+                    <div class="relative flex flex-col min-[480px]:block gap-2">
                         <label for="q" class="sr-only">Mots-clés ou termes de recherche</label>
-                        <span class="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        </span>
-                        <input type="search" id="q" name="q" value="<%= typeof q !== 'undefined' ? q : '' %>" required placeholder="Ex : Maxwell, Navier-Stokes, Nernst, SN1, Thermochimie…"
-                               class="w-full rounded-2xl border-slate-200 bg-white py-4 pl-14 pr-36 text-[15px] text-slate-900 shadow-lift transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-white">
+                        <div class="relative flex-1">
+                            <span class="pointer-events-none absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
+                                <svg class="h-4 sm:h-5 w-4 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </span>
+                            <input type="search" id="q" name="q" value="<%= typeof q !== 'undefined' ? q : '' %>" required placeholder="Ex : Maxwell, Navier-Stokes, Nernst…"
+                                   class="w-full rounded-2xl border-slate-200 bg-white py-3.5 sm:py-4 pl-11 sm:pl-14 pr-4 min-[480px]:pr-36 text-sm sm:text-[15px] text-slate-900 shadow-lift transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-white">
+                        </div>
                         <button type="submit"
-                                class="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700">
+                                class="w-full min-[480px]:w-auto min-[480px]:absolute min-[480px]:right-2 min-[480px]:top-1/2 min-[480px]:-translate-y-1/2 rounded-xl bg-brand-600 px-5 py-3 min-[480px]:py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700">
                             Rechercher
                         </button>
                     </div>
@@ -54,53 +55,53 @@
         </section>
 
         <!-- Recherches fréquentes -->
-        <section class="popular-searches mx-auto max-w-7xl px-6 py-8 lg:px-8" aria-labelledby="titre-populaires">
+        <section class="popular-searches mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 lg:px-8" aria-labelledby="titre-populaires">
             <h2 id="titre-populaires" class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
                 Recherches fréquentes
             </h2>
-            <ul class="mt-4 flex flex-wrap gap-2">
-                <li><a href="/recherche?q=Thermodynamique" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Thermodynamique</a></li>
-                <li><a href="/recherche?q=Oscillateur" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Oscillateur</a></li>
-                <li><a href="/recherche?q=Chimie" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">Chimie</a></li>
-                <li><a href="/recherche?q=Centrale" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Centrale</a></li>
-                <li><a href="/recherche?q=Mines" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">Mines-Ponts</a></li>
-                <li><a href="/recherche?q=H-Prepa" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">H-Prépa</a></li>
+            <ul class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+                <li><a href="/recherche?q=Thermodynamique" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Thermodynamique</a></li>
+                <li><a href="/recherche?q=Oscillateur" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Oscillateur</a></li>
+                <li><a href="/recherche?q=Chimie" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">Chimie</a></li>
+                <li><a href="/recherche?q=Centrale" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-700 dark:hover:text-brand-400">Centrale</a></li>
+                <li><a href="/recherche?q=Mines" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">Mines-Ponts</a></li>
+                <li><a href="/recherche?q=H-Prepa" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-flask-300 hover:text-flask-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-flask-700 dark:hover:text-flask-400">H-Prépa</a></li>
             </ul>
         </section>
 
         <!-- Filtres par catégorie -->
         <% if (typeof q !== 'undefined' && q) { %>
-            <div class="mx-auto max-w-7xl px-6 pt-4 pb-2 lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-2 lg:px-8">
                 <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-4 dark:border-slate-800">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-2">Filtrer par :</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-1 sm:mr-2">Filtrer par :</span>
                     <% var curType = typeof type !== 'undefined' ? type : 'tous'; %>
-                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=tous" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'tous' ? 'bg-brand-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Tous les types</a>
-                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=concours" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'concours' ? 'bg-indigo-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Concours & Annales</a>
-                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=livres" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'livres' ? 'bg-emerald-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Livres Physique / Chimie</a>
-                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=exercices" class="rounded-xl px-4 py-2 text-xs font-bold transition-all <%= curType === 'exercices' ? 'bg-amber-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Exercices & TD</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=tous" class="rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold transition-all <%= curType === 'tous' ? 'bg-brand-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Tous les types</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=concours" class="rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold transition-all <%= curType === 'concours' ? 'bg-indigo-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Concours & Annales</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=livres" class="rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold transition-all <%= curType === 'livres' ? 'bg-emerald-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Livres Physique / Chimie</a>
+                    <a href="/recherche?q=<%= encodeURIComponent(q) %>&type=exercices" class="rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold transition-all <%= curType === 'exercices' ? 'bg-amber-600 text-white shadow-soft' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' %>">Exercices & TD</a>
                 </div>
             </div>
         <% } %>
 
         <!-- Résultats -->
-        <section class="search-results mx-auto max-w-7xl px-6 pb-16 lg:px-8" aria-labelledby="titre-resultats">
-            <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-slate-200 pb-6 dark:border-slate-800">
-                <h2 id="titre-resultats" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        <section class="search-results mx-auto max-w-7xl px-4 sm:px-6 pb-12 sm:pb-16 lg:px-8" aria-labelledby="titre-resultats">
+            <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-slate-200 pb-4 sm:pb-6 dark:border-slate-800">
+                <h2 id="titre-resultats" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                     <% if (typeof q !== 'undefined' && q) { %>
                         Résultats pour « <span class="text-brand-600 dark:text-brand-400"><%= q %></span> »
                     <% } else { %>
                         Résultats de la recherche
                     <% } %>
                 </h2>
-                <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                <p class="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
                     <%= typeof results !== 'undefined' && results ? results.length : 0 %> résultat<%= (typeof results !== 'undefined' && results && results.length > 1) ? 's' : '' %> trouvé<%= (typeof results !== 'undefined' && results && results.length > 1) ? 's' : '' %>
                 </p>
             </div>
 
-            <div class="mt-8 grid gap-4">
+            <div class="mt-6 sm:mt-8 grid gap-4">
                 <% if (typeof results !== 'undefined' && results && results.length > 0) { %>
                     <% results.forEach(function (r) { %>
-                        <article class="result-card group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
+                        <article class="result-card group relative flex flex-col rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-slate-800 dark:bg-slate-900">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="badge inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold <%= r.badgeClass %>"><%= r.type %></span>
                             </div>

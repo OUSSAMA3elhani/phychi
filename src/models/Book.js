@@ -76,19 +76,22 @@ const Book = {
             const where = ['1=1'];
             const params = [];
 
-            if (discipline && String(discipline).trim() !== '') {
+            const cleanDisc = discipline && String(discipline).trim() !== '' && String(discipline).trim() !== 'null' && String(discipline).trim() !== 'undefined' && String(discipline).trim() !== 'toutes' && String(discipline).trim() !== 'Toutes' ? String(discipline).trim() : null;
+            if (cleanDisc) {
                 where.push('discipline = ?');
-                params.push(String(discipline).trim());
+                params.push(cleanDisc);
             }
 
-            if (collection && String(collection).trim() !== '') {
+            const cleanCol = collection && String(collection).trim() !== '' && String(collection).trim() !== 'null' && String(collection).trim() !== 'undefined' ? String(collection).trim() : null;
+            if (cleanCol) {
                 where.push('collection = ?');
-                params.push(String(collection).trim());
+                params.push(cleanCol);
             }
 
-            if (search && String(search).trim() !== '') {
+            const cleanSearch = search && String(search).trim() !== '' && String(search).trim() !== 'null' && String(search).trim() !== 'undefined' ? String(search).trim() : null;
+            if (cleanSearch) {
                 where.push('(titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR niveau LIKE ?)');
-                const term = `%${String(search).trim()}%`;
+                const term = `%${cleanSearch}%`;
                 params.push(term, term, term, term);
             }
 

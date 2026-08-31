@@ -5,69 +5,69 @@
 <body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
 <%- include('partials/header') %>
 
-<main id="main-content" class="min-h-screen bg-slate-50 py-10 dark:bg-slate-950">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<main id="main-content" class="min-h-screen bg-slate-50 py-6 sm:py-10 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <!-- ================= HERO HEADER ================= -->
-        <header class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 p-8 text-white shadow-lift sm:p-12">
+        <header class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 p-5 sm:p-10 lg:p-12 text-white shadow-lift">
             <div class="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-brand-500/10 blur-3xl" aria-hidden="true"></div>
             <div class="absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-flask-500/10 blur-3xl" aria-hidden="true"></div>
 
             <div class="relative max-w-3xl">
-                <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-300 backdrop-blur-md">
+                <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 sm:px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-300 backdrop-blur-md">
                     <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/></svg>
                     Bibliothèque de Référence CPGE
                 </span>
-                <h1 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+                <h1 class="mt-3 sm:mt-4 font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
                     <%= filters.discipline === 'Physique' ? 'Livres & Manuels de Physique' : (filters.discipline === 'Chimie' ? 'Livres & Manuels de Chimie' : 'Livres & Manuels de Référence') %>
                 </h1>
-                <p class="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
+                <p class="mt-3 sm:mt-4 text-sm sm:text-base leading-relaxed text-slate-300 sm:text-lg">
                     <%= filters.discipline === 'Physique' ? 'Collection complète des manuels de cours, exercices corrigés et problèmes de Physique pour classes préparatoires (Pérez, Lumbroso, H-Prépa, Nathan, Garing).' : (filters.discipline === 'Chimie' ? 'Collection complète des manuels de cours, exercices corrigés et problèmes de Chimie pour classes préparatoires (Grécias, Dunod, H-Prépa).' : 'Accédez à la collection complète des manuels de cours, exercices corrigés et problèmes de Physique et Chimie pour classes préparatoires (H-Prépa, Lumbroso, Pérez, Nathan CPGE, Garing, Dunod...).') %>
                 </p>
 
-                <div class="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
-                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
-                        <span class="block text-xl font-bold text-white"><%= pagination.total.toLocaleString() %></span>
-                        <span class="text-xs text-slate-300">Livres numérisés</span>
+                <div class="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-4 text-sm font-semibold">
+                    <div class="rounded-xl bg-white/10 px-3 sm:px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-lg sm:text-xl font-bold text-white"><%= pagination.total.toLocaleString() %></span>
+                        <span class="text-[11px] sm:text-xs text-slate-300">Livres numérisés</span>
                     </div>
-                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
-                        <span class="block text-xl font-bold text-brand-300"><%= filters.discipline || 'Physique & Chimie' %></span>
-                        <span class="text-xs text-slate-300">Grandes Collections CPGE</span>
+                    <div class="rounded-xl bg-white/10 px-3 sm:px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-lg sm:text-xl font-bold text-brand-300"><%= filters.discipline || 'Physique & Chimie' %></span>
+                        <span class="text-[11px] sm:text-xs text-slate-300">Grandes Collections</span>
                     </div>
-                    <div class="rounded-xl bg-white/10 px-4 py-2 backdrop-blur-sm">
-                        <span class="block text-xl font-bold text-emerald-400">100% PDF</span>
-                        <span class="text-xs text-slate-300">Consultation &amp; Téléchargement</span>
+                    <div class="rounded-xl bg-white/10 px-3 sm:px-4 py-2 backdrop-blur-sm">
+                        <span class="block text-lg sm:text-xl font-bold text-emerald-400">100% PDF</span>
+                        <span class="text-[11px] sm:text-xs text-slate-300">Consultation</span>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- ================= ONGLETS PAR DISCIPLINE ================= -->
-        <section class="mt-8" aria-label="Filtre par Discipline">
-            <div class="flex flex-wrap gap-2">
-                <a href="/livres" class="inline-flex items-center gap-2 rounded-xl border <%= !filters.discipline ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
+        <section class="mt-6 sm:mt-8" aria-label="Filtre par Discipline">
+            <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                <a href="/livres" class="inline-flex items-center gap-2 rounded-xl border <%= !filters.discipline ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs transition-all">
                     Tous les livres
                 </a>
-                <a href="/livres/physique" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Physique' ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
+                <a href="/livres/physique" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Physique' ? 'border-brand-500 bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs transition-all">
                     <svg class="h-4 w-4 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                    <span>Livres de Physique (56)</span>
+                    <span>Physique (56)</span>
                 </a>
-                <a href="/livres/chimie" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Chimie' ? 'border-flask-500 bg-flask-50 font-bold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-4 py-2.5 text-xs transition-all">
-                    <svg class="h-4 w-4 text-flask-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 0 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
-                    <span>Livres de Chimie (19)</span>
+                <a href="/livres/chimie" class="inline-flex items-center gap-2 rounded-xl border <%= filters.discipline === 'Chimie' ? 'border-flask-500 bg-flask-50 font-bold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400' : 'border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300' %> px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs transition-all">
+                    <svg class="h-4 w-4 text-flask-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31a2 2 0 0 1-.24.95l-5.5 9.9A2 2 0 0 0 6 23h12a2 2 0 0 1 1.74-2.84l-5.5-9.9a2 2 0 0 1-.24-.95V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                    <span>Chimie (19)</span>
                 </a>
             </div>
         </section>
 
         <!-- ================= BARRE DE RECHERCHE ET FILTRES ================= -->
-        <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900" aria-label="Filtres des livres">
+        <section class="mt-6 rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900" aria-label="Filtres des livres">
             <form method="GET" action="<%= filters.discipline === 'Physique' ? '/livres/physique' : (filters.discipline === 'Chimie' ? '/livres/chimie' : '/livres') %>" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 
                 <!-- Recherche texte -->
                 <div class="lg:col-span-2">
                     <label for="search" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Rechercher un livre</label>
                     <div class="relative mt-1.5">
-                        <input type="text" id="search" name="search" value="<%= filters.search || '' %>"
+                        <input type="text" id="search" name="search" value="<%= (filters && filters.search && filters.search !== 'null' && filters.search !== 'undefined') ? filters.search : '' %>"
                                placeholder="Auteur, collection, thème (ex: Perez, Electromagnétisme...)"
                                class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm font-medium text-slate-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-brand-400">
                         <svg width="16" height="16" class="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>

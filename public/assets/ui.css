@@ -22,9 +22,34 @@
     --color-text-light: #94a3b8;
 }
 
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
 body {
+    overflow-x: hidden;
+    width: 100%;
+    min-width: 320px;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+}
+
+/* Global responsive safeguards */
+img, video, canvas, iframe {
+    max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, span, button, dt, dd {
+    overflow-wrap: break-word;
+}
+
+/* Prevent scientific equations from stretching the container on mobile */
+.formula-scroll, #hero-card-formula, #hero-floating-formula {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Base reset SVG width/height to prevent layout flash before Tailwind JS loads */

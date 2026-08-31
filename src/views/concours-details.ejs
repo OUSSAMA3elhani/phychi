@@ -5,8 +5,8 @@
 <body class="bg-slate-50 font-sans text-slate-600 antialiased selection:bg-brand-600 selection:text-white dark:bg-slate-950 dark:text-slate-400">
 <%- include('partials/header') %>
 
-<main id="main-content" class="min-h-screen bg-slate-50 py-10 dark:bg-slate-950">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<main id="main-content" class="min-h-screen bg-slate-50 py-6 sm:py-10 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <!-- ================= BREADCRUMB ================= -->
         <nav aria-label="Fil d'Ariane" class="mb-6">
@@ -20,36 +20,36 @@
         </nav>
 
         <!-- ================= CARTUCHE DU CONCOURS ================= -->
-        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-6 dark:border-slate-800">
+        <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 md:p-8 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 sm:pb-6 dark:border-slate-800">
                 <div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center rounded-lg bg-brand-50 px-3 py-1 text-xs font-extrabold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span class="inline-flex items-center rounded-lg bg-brand-50 px-2.5 sm:px-3 py-1 text-xs font-extrabold text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
                             <%= concours.ecole %>
                         </span>
-                        <span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <span class="inline-flex items-center rounded-lg bg-slate-100 px-2.5 sm:px-3 py-1 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                             Session <%= concours.annee %>
                         </span>
-                        <span class="inline-flex items-center rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                        <span class="inline-flex items-center rounded-lg bg-amber-50 px-2 sm:px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
                             Filière <%= concours.filiere %>
                         </span>
-                        <span class="inline-flex items-center rounded-lg bg-flask-50 px-2.5 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">
+                        <span class="inline-flex items-center rounded-lg bg-flask-50 px-2 sm:px-2.5 py-1 text-xs font-semibold text-flask-700 dark:bg-flask-500/10 dark:text-flask-400">
                             <%= concours.matiere %>
                         </span>
                     </div>
 
-                    <h1 class="mt-4 font-display text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">
+                    <h1 class="mt-3 sm:mt-4 font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white">
                         <%= concours.epreuve %>
                     </h1>
                 </div>
 
-                <a href="/concours" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                <a href="/concours" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
                     ← Retour aux concours
                 </a>
             </div>
 
             <!-- Métadonnées et Actions de consultation -->
-            <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="mt-6 sm:mt-8 grid gap-6 md:grid-cols-2">
                 
                 <!-- Bloc Sujet du Concours -->
                 <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-950/40">

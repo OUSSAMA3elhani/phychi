@@ -8,8 +8,82 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const googleDriveService = require('../services/googleDriveService');
+const { pool } = require('../../config/db');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+
+/** Helper de nettoyage et sécurisation du nom de fichier PDF */
+function sanitizeFileName(name) {
+    return String(name || 'document')
+        .replace(/[/\\?%*:|"<>]/g, '-')
+        .replace(/\s+/g, '_')
+        .replace(/_{2,}/g, '_')
+        .replace(/^[-_]+|[-_]+$/g, '')
+        .trim();
+}
+
+/** Résolution du nom réel et descriptif du document pour téléchargement et SEO */
+async function resolveFriendlyFileName(fileIdOrKey, fallbackName) {
+    if (!fileIdOrKey) return fallbackName || 'PhyChemia_Document.pdf';
+    const cleanId = path.basename(fileIdOrKey);
+
+    try {
+        // 1. Concours
+        const [c] = await pool.query(
+            'SELECT ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file FROM concours WHERE enonce_file LIKE ? OR correction_file LIKE ? LIMIT 1',
+            [`%${cleanId}%`, `%${cleanId}%`]
+        );
+        if (c.length > 0) {
+            const item = c[0];
+            const isCorr = item.correction_file && item.correction_file.includes(cleanId);
+            const typeStr = isCorr ? 'Corrige' : 'Enonce';
+            const name = `PhyChemia_${item.ecole}_${item.annee}_${item.epreuve}_${item.filiere}_${typeStr}.pdf`;
+            return sanitizeFileName(name);
+        }
+
+        // 2. Livres
+        const [b] = await pool.query(
+            'SELECT titre, auteur, collection FROM books WHERE pdf_file LIKE ? LIMIT 1',
+            [`%${cleanId}%`]
+        );
+        if (b.length > 0) {
+            const item = b[0];
+            const name = `PhyChemia_Livre_${item.auteur}_${item.titre}.pdf`;
+            return sanitizeFileName(name);
+        }
+
+        // 3. Cours
+        const [co] = await pool.query(
+            'SELECT c.titre, d.nom as discipline FROM courses c LEFT JOIN chapters ch ON c.chapter_id = ch.id LEFT JOIN disciplines d ON ch.discipline_id = d.id WHERE c.course_file LIKE ? LIMIT 1',
+            [`%${cleanId}%`]
+        );
+        if (co.length > 0) {
+            const item = co[0];
+            const disc = item.discipline ? `${item.discipline}_` : '';
+            const name = `PhyChemia_Cours_${disc}${item.titre}.pdf`;
+            return sanitizeFileName(name);
+        }
+
+        // 4. Exercices
+        const [ex] = await pool.query(
+            'SELECT titre, enonce_file, correction_file FROM exercises WHERE enonce_file LIKE ? OR correction_file LIKE ? LIMIT 1',
+            [`%${cleanId}%`, `%${cleanId}%`]
+        );
+        if (ex.length > 0) {
+            const item = ex[0];
+            const isCorr = item.correction_file && item.correction_file.includes(cleanId);
+            const name = `PhyChemia_Exercice_${item.titre}_${isCorr ? 'Corrige' : 'Enonce'}.pdf`;
+            return sanitizeFileName(name);
+        }
+    } catch (err) {
+        console.warn('[DocumentController] Erreur resolveFriendlyFileName:', err.message);
+    }
+
+    if (fallbackName && fallbackName !== 'document.pdf') {
+        return sanitizeFileName(fallbackName);
+    }
+    return 'PhyChemia_Document.pdf';
+}
 
 const documentController = {
     /**
@@ -49,7 +123,8 @@ const documentController = {
                         console.warn(`[DocumentController] Impossible de lire les métadonnées pour ${fileId}:`, metaErr.message);
                     }
 
-                    const filename = metadata.name || path.basename(cleanKey) || 'document.pdf';
+                    const rawFilename = metadata.name || path.basename(cleanKey) || 'document.pdf';
+                    const filename = await resolveFriendlyFileName(fileId, rawFilename);
                     const mimeType = metadata.mimeType || 'application/pdf';
                     const disposition = isDownload ? 'attachment' : 'inline';
 
@@ -94,7 +169,8 @@ const documentController = {
 
             if (localPathToServe) {
                 const stat = fs.statSync(localPathToServe);
-                const filename = path.basename(localPathToServe);
+                const rawFilename = path.basename(localPathToServe);
+                const filename = await resolveFriendlyFileName(cleanKey, rawFilename);
                 const disposition = isDownload ? 'attachment' : 'inline';
 
                 res.setHeader('Content-Type', 'application/pdf');

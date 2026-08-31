@@ -81,29 +81,34 @@ const Concours = {
             const where = ['1=1'];
             const params = [];
 
-            if (ecole && String(ecole).trim() !== '') {
+            const cleanEco = ecole && String(ecole).trim() !== '' && String(ecole).trim() !== 'null' && String(ecole).trim() !== 'undefined' ? String(ecole).trim() : null;
+            if (cleanEco) {
                 where.push('ecole = ?');
-                params.push(String(ecole).trim());
+                params.push(cleanEco);
             }
 
-            if (annee && !isNaN(parseInt(annee, 10))) {
+            const cleanAnnee = annee && !isNaN(parseInt(annee, 10)) && String(annee).trim() !== 'null' && String(annee).trim() !== 'undefined' ? parseInt(annee, 10) : null;
+            if (cleanAnnee) {
                 where.push('annee = ?');
-                params.push(parseInt(annee, 10));
+                params.push(cleanAnnee);
             }
 
-            if (filiere && String(filiere).trim() !== '') {
+            const cleanFil = filiere && String(filiere).trim() !== '' && String(filiere).trim() !== 'null' && String(filiere).trim() !== 'undefined' && String(filiere).trim() !== 'toutes' && String(filiere).trim() !== 'Toutes' ? String(filiere).trim() : null;
+            if (cleanFil) {
                 where.push('filiere = ?');
-                params.push(String(filiere).trim());
+                params.push(cleanFil);
             }
 
-            if (matiere && String(matiere).trim() !== '') {
+            const cleanMat = matiere && String(matiere).trim() !== '' && String(matiere).trim() !== 'null' && String(matiere).trim() !== 'undefined' && String(matiere).trim() !== 'toutes' && String(matiere).trim() !== 'Toutes' ? String(matiere).trim() : null;
+            if (cleanMat) {
                 where.push('matiere = ?');
-                params.push(String(matiere).trim());
+                params.push(cleanMat);
             }
 
-            if (search && String(search).trim() !== '') {
+            const cleanSearch = search && String(search).trim() !== '' && String(search).trim() !== 'null' && String(search).trim() !== 'undefined' ? String(search).trim() : null;
+            if (cleanSearch) {
                 where.push('(ecole LIKE ? OR epreuve LIKE ? OR titre LIKE ?)');
-                const term = `%${String(search).trim()}%`;
+                const term = `%${cleanSearch}%`;
                 params.push(term, term, term);
             }
 

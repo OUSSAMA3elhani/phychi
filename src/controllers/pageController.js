@@ -12,11 +12,20 @@ const Book = require('../models/Book');
 const DownloadRequest = require('../models/DownloadRequest');
 const { pool } = require('../../config/db');
 
+/** Helper de nettoyage des parametres d'URL pour eviter les chaines 'null' / 'undefined' */
+function cleanQueryParam(val) {
+    if (val === undefined || val === null) return null;
+    const str = String(val).trim();
+    if (str === '' || str === 'null' || str === 'undefined') return null;
+    return str;
+}
+
 /**
  * Metadonnees de pagination + fabrique d'URL conservant les filtres actifs.
  *
  * `queryFor(n)` reconstruit la chaine de requete de la page n a partir des
- * filtres courants : sans cela, changer de page reinitialiserait les filtres.
+ * filtres courants valides : sans cela, changer de page reinitialiserait les filtres
+ * ou injecterait des parametres vides / 'null'.
  */
 function paginate(total, page, perPage, filters) {
     const size = Math.max(1, Number.parseInt(perPage, 10) || 6);
@@ -33,7 +42,23 @@ function paginate(total, page, perPage, filters) {
         from: total === 0 ? 0 : (current - 1) * size + 1,
         to: Math.min(current * size, total),
         queryFor(n) {
-            const params = new URLSearchParams(filters || {});
+            const params = new URLSearchParams();
+            if (filters && typeof filters === 'object') {
+                for (const [key, val] of Object.entries(filters)) {
+                    if (
+                        val !== null &&
+                        val !== undefined &&
+                        val !== '' &&
+                        val !== 'null' &&
+                        val !== 'undefined' &&
+                        val !== 'tous' &&
+                        val !== 'toutes' &&
+                        val !== 'Toutes'
+                    ) {
+                        params.set(key, String(val));
+                    }
+                }
+            }
             params.set('page', String(n));
             return '?' + params.toString();
         },
@@ -53,22 +78,47 @@ function normalizeText(text) {
         .trim();
 }
 
-/** Dictionnaire des synonymes & abréviations académiques */
+/** Dictionnaire exhaustif des synonymes & abréviations académiques CPGE / Supérieur */
 const SCIENTIFIC_SYNONYMS = {
-    'thermo': 'thermodynamique',
-    'meca': 'mecanique',
-    'elec': 'electromagnetisme',
-    'em': 'electromagnetisme maxwell',
-    'orga': 'organique',
-    'agreg': 'agregation',
-    'capes': 'capes cafep',
-    'centrale': 'centrale supelec',
-    'mines': 'mines ponts',
-    'ens': 'ecole normale superieure',
-    'opto': 'optique',
-    'quantique': 'quantique mecanique',
-    'fluide': 'mecanique des fluides navier stokes',
-    'cinetique': 'cinetique chimique'
+    'thermo': 'thermodynamique premier deuxieme principe carnot entropie enthalpie gaz parfait cycle',
+    'thermodynamique': 'thermo thermodynamique entropie enthalpie carnot',
+    'meca': 'mecanique cinematique dynamique oscillateur newton point solide referentiel galileen',
+    'mecanique': 'meca mecanique cinematique dynamique point solide',
+    'elec': 'electromagnetisme electrocinetique electronique circuit rlc thevenin norton diode aop',
+    'em': 'electromagnetisme maxwell induction ondes rayonnement flux laplace lorentz',
+    'electromagnetisme': 'em electromagnetisme maxwell induction biot savart',
+    'orga': 'organique chimie stereochimie reaction alcene alcool electrophile nucleophile sn1 sn2',
+    'organique': 'orga organique chimie synthese mecanisme',
+    'agreg': 'agregation externe interne concours physique chimie',
+    'agregation': 'agreg agregation',
+    'capes': 'capes cafep physique chimie enseignement',
+    'centrale': 'centrale supelec concours centrale',
+    'mines': 'mines ponts telecommines concours mines',
+    'ens': 'ecole normale superieure ulm lyon saclay rennes concours ens',
+    'polytechnique': 'polytechnique x ecole polytechnique',
+    'x': 'polytechnique ecole polytechnique',
+    'ccp': 'ccinp ccp concours communs polytechniques',
+    'ccinp': 'ccinp ccp concours communs polytechniques',
+    'e3a': 'e3a polytech concours e3a',
+    'bcpst': 'agro veto g2e banque agro veto bio prepa',
+    'opto': 'optique geometrique ondulatoire interferometre diffraction fourier miroir lentille',
+    'optique': 'opto optique geometrique ondulatoire interferometre michelson',
+    'quantique': 'quantique mecanique schrodinger puits fonction d onde heisenberg',
+    'fluide': 'mecanique des fluides navier stokes bernoulli euler ecoulement viscosite reynolds',
+    'fluides': 'mecanique des fluides navier stokes bernoulli euler viscosite',
+    'cinetique': 'cinetique chimique ordre reaction activation arrhenius constante catalytique',
+    'aqueuse': 'solutions aqueuses acide base ph solubilite complexation redox titrage potentiel',
+    'aqueuses': 'solutions aqueuses acide base ph solubilite complexation redox',
+    'solution': 'solutions aqueuses corrige correction',
+    'solutions': 'solutions aqueuses corrige correction',
+    'corrige': 'correction corrige solution resolus annales',
+    'corriges': 'correction corrige solution resolus annales',
+    'sujet': 'enonce epreuve concours session',
+    'garing': 'christian garing ondes mecaniques electromagnetiques',
+    'lumbroso': 'hubert lumbroso thermodynamique mecanique electromagnetisme problemes resolus',
+    'perez': 'jose philippe perez thermodynamique optique mecanique relativite quantique',
+    'grecias': 'pierre grecias chimie tout en un compagnon',
+    'hprepa': 'h prepa hachette tout en un exercices problemes'
 };
 
 /**
@@ -79,26 +129,50 @@ function calculateRelevanceScore(item, queryWords, rawQueryNorm) {
     const titleNorm = normalizeText(item.rawTitle || item.titre);
     const descNorm = normalizeText(item.rawDesc || item.description);
     const typeNorm = normalizeText(item.type);
+    const combinedNorm = `${titleNorm} ${descNorm} ${typeNorm}`;
 
-    // 1. Correspondance exacte ou partielle du titre (+30 à +50 pts)
-    if (titleNorm === rawQueryNorm) score += 50;
-    else if (titleNorm.includes(rawQueryNorm)) score += 30;
+    // 1. Match global complet
+    if (titleNorm === rawQueryNorm) {
+        score += 200;
+    } else if (titleNorm.startsWith(rawQueryNorm)) {
+        score += 120;
+    } else if (titleNorm.includes(rawQueryNorm)) {
+        score += 90;
+    } else if (descNorm.includes(rawQueryNorm)) {
+        score += 50;
+    }
 
-    // 2. Score par mot de la requête
+    // 2. Bonus de conjonction : Si TOUS les mots originaux de la requête sont présents
+    const allWordsPresent = queryWords.length > 1 && queryWords.every(w => combinedNorm.includes(w));
+    if (allWordsPresent) {
+        score += 150;
+    }
+
+    // 3. Score mot par mot
     queryWords.forEach(word => {
         if (!word || word.length < 2) return;
 
-        // Synonymes
-        const expandedWord = SCIENTIFIC_SYNONYMS[word] || word;
+        if (titleNorm.includes(word)) {
+            const isWordBoundary = new RegExp(`\\b${word}\\b`).test(titleNorm);
+            score += isWordBoundary ? 30 : 20;
+        }
+        if (descNorm.includes(word)) {
+            score += 10;
+        }
+        if (typeNorm.includes(word)) {
+            score += 5;
+        }
 
-        // Présence dans le titre (+10 pts)
-        if (titleNorm.includes(word) || titleNorm.includes(expandedWord)) score += 10;
-
-        // Présence dans la description/métadonnées (+5 pts)
-        if (descNorm.includes(word) || descNorm.includes(expandedWord)) score += 5;
-
-        // Présence dans le type / catégorie (+3 pts)
-        if (typeNorm.includes(word)) score += 3;
+        const expandedStr = SCIENTIFIC_SYNONYMS[word];
+        if (expandedStr) {
+            const synonyms = expandedStr.split(/\s+/);
+            for (const syn of synonyms) {
+                if (syn && syn.length > 2 && syn !== word) {
+                    if (titleNorm.includes(syn)) score += 12;
+                    if (descNorm.includes(syn)) score += 5;
+                }
+            }
+        }
     });
 
     return score;
@@ -111,21 +185,22 @@ function calculateRelevanceScore(item, queryWords, rawQueryNorm) {
 async function renderExercises(req, res, next, disciplineSlug, view, title, metaDescription) {
     try {
         const filters = {
-            tome: req.query.tome || 'tous',
-            chapitre: req.query.chapitre || 'tous',
-            niveau: req.query.niveau || 'tous',
-            difficulte: req.query.difficulte || 'toutes',
+            tome: cleanQueryParam(req.query.tome) || 'tous',
+            chapitre: cleanQueryParam(req.query.chapitre) || 'tous',
+            niveau: cleanQueryParam(req.query.niveau) || 'tous',
+            difficulte: cleanQueryParam(req.query.difficulte) || 'toutes',
         };
         const PER_PAGE = 10;
+        const currentPage = Math.max(1, Number.parseInt(cleanQueryParam(req.query.page), 10) || 1);
 
         const [{ rows, total }, stats, chapters, favoriteIds, downloadStatus, tomes] = await Promise.all([
             Exercise.findPage({
                 disciplineSlug,
                 tome: filters.tome === 'tous' ? null : filters.tome,
                 chapitre: filters.chapitre === 'tous' ? null : filters.chapitre,
-                niveau: filters.niveau,
-                difficulte: filters.difficulte,
-                page: req.query.page,
+                niveau: filters.niveau === 'tous' ? null : filters.niveau,
+                difficulte: filters.difficulte === 'toutes' ? null : filters.difficulte,
+                page: currentPage,
                 perPage: PER_PAGE,
             }),
             Exercise.stats(disciplineSlug),
@@ -146,7 +221,7 @@ async function renderExercises(req, res, next, disciplineSlug, view, title, meta
             filters,
             favoriteIds,
             downloadStatus,
-            pagination: paginate(total, req.query.page, PER_PAGE, filters),
+            pagination: paginate(total, currentPage, PER_PAGE, filters),
         });
     } catch (err) {
         next(err);
@@ -439,18 +514,19 @@ const pageController = {
      */
     async cours(req, res, next) {
         try {
-            const requestedDiscipline = req.query.discipline || req.params.discipline || 'toutes';
+            const requestedDiscipline = cleanQueryParam(req.query.discipline) || cleanQueryParam(req.params.discipline) || 'toutes';
             const filters = {
                 discipline: requestedDiscipline,
-                niveau: req.query.niveau || 'tous',
+                niveau: cleanQueryParam(req.query.niveau) || 'tous',
             };
             const PER_PAGE = 6;
+            const currentPage = Math.max(1, Number.parseInt(cleanQueryParam(req.query.page), 10) || 1);
 
             const [{ rows, total }, stats, disciplines, favoriteChapterIds] = await Promise.all([
                 Chapter.findPage({
-                    discipline: filters.discipline,
-                    niveau: filters.niveau,
-                    page: req.query.page,
+                    discipline: filters.discipline === 'toutes' ? null : filters.discipline,
+                    niveau: filters.niveau === 'tous' ? null : filters.niveau,
+                    page: currentPage,
                     perPage: PER_PAGE,
                 }),
                 Course.stats(),
@@ -473,7 +549,7 @@ const pageController = {
                 stats,
                 filters,
                 favoriteChapterIds,
-                pagination: paginate(total, req.query.page, PER_PAGE, filters),
+                pagination: paginate(total, currentPage, PER_PAGE, filters),
             });
         } catch (err) {
             next(err);
@@ -671,16 +747,18 @@ const pageController = {
     async concours(req, res, next) {
         try {
             const filters = {
-                ecole: req.query.ecole || null,
-                annee: req.query.annee || null,
-                filiere: req.query.filiere || null,
-                matiere: req.query.matiere || null,
-                search: req.query.search || null,
+                ecole: cleanQueryParam(req.query.ecole),
+                annee: cleanQueryParam(req.query.annee),
+                filiere: cleanQueryParam(req.query.filiere),
+                matiere: cleanQueryParam(req.query.matiere),
+                search: cleanQueryParam(req.query.search),
             };
 
             const PER_PAGE = 12;
+            const currentPage = Math.max(1, Number.parseInt(cleanQueryParam(req.query.page), 10) || 1);
+
             const [{ rows, total }, filterOptions, totalCount, downloadStatus, favoriteConcoursIds] = await Promise.all([
-                Concours.findPage({ ...filters, page: req.query.page, perPage: PER_PAGE }),
+                Concours.findPage({ ...filters, page: currentPage, perPage: PER_PAGE }),
                 Concours.findFilters(),
                 Concours.countAll(),
                 DownloadRequest.statusMap(req.session.userId, 'concours'),
@@ -699,7 +777,7 @@ const pageController = {
                 filters,
                 downloadStatus,
                 favoriteConcoursIds,
-                pagination: paginate(total, req.query.page, PER_PAGE, filters),
+                pagination: paginate(total, currentPage, PER_PAGE, filters),
             });
         } catch (err) {
             next(err);
@@ -751,13 +829,13 @@ const pageController = {
     async livres(req, res, next) {
         try {
             const filters = {
-                discipline: req.query.discipline || null,
-                collection: req.query.collection || null,
-                search: req.query.search || null,
+                discipline: cleanQueryParam(req.query.discipline),
+                collection: cleanQueryParam(req.query.collection),
+                search: cleanQueryParam(req.query.search),
             };
 
             const perPage = 12;
-            const currentPage = req.query.page || 1;
+            const currentPage = Math.max(1, Number.parseInt(cleanQueryParam(req.query.page), 10) || 1);
 
             const [result, filterOptions, downloadStatus, favoriteBookIds] = await Promise.all([
                 Book.findPage({
@@ -847,26 +925,68 @@ const pageController = {
                     }
                 });
 
-                // Construire la clause SQL dynamique avec LIKE %term%
                 const termList = Array.from(expandedTerms);
-                const concoursConditions = termList.map(() => `(titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?)`).join(' OR ');
-                const bookConditions = termList.map(() => `(titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?)`).join(' OR ');
-                const exerciseConditions = termList.map(() => `(e.titre LIKE ? OR e.description LIKE ?)`).join(' OR ');
 
-                const concoursParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
-                const bookParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+                // Conjonction prioritaire pour les mots originaux
+                const concoursAllCond = queryWords.map(() => `(titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?)`).join(' AND ');
+                const concoursAllParams = queryWords.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+
+                const concoursAnyCond = termList.map(() => `(titre LIKE ? OR ecole LIKE ? OR epreuve LIKE ? OR filiere LIKE ? OR matiere LIKE ?)`).join(' OR ');
+                const concoursAnyParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+
+                const bookAllCond = queryWords.map(() => `(titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?)`).join(' AND ');
+                const bookAllParams = queryWords.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+
+                const bookAnyCond = termList.map(() => `(titre LIKE ? OR collection LIKE ? OR auteur LIKE ? OR discipline LIKE ?)`).join(' OR ');
+                const bookAnyParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+
+                const exerciseAnyCond = termList.map(() => `(e.titre LIKE ? OR e.description LIKE ?)`).join(' OR ');
                 const exerciseParams = termList.flatMap(t => [`%${t}%`, `%${t}%`]);
 
+                const courseAnyCond = termList.map(() => `(c.titre LIKE ? OR c.description LIKE ? OR ch.titre LIKE ? OR d.nom LIKE ?)`).join(' OR ');
+                const courseParams = termList.flatMap(t => [`%${t}%`, `%${t}%`, `%${t}%`, `%${t}%`]);
+
                 // Exécution parallèle des requêtes DB
-                const [concoursRows, bookRows, exerciseRows] = await Promise.all([
+                const [concoursRows, bookRows, exerciseRows, courseRows] = await Promise.all([
                     (typeFilter === 'tous' || typeFilter === 'concours')
-                        ? pool.query(`SELECT id, titre, ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file FROM concours WHERE ${concoursConditions} LIMIT 40`, concoursParams).then(r => r[0])
+                        ? pool.query(
+                            `SELECT id, titre, ecole, annee, epreuve, filiere, matiere, enonce_file, correction_file 
+                             FROM concours 
+                             WHERE (${concoursAllCond}) OR (${concoursAnyCond}) 
+                             ORDER BY (${concoursAllCond}) DESC 
+                             LIMIT 50`,
+                            [...concoursAllParams, ...concoursAnyParams, ...concoursAllParams]
+                        ).then(r => r[0])
                         : [],
                     (typeFilter === 'tous' || typeFilter === 'livres')
-                        ? pool.query(`SELECT id, titre, collection, auteur, discipline, pdf_file FROM books WHERE ${bookConditions} LIMIT 40`, bookParams).then(r => r[0])
+                        ? pool.query(
+                            `SELECT id, titre, collection, auteur, discipline, pdf_file 
+                             FROM books 
+                             WHERE (${bookAllCond}) OR (${bookAnyCond}) 
+                             ORDER BY (${bookAllCond}) DESC 
+                             LIMIT 50`,
+                            [...bookAllParams, ...bookAnyParams, ...bookAllParams]
+                        ).then(r => r[0])
                         : [],
                     (typeFilter === 'tous' || typeFilter === 'exercices')
-                        ? pool.query(`SELECT e.id, e.titre, e.description, e.niveau, e.difficulte, e.enonce_file, e.correction_file FROM exercises e WHERE ${exerciseConditions} LIMIT 40`, exerciseParams).then(r => r[0])
+                        ? pool.query(
+                            `SELECT e.id, e.titre, e.description, e.niveau, e.difficulte, e.enonce_file, e.correction_file 
+                             FROM exercises e 
+                             WHERE ${exerciseAnyCond} 
+                             LIMIT 50`,
+                            exerciseParams
+                        ).then(r => r[0])
+                        : [],
+                    (typeFilter === 'tous' || typeFilter === 'cours')
+                        ? pool.query(
+                            `SELECT c.id, c.chapter_id, c.titre, c.description, c.course_file, ch.titre as chapter_titre, d.nom as discipline_nom 
+                             FROM courses c 
+                             LEFT JOIN chapters ch ON c.chapter_id = ch.id 
+                             LEFT JOIN disciplines d ON ch.discipline_id = d.id 
+                             WHERE ${courseAnyCond} 
+                             LIMIT 50`,
+                            courseParams
+                        ).then(r => r[0])
                         : []
                 ]);
 
@@ -877,7 +997,7 @@ const pageController = {
                         badgeClass: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400',
                         titre: `${r.ecole} (${r.annee}) — ${r.epreuve}`,
                         description: `${r.filiere} • ${r.matiere}`,
-                        rawTitle: `${r.ecole} ${r.epreuve} ${r.annee}`,
+                        rawTitle: `${r.ecole} ${r.epreuve} ${r.annee} ${r.filiere} ${r.matiere}`,
                         rawDesc: `${r.filiere} ${r.matiere}`,
                         url: `/concours/${r.id}`,
                         file: r.enonce_file || r.correction_file,
@@ -889,12 +1009,24 @@ const pageController = {
                         badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
                         titre: `${r.titre} (${r.collection})`,
                         description: `Auteur : ${r.auteur} • Discipline : ${r.discipline}`,
-                        rawTitle: r.titre,
+                        rawTitle: `${r.titre} ${r.collection} ${r.auteur}`,
                         rawDesc: `${r.collection} ${r.auteur} ${r.discipline}`,
                         url: `/livres/${r.id}`,
                         file: r.pdf_file,
                         id: r.id,
                         itemType: 'book'
+                    })),
+                    ...courseRows.map(r => ({
+                        type: 'Cours',
+                        badgeClass: 'bg-sky-50 text-sky-700 dark:bg-sky-500/10 dark:text-sky-400',
+                        titre: r.titre,
+                        description: `${r.discipline_nom || 'Physique'} • ${r.chapter_titre || ''} — ${r.description || 'Fiche de cours et synthèse complète.'}`,
+                        rawTitle: `${r.titre} ${r.chapter_titre || ''}`,
+                        rawDesc: `${r.discipline_nom || ''} ${r.description || ''}`,
+                        url: `/cours/${r.chapter_id || r.id}`,
+                        file: r.course_file,
+                        id: r.id,
+                        itemType: 'course'
                     })),
                     ...exerciseRows.map(r => ({
                         type: 'Exercice',
