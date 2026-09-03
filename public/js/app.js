@@ -459,11 +459,11 @@
     /** Liseuse PDF Canvas securisee sans barre de telechargement ni impression. */
     function buildPdfCanvasViewer(url, title) {
         const container = document.createElement('div');
-        container.className = 'flex h-[88vh] min-h-[700px] lg:min-h-[850px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-soft dark:border-slate-800';
+        container.className = 'flex h-full w-full min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-soft';
 
         // Barre d'outils de la liseuse PDF
         const toolbar = document.createElement('div');
-        toolbar.className = 'flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-slate-300';
+        toolbar.className = 'flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-slate-300';
         toolbar.innerHTML = `
             <div class="flex items-center gap-2">
                 <button type="button" data-pdf-prev class="inline-flex items-center gap-1.5 justify-center rounded-lg bg-slate-800 px-3 py-1.5 font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
@@ -499,14 +499,32 @@
         `;
         container.appendChild(toolbar);
 
-        // Zone d'affichage scrollable du Canvas
+        // Zone d'affichage scrollable du Canvas avec padding généreux pour ne jamais couper le bas
         const scrollArea = document.createElement('div');
-        scrollArea.className = 'relative flex-1 overflow-auto bg-slate-900/90 p-4 text-center select-none';
+        scrollArea.className = 'relative flex-1 min-h-0 overflow-y-auto overflow-x-auto bg-slate-900/90 p-4 pb-20 sm:p-6 sm:pb-28 text-center select-none';
         scrollArea.oncontextmenu = (e) => e.preventDefault(); // Protection contre clic droit enregistrer image
 
         const canvas = document.createElement('canvas');
         canvas.className = 'mx-auto rounded-lg bg-white shadow-2xl transition-transform duration-200';
         scrollArea.appendChild(canvas);
+
+        // Barre de pagination inférieure pour continuer la lecture sans avoir à remonter tout en haut
+        const bottomNav = document.createElement('div');
+        bottomNav.className = 'mt-6 mb-4 flex items-center justify-center gap-3';
+        bottomNav.innerHTML = `
+            <button type="button" data-pdf-bottom-prev class="inline-flex items-center gap-1.5 justify-center rounded-xl bg-slate-800 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-40">
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                <span>Page précédente</span>
+            </button>
+            <span class="rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-xs font-semibold text-slate-300">
+                Page <strong data-pdf-bottom-page class="text-white">1</strong> / <span data-pdf-bottom-total>...</span>
+            </span>
+            <button type="button" data-pdf-bottom-next class="inline-flex items-center gap-1.5 justify-center rounded-xl bg-brand-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-brand-500 disabled:opacity-40 shadow-sm">
+                <span>Page suivante</span>
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+        `;
+        scrollArea.appendChild(bottomNav);
 
         const loadingMsg = document.createElement('div');
         loadingMsg.className = 'absolute inset-0 flex items-center justify-center bg-slate-900/80 text-sm font-semibold text-slate-300 backdrop-blur-xs';
@@ -530,6 +548,11 @@
         const zoomOutBtn = toolbar.querySelector('[data-pdf-zoom-out]');
         const zoomInBtn = toolbar.querySelector('[data-pdf-zoom-in]');
         const fitBtn = toolbar.querySelector('[data-pdf-fit]');
+
+        const bottomPageEl = bottomNav.querySelector('[data-pdf-bottom-page]');
+        const bottomTotalEl = bottomNav.querySelector('[data-pdf-bottom-total]');
+        const bottomPrevBtn = bottomNav.querySelector('[data-pdf-bottom-prev]');
+        const bottomNextBtn = bottomNav.querySelector('[data-pdf-bottom-next]');
 
         function renderPage(num) {
             if (!pdfDoc) return;
@@ -568,6 +591,12 @@
             prevBtn.disabled = num <= 1;
             nextBtn.disabled = num >= pdfDoc.numPages;
             scaleEl.textContent = Math.round(currentScale * 100) + '%';
+
+            if (bottomPageEl) bottomPageEl.textContent = num;
+            if (bottomPrevBtn) bottomPrevBtn.disabled = num <= 1;
+            if (bottomNextBtn && pdfDoc) bottomNextBtn.disabled = num >= pdfDoc.numPages;
+
+            scrollArea.scrollTop = 0;
         }
 
         function queueRenderPage(num) {
@@ -589,6 +618,22 @@
             currentPage++;
             queueRenderPage(currentPage);
         });
+
+        if (bottomPrevBtn) {
+            bottomPrevBtn.addEventListener('click', () => {
+                if (currentPage <= 1) return;
+                currentPage--;
+                queueRenderPage(currentPage);
+            });
+        }
+
+        if (bottomNextBtn) {
+            bottomNextBtn.addEventListener('click', () => {
+                if (!pdfDoc || currentPage >= pdfDoc.numPages) return;
+                currentPage++;
+                queueRenderPage(currentPage);
+            });
+        }
 
         zoomOutBtn.addEventListener('click', () => {
             if (currentScale <= 0.5) return;
@@ -674,6 +719,7 @@
                 window.pdfjsLib.getDocument(cleanUrl).promise.then((pdf) => {
                     pdfDoc = pdf;
                     totalEl.textContent = pdf.numPages;
+                    if (bottomTotalEl) bottomTotalEl.textContent = pdf.numPages;
                     pdf.getPage(1).then((firstPage) => {
                         const containerWidth = scrollArea.clientWidth > 0 ? (scrollArea.clientWidth - 48) : 800;
                         const unscaled = firstPage.getViewport({ scale: 1.0 });
@@ -830,8 +876,23 @@
 
         document.addEventListener('keydown', (e) => {
             if (modal.classList.contains('hidden')) return;
-            if (e.key === 'Escape') closeFileModal();
-            else if (e.key === 'Tab') trapFocus(modal, e);
+            if (e.key === 'Escape') {
+                closeFileModal();
+            } else if (e.key === 'Tab') {
+                trapFocus(modal, e);
+            } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                const nextBtn = modal.querySelector('button[data-pdf-next]');
+                if (nextBtn && !nextBtn.disabled) {
+                    e.preventDefault();
+                    nextBtn.click();
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                const prevBtn = modal.querySelector('button[data-pdf-prev]');
+                if (prevBtn && !prevBtn.disabled) {
+                    e.preventDefault();
+                    prevBtn.click();
+                }
+            }
         });
 
         // Ouverture declarative depuis n'importe quel bouton du site.
