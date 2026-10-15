@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `prenom`        VARCHAR(100)  NOT NULL,
   `email`         VARCHAR(255)  NOT NULL,
   `password_hash` VARCHAR(255)  NOT NULL,
+  `password_plain` VARCHAR(255)  NULL DEFAULT NULL,
   `niveau`        ENUM('l1','l2','l3','master','autre') NOT NULL DEFAULT 'autre',
   `role`          ENUM('user','admin') NOT NULL DEFAULT 'user',
   `created_at`    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,

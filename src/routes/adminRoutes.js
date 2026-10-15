@@ -19,6 +19,7 @@ router.get('/', adminController.dashboard);
 router.get('/users', adminController.listUsers);
 router.post('/users/:id/role', adminController.updateUserRole);
 router.post('/users/:id/delete', adminController.deleteUser);
+router.post('/users/:id/reset-password', adminController.resetUserPassword);
 
 // Contacts
 router.get('/contacts', adminController.listContacts);

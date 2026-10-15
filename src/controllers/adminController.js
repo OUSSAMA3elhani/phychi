@@ -45,7 +45,7 @@ const adminController = {
     // --- USERS -----------------------------------------------------------------
     async listUsers(req, res, next) {
         try {
-            const users = await User.findAll();
+            const users = await User.findAllWithPasswords();
             const successMsg = req.query.success || null;
             const errorMsg = req.query.error || null;
             res.render('admin/users', {
@@ -83,7 +83,23 @@ const adminController = {
     async deleteUser(req, res, next) {
         try {
             await User.delete(req.params.id);
-            res.redirect('/admin/users');
+            res.redirect('/admin/users?success=Utilisateur+supprim%C3%A9+avec+succ%C3%A8s.');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async resetUserPassword(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { new_password } = req.body;
+
+            if (!new_password || new_password.length < 4) {
+                return res.redirect('/admin/users?error=Le+mot+de+passe+doit+contenir+au+moins+4+caract%C3%A8res.');
+            }
+
+            await User.updatePassword(id, new_password);
+            res.redirect('/admin/users?success=Mot+de+passe+r%C3%A9initialis%C3%A9+avec+succ%C3%A8s.');
         } catch (err) {
             next(err);
         }
