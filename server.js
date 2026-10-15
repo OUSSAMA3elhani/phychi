@@ -109,6 +109,28 @@ async function ensureSessionsTable() {
 }
 ensureSessionsTable();
 
+/**
+ * Migration auto : ajoute la colonne password_plain a la table users si elle
+ * n'existe pas encore. Permet un deploiement sans acces manuel a phpMyAdmin.
+ */
+async function ensurePasswordPlainColumn() {
+    try {
+        const [cols] = await pool.query(
+            `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'password_plain'`
+        );
+        if (cols.length === 0) {
+            await pool.query(
+                `ALTER TABLE users ADD COLUMN password_plain VARCHAR(255) NULL DEFAULT NULL AFTER password_hash`
+            );
+            console.log('Migration : colonne password_plain ajoutee a la table users.');
+        }
+    } catch (e) {
+        console.warn('Migration password_plain event:', e.message);
+    }
+}
+ensurePasswordPlainColumn();
+
 const sessionSecret = process.env.SESSION_SECRET || 'phychemia_session_secret_default_key_2026';
 if (!process.env.SESSION_SECRET && isProduction) {
     console.warn(
