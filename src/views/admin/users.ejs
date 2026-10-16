@@ -8,22 +8,12 @@
     <link rel="stylesheet" href="/assets/ui.css">
     <script src="/assets/ui.js" defer></script>
     <script src="/js/app.js" defer></script>
-    <style>
-        .password-blur { filter: blur(5px); transition: filter 0.25s ease; cursor: pointer; user-select: none; }
-        .password-blur.revealed { filter: none; user-select: text; }
-        .modal-backdrop { opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
-        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-        .modal-panel { transform: scale(0.95) translateY(8px); opacity: 0; transition: transform 0.25s ease, opacity 0.2s ease; }
-        .modal-backdrop.active .modal-panel { transform: scale(1) translateY(0); opacity: 1; }
-        tr.row-hidden { display: none; }
-    </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-600 antialiased dark:bg-slate-950 dark:text-slate-400">
     <%- include('partials/sidebar') %>
     <div class="pl-72">
         <%- include('partials/header') %>
         <main class="p-8">
-            <!-- Flash messages -->
             <% if (typeof successMsg !== 'undefined' && successMsg) { %>
                 <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300 flex items-center justify-between">
                     <span>✅ <%= successMsg %></span>
@@ -37,277 +27,61 @@
                 </div>
             <% } %>
 
-            <!-- Card principale -->
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
-                <!-- En-tête avec titre, recherche et filtres -->
-                <div class="p-6 border-b border-slate-200 dark:border-slate-800">
-                    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
-                            Gestion des Utilisateurs
-                            <span class="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">(<span id="visibleCount"><%= users.length %></span> / <%= users.length %>)</span>
-                        </h2>
-                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                            <!-- Barre de recherche -->
-                            <div class="relative">
-                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                                <input type="text" id="searchInput" placeholder="Rechercher par nom, prénom ou email..." class="pl-9 pr-4 py-2 text-sm rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:ring-brand-500 w-full sm:w-72">
-                            </div>
-                            <!-- Filtre par rôle -->
-                            <select id="filterRole" class="text-xs rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white py-2 pl-3 pr-8 focus:ring-brand-500">
-                                <option value="">Tous les rôles</option>
-                                <option value="admin">Administrateurs</option>
-                                <option value="user">Utilisateurs</option>
-                            </select>
-                            <!-- Filtre par niveau -->
-                            <select id="filterNiveau" class="text-xs rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white py-2 pl-3 pr-8 focus:ring-brand-500">
-                                <option value="">Tous les niveaux</option>
-                                <option value="l1">L1</option>
-                                <option value="l2">L2</option>
-                                <option value="l3">L3</option>
-                                <option value="master">Master</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Gestion des Utilisateurs (<%= users.length %>)</h2>
                 </div>
-
-                <!-- Tableau -->
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm" id="usersTable">
+                    <table class="w-full text-left text-sm">
                         <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-200 dark:bg-slate-950/50 dark:border-slate-800">
                             <tr>
-                                <th class="px-5 py-4">ID</th>
-                                <th class="px-5 py-4">Nom & Prénom</th>
-                                <th class="px-5 py-4">Email</th>
-                                <th class="px-5 py-4">Mot de passe</th>
-                                <th class="px-5 py-4">Niveau</th>
-                                <th class="px-5 py-4">Rôle</th>
-                                <th class="px-5 py-4">Inscrit le</th>
-                                <th class="px-5 py-4 text-center">Actions</th>
+                                <th class="px-6 py-4">Nom & Prénom</th>
+                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Niveau</th>
+                                <th class="px-6 py-4">Changer le Rôle</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                             <% users.forEach(function(u) { %>
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors user-row"
-                                    data-name="<%= (u.prenom + ' ' + u.nom).toLowerCase() %>"
-                                    data-email="<%= u.email.toLowerCase() %>"
-                                    data-role="<%= u.role %>"
-                                    data-niveau="<%= u.niveau %>">
-                                    <!-- ID -->
-                                    <td class="px-5 py-4 text-xs text-slate-400 font-mono">#<%= u.id %></td>
-                                    <!-- Nom & Prénom -->
-                                    <td class="px-5 py-4 font-semibold text-slate-900 dark:text-white whitespace-nowrap">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
                                         <%= u.prenom %> <%= u.nom %>
                                         <% if (locals.user && locals.user.id === u.id) { %>
                                             <span class="ml-2 text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-md bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">(Vous)</span>
                                         <% } %>
                                     </td>
-                                    <!-- Email -->
-                                    <td class="px-5 py-4 text-slate-600 dark:text-slate-300"><%= u.email %></td>
-                                    <!-- Mot de passe -->
-                                    <td class="px-5 py-4">
-                                        <% if (u.password_plain) { %>
-                                            <div class="inline-flex items-center gap-1.5">
-                                                <code class="password-blur text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg font-mono text-slate-700 dark:text-slate-300" onclick="this.classList.toggle('revealed')" title="Cliquer pour afficher/masquer"><%= u.password_plain %></code>
-                                                <button type="button" onclick="copyPassword(this)" data-pw="<%= u.password_plain %>" class="p-1 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-slate-100 dark:hover:text-brand-400 dark:hover:bg-slate-800 transition-all" title="Copier">
-                                                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                                </button>
-                                            </div>
-                                        <% } else { %>
-                                            <div class="inline-flex items-center gap-2">
-                                                <span class="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                                                    <svg class="inline h-3.5 w-3.5 mr-0.5 -mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                                    Non disponible
-                                                </span>
-                                                <button type="button" onclick="openResetModal(<%= u.id %>, '<%= u.prenom %> <%= u.nom %>')" class="text-[10px] uppercase tracking-wider font-bold text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors" title="Définir un nouveau mot de passe">
-                                                    Définir
-                                                </button>
-                                            </div>
-                                        <% } %>
-                                    </td>
-                                    <!-- Niveau -->
-                                    <td class="px-5 py-4">
+                                    <td class="px-6 py-4 text-slate-600 dark:text-slate-300"><%= u.email %></td>
+                                    <td class="px-6 py-4">
                                         <span class="uppercase text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"><%= u.niveau %></span>
                                     </td>
-                                    <!-- Rôle -->
-                                    <td class="px-5 py-4">
-                                        <% if (u.role === 'admin') { %>
-                                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300">Admin</span>
-                                        <% } else { %>
-                                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300">Utilisateur</span>
-                                        <% } %>
-                                    </td>
-                                    <!-- Date d'inscription -->
-                                    <td class="px-5 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                                        <%= new Date(u.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) %>
-                                    </td>
-                                    <!-- Actions -->
-                                    <td class="px-5 py-4">
-                                        <div class="flex items-center justify-center gap-1">
-                                            <!-- Changer le rôle -->
-                                            <form action="/admin/users/<%= u.id %>/role" method="post" class="inline-flex items-center gap-1">
-                                                <select name="role" class="text-xs rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white py-1 pl-2 pr-6 focus:ring-brand-500">
-                                                    <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>Utilisateur</option>
-                                                    <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                                                </select>
-                                                <button type="submit" class="p-1.5 rounded-lg bg-brand-600 text-white hover:bg-brand-700 transition-colors shadow-sm" title="Enregistrer le rôle">
-                                                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                                </button>
-                                            </form>
-                                            <!-- Réinitialiser MDP -->
-                                            <button type="button" onclick="openResetModal(<%= u.id %>, '<%= u.prenom %> <%= u.nom %>')" class="p-1.5 rounded-lg text-amber-600 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950/30 transition-colors" title="Réinitialiser le mot de passe">
-                                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <td class="px-6 py-4">
+                                        <form action="/admin/users/<%= u.id %>/role" method="post" class="inline-flex items-center gap-2">
+                                            <select name="role" class="text-xs rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 text-slate-900 dark:text-white py-1.5 pl-3 pr-8 focus:ring-brand-500">
+                                                <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>Utilisateur</option>
+                                                <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Administrateur</option>
+                                            </select>
+                                            <button type="submit" class="rounded-xl bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition-colors shadow-sm">
+                                                Enregistrer
                                             </button>
-                                            <!-- Supprimer -->
-                                            <% if (!locals.user || locals.user.id !== u.id) { %>
-                                                <form action="/admin/users/<%= u.id %>/delete" method="post" onsubmit="return confirm('⚠️ Supprimer définitivement l\'utilisateur <%= u.prenom %> <%= u.nom %> ?')" class="inline">
-                                                    <button type="submit" class="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/30 transition-colors" title="Supprimer l'utilisateur">
-                                                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                                                    </button>
-                                                </form>
-                                            <% } else { %>
-                                                <span class="p-1.5 text-slate-300 dark:text-slate-600" title="Vous ne pouvez pas vous supprimer">
-                                                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                                                </span>
-                                            <% } %>
-                                        </div>
+                                        </form>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <% if (!locals.user || locals.user.id !== u.id) { %>
+                                            <form action="/admin/users/<%= u.id %>/delete" method="post" onsubmit="return confirm('Supprimer cet utilisateur ?')" class="inline">
+                                                <button type="submit" class="text-rose-600 hover:text-rose-700 font-medium text-xs dark:text-rose-400">Supprimer</button>
+                                            </form>
+                                        <% } else { %>
+                                            <span class="text-xs text-slate-400 font-medium">—</span>
+                                        <% } %>
                                     </td>
                                 </tr>
                             <% }); %>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Message "aucun résultat" -->
-                <div id="noResults" class="hidden p-12 text-center">
-                    <svg class="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Aucun utilisateur ne correspond à votre recherche.</p>
-                </div>
             </div>
         </main>
     </div>
-
-    <!-- Modal Réinitialiser le mot de passe -->
-    <div id="resetModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div class="modal-panel w-full max-w-md mx-4 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <svg class="h-5 w-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    Réinitialiser le mot de passe
-                </h3>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Utilisateur : <strong id="resetUserName" class="text-slate-700 dark:text-slate-200"></strong></p>
-            </div>
-            <form id="resetForm" method="post" class="px-6 py-5 space-y-4">
-                <div>
-                    <label for="new_password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Nouveau mot de passe</label>
-                    <input type="text" name="new_password" id="new_password" required minlength="4" placeholder="Saisir le nouveau mot de passe..." class="w-full rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-white py-2.5 px-4 text-sm focus:ring-brand-500 font-mono">
-                </div>
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="generateRandomPassword()" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 font-semibold transition-colors">
-                        🔄 Générer un mot de passe aléatoire
-                    </button>
-                </div>
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeResetModal()" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                        Annuler
-                    </button>
-                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-xl shadow-sm transition-colors">
-                        Réinitialiser
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // --- Recherche & Filtres ---
-        const searchInput = document.getElementById('searchInput');
-        const filterRole = document.getElementById('filterRole');
-        const filterNiveau = document.getElementById('filterNiveau');
-        const rows = document.querySelectorAll('.user-row');
-        const noResults = document.getElementById('noResults');
-        const visibleCount = document.getElementById('visibleCount');
-
-        function applyFilters() {
-            const q = searchInput.value.toLowerCase().trim();
-            const role = filterRole.value;
-            const niveau = filterNiveau.value;
-            let count = 0;
-
-            rows.forEach(row => {
-                const name = row.dataset.name;
-                const email = row.dataset.email;
-                const rowRole = row.dataset.role;
-                const rowNiveau = row.dataset.niveau;
-
-                const matchSearch = !q || name.includes(q) || email.includes(q);
-                const matchRole = !role || rowRole === role;
-                const matchNiveau = !niveau || rowNiveau === niveau;
-
-                if (matchSearch && matchRole && matchNiveau) {
-                    row.classList.remove('row-hidden');
-                    count++;
-                } else {
-                    row.classList.add('row-hidden');
-                }
-            });
-
-            visibleCount.textContent = count;
-            noResults.classList.toggle('hidden', count > 0);
-        }
-
-        searchInput.addEventListener('input', applyFilters);
-        filterRole.addEventListener('change', applyFilters);
-        filterNiveau.addEventListener('change', applyFilters);
-
-        // --- Copier le mot de passe ---
-        function copyPassword(btn) {
-            const pw = btn.dataset.pw;
-            navigator.clipboard.writeText(pw).then(() => {
-                const originalTitle = btn.title;
-                btn.title = '✅ Copié !';
-                btn.classList.add('text-emerald-600');
-                setTimeout(() => {
-                    btn.title = originalTitle;
-                    btn.classList.remove('text-emerald-600');
-                }, 1500);
-            });
-        }
-
-        // --- Modal Réinitialiser le mot de passe ---
-        const resetModal = document.getElementById('resetModal');
-        const resetForm = document.getElementById('resetForm');
-        const resetUserName = document.getElementById('resetUserName');
-        const newPasswordInput = document.getElementById('new_password');
-
-        function openResetModal(userId, userName) {
-            resetForm.action = '/admin/users/' + userId + '/reset-password';
-            resetUserName.textContent = userName;
-            newPasswordInput.value = '';
-            resetModal.classList.add('active');
-            setTimeout(() => newPasswordInput.focus(), 200);
-        }
-
-        function closeResetModal() {
-            resetModal.classList.remove('active');
-        }
-
-        // Fermer avec Escape ou clic en dehors
-        resetModal.addEventListener('click', function(e) {
-            if (e.target === resetModal) closeResetModal();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeResetModal();
-        });
-
-        function generateRandomPassword() {
-            const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$';
-            let pw = '';
-            for (let i = 0; i < 12; i++) {
-                pw += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            newPasswordInput.value = pw;
-        }
-    </script>
 </body>
 </html>

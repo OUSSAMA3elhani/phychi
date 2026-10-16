@@ -17,9 +17,9 @@ const User = {
         const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
         const [result] = await pool.query(
-            `INSERT INTO users (nom, prenom, email, password_hash, password_plain, niveau, role)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [nom, prenom, email, passwordHash, password, niveau, role]
+            `INSERT INTO users (nom, prenom, email, password_hash, niveau, role)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [nom, prenom, email, passwordHash, niveau, role]
         );
 
         return this.findById(result.insertId);
@@ -29,14 +29,6 @@ const User = {
     async findAll() {
         const [rows] = await pool.query(
             `SELECT ${PUBLIC_COLUMNS} FROM users ORDER BY created_at DESC`
-        );
-        return rows;
-    },
-
-    /** Liste tous les utilisateurs AVEC le mot de passe en clair (Reserve Admin). */
-    async findAllWithPasswords() {
-        const [rows] = await pool.query(
-            `SELECT ${PUBLIC_COLUMNS}, password_plain FROM users ORDER BY created_at DESC`
         );
         return rows;
     },
@@ -115,7 +107,7 @@ const User = {
     /** Change le mot de passe. */
     async updatePassword(id, newPassword) {
         const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
-        await pool.query('UPDATE users SET password_hash = ?, password_plain = ? WHERE id = ?', [passwordHash, newPassword, id]);
+        await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
     },
 };
 
